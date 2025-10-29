@@ -45,3 +45,5 @@ L44 * (
     p[i + (4,4,0)] - p[i + (-4,4,0)] - p[i +(4,-4,0)] + p[i + (-4,-4,0)]
 ) 
 ```
+
+TODO: visualizar essa matriz de acesso, pois ela literalemente acessa as diagonais e isso é um problemão
