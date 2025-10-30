@@ -4,11 +4,11 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/nix/store/skq0k7jsqazmjfly55mpi1ggr2f62ix9-StarPU-1.4.7/include/starpu/1.4",
-                "/nix/store/ba5nv8h5xaanh8kq20nbdbwnwr64n4k9-hwloc-2.12.2-dev/include/"
+                "${env:STARPU_STORE_PATH}/include/starpu/1.4",
+                "${env:HWLOC_STORE_PATH}/include/"
             ],
             "defines": [],
-            "compilerPath": "/nix/store/95k9rsn1zsw1yvir8mj824ldhf90i4qw-gcc-wrapper-14.3.0/bin/gcc",
+            "compilerPath": "${env:GCC_STORE_PATH}/bin/gcc",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "linux-gcc-x64",
