@@ -6,29 +6,31 @@
 
 #include "macros.h"
 
-const int nbufs = STARPU_NMAXBUFS;
+const uint64_t BORDER_SIZE = 4;
 
-const int KERNEL_SIZE = 4;
+
 // number of iterations
-static int g_iterations;
+uint64_t  g_iterations = 0;
 // width for the volume of the whole sistem
-int g_volume_width;
+uint64_t g_volume_width = 0;
 // amount of segments in a dimension. 
 // if g_volume_width = 100 and g_width_in_cubes = 10
 // there are 10 segmentations by dimension, resulting in 1000 total cubes of 
 // volume 1000
-int g_width_in_cubes;
+uint64_t g_width_in_cubes = 0;
 // width for the segmented cube
-int g_cube_width;
+uint64_t g_cube_width = 0;
+
+uint64_t g_absorption_width = 0;
 
 
 void print_block(double* block){
     printf("[\n");
-    for(int z = 0; z < g_cube_width; z++){
+    for(size_t z = 0; z < g_cube_width; z++){
         printf("[\n");
-        for(int y = 0; y < g_cube_width; y++){
+        for(size_t y = 0; y < g_cube_width; y++){
             printf("\t[");
-            for(int x = 0; x < g_cube_width; x++){
+            for(size_t x = 0; x < g_cube_width; x++){
                 printf("%.2f", block[CUBE_I(x, y, z)]);
                 if(x != g_cube_width - 1){
                     printf(", ");
@@ -43,9 +45,9 @@ void print_block(double* block){
 
 //initialize block, the border consists of value 0.0
 void initialize_block(double* block, int i, int j, int k){
-    for(int z = 0; z < g_cube_width; z++){
-        for(int y = 0; y < g_cube_width; y++){
-            for(int x = 0; x < g_cube_width; x++){
+    for(size_t z = 0; z < g_cube_width; z++){
+        for(size_t y = 0; y < g_cube_width; y++){
+            for(size_t x = 0; x < g_cube_width; x++){
                 //if it starts or ends in an edge, set to 0
                 if( INEDGE(k, z) || INEDGE(j, y) || INEDGE(i, x)){
                     block[CUBE_I(x, y, z)] = 0.0;
@@ -58,9 +60,9 @@ void initialize_block(double* block, int i, int j, int k){
 }
 
 void clear_block(double* block){
-    for(int z = 0; z < g_cube_width; z++){
-        for(int y = 0; y < g_cube_width; y++){
-            for(int x = 0; x < g_cube_width; x++){
+    for(size_t z = 0; z < g_cube_width; z++){
+        for(size_t y = 0; y < g_cube_width; y++){
+            for(size_t x = 0; x < g_cube_width; x++){
                 block[CUBE_I(x, y, z)] = 0.0;
             }
         }
@@ -68,18 +70,18 @@ void clear_block(double* block){
 }
 
 void clear_pointers(starpu_data_handle_t* list){
-    for(int i = 0; i < CUBE(g_width_in_cubes); i++){
+    for(size_t i = 0; i < CUBE(g_width_in_cubes); i++){
         list[i] = NULL;
     }
 }
 
 #define EPSILON 0.0001
 
-void assert_block_clear_edge(double* block, int i, int j, int k){
-    for(int z = 0; z < g_cube_width; z++){
-        for(int y = 0; y < g_cube_width; y++){
-            for(int x = 0; x < g_cube_width; x++){
-                const int idx = CUBE_I(x, y, z);
+void assert_block_clear_edge(double* block, size_t i, size_t j, size_t k){
+    for(size_t z = 0; z < g_cube_width; z++){
+        for(size_t y = 0; y < g_cube_width; y++){
+            for(size_t x = 0; x < g_cube_width; x++){
+                const size_t idx = CUBE_I(x, y, z);
                 if( INEDGE(k, z) || INEDGE(j, y) || INEDGE(i, x)){
                     assert(block[idx] < EPSILON);
                     assert(block[idx] > -EPSILON);
@@ -97,7 +99,7 @@ struct cl_args {
     uint32_t t;
 };
 
-struct cl_args* make_cl_args(uint32_t i, uint32_t j, uint32_t k, uint32_t t){
+struct cl_args* make_cl_args(size_t i, size_t j, size_t k, size_t t){
     struct cl_args* cl_args = (struct cl_args*) malloc(sizeof(struct cl_args));
     if(cl_args == NULL){
         return NULL;
@@ -110,21 +112,39 @@ struct cl_args* make_cl_args(uint32_t i, uint32_t j, uint32_t k, uint32_t t){
     return cl_args;
 }
 
-int main(int argc, char **argv){
+
+void read_input(int argc, char **argv){
     //get global parâmeters
-	assert(argc >= 4);
+	assert(argc >= 5);
+    int iterations, volume_width, width_in_cubes, absorption_width;
 
-	g_iterations = atoi(argv[1]);
-    assert(g_iterations > 0);
+	iterations = atoi(argv[1]);
+    assert(iterations > 0);
+    g_iterations = iterations;
 
-	g_volume_width = atoi(argv[2]);
-	g_width_in_cubes = atoi(argv[3]);
+	volume_width = atoi(argv[2]);
+    assert(volume_width > 0);
+    g_volume_width = volume_width;
+
+	width_in_cubes = atoi(argv[3]);
+    assert(width_in_cubes > 0);
+    g_width_in_cubes = width_in_cubes;
+
     // the number of segments divides the total volume
     assert((g_volume_width % g_width_in_cubes == 0) && 
         "A largura do volume + kernel size devem ser divisíveis pela largura do segmento.\n");
 
-	g_cube_width = g_volume_width / g_width_in_cubes;
+	absorption_width = atoi(argv[3]);
+    assert(absorption_width > 0);
+    g_absorption_width = absorption_width;
 
+	g_cube_width = g_volume_width / g_width_in_cubes;
+}
+
+int main(int argc, char **argv){
+    read_input(argc, argv);
+    // check if all have been properly intialized
+    assert(g_absorption_width && g_cube_width && g_iterations && g_volume_width && g_width_in_cubes);
   
     struct starpu_codelet avrg_filter_cl = {
         .cpu_funcs = { rtm_kernel },
