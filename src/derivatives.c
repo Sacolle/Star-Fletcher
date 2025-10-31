@@ -7,24 +7,37 @@
 
 #define KERNEL_SIZE 4
 
-//flip along the axis jump x = width, y = width², z = width³
-// given the matrix, to flip in the x axis
-// 0, 1, 2
-// 3, 4, 5
-// 6, 7, 8
-// flip(5, 3) returns 3
-static inline flip(const size_t line_idx, const size_t idx, const size_t jump, const size_t stride){
-    return jump - 2 * line_idx * stride + idx;
+extern uint64_t g_cube_width;
+
+// espelha no eixo
+// a deirvação baseia-se na fórmula do índice f(x, y, z) = x + Wy + W²z
+// f(W - 1 - x, y, z) é o ponto espelhado no eixo x, então na lista 0, 1, 2, 3, 4. g(4) = 0 e g(1) = 3.
+// subsitituido isso na fórmula do índice, temos: 
+// f(W - 1 - x, y, z) = W - 1 - x + Wy + W²z
+// que pode ser simplificado nas seguintes etapas para
+// f(W - 1 - x, y, z) = W - 1 - x - x + x + Wy + W²z
+// f(W - 1 - x, y, z) = W - 1 - 2x + f(x, y, z)
+// As formulas para Y e Z são derivadas da mesma forma sendo:
+// f(x, W - 1 - y, z) = W² - W - 2Wy + f(x, y, z)
+// f(x, y, W - 1 - z) = W³ - W² - 2W²z + f(x, y, z)
+//
+// Tudo isso pode ser reduzido para:
+// W * stride - stride - 2 * stride * dir + idx
+// pois a direção correlaciona ao stride
+// Portanto
+// flip no eixo X deve-se passar stride = 1
+// flip no eixo Y deve-se passar stride = cube_width
+// flip no eixo Y deve-se passar stride = cube_width²
+static inline flip(const size_t line_idx, const size_t idx, const size_t stride){
+    return (stride * g_cube_width - stride) - 2 * line_idx * stride + idx;
 }
 
 //NOTE: this might do some insane overflow errors
 //TODO: 
 FP deriv_dir(
     FP* block, FP* block_minus, FP* block_plus, 
-    const int dir, const size_t base_idx, 
-    const int stride, const size_t jump,
-    const FP dinv, const int cube_width, 
-    FP aggr, const FP const ls[4]
+    const int dir, const size_t base_idx, const int stride, 
+    const FP dinv, FP aggr, const FP const ls[4]
 ) {  
     // sign is either -1 or 1.
     for(int sign = -1; sign <= 1; sign += 2){
@@ -34,14 +47,14 @@ FP deriv_dir(
         for(int k = 1; k <= KERNEL_SIZE; k++){  
             line_idx += sign;
 
-            if(line_idx >= cube_width){
+            if(line_idx >= g_cube_width){
                 access_block = block_plus;
                 line_idx = 0;
-                idx = flip(0, idx, jump, stride);
+                idx = flip(0, idx, stride);
             }else if(line_idx < 0){
                 access_block = block_minus;
-                line_idx = cube_width;
-                idx = flip(cube_width, idx, jump, stride);
+                line_idx = g_cube_width;
+                idx = flip(g_cube_width, idx, stride);
             }else{
                 idx = (idx + sign * stride);
             }
@@ -65,16 +78,13 @@ const FP const fst_deriv_coef[4] = {L1, L2, L3, L4};
 */
 FP fst_deriv_dir(
     FP* block, FP* block_minus, FP* block_plus, 
-    const int dir, const size_t base_idx, 
-    const int stride, const size_t jump,
-    const FP dinv, const int cube_width
+    const int dir, const size_t base_idx, const int stride, 
+    const FP dinv 
 ){
     return deriv_dir(
         block, block_minus, block_plus, 
-        dir, base_idx, 
-        stride, jump, 
-        dinv, cube_width, 
-        0.0, fst_deriv_coef
+        dir, base_idx, stride, 
+        dinv, 0.0, fst_deriv_coef
     );
 }
 
@@ -91,17 +101,14 @@ const FP const snd_deriv_coef[4] = {K1, K2, K3, K4};
 */
 FP snd_deriv_dir(
     FP* block, FP* block_minus, FP* block_plus, 
-    const int dir, const size_t base_idx, 
-    const int stride, const size_t jump,
-    const FP d2inv, const int cube_width
+    const int dir, const size_t base_idx, const int stride, 
+    const FP d2inv 
 ){
     const FP center = K0 * block[base_idx];
     return deriv_dir(
         block, block_minus, block_plus, 
-        dir, base_idx, 
-        stride, jump, 
-        d2inv, cube_width, 
-        center, snd_deriv_coef
+        dir, base_idx, stride,  
+        d2inv, center, snd_deriv_coef
     );
 }
 
@@ -156,10 +163,10 @@ FP snd_deriv_dir(
 //TODO: validar esse bloco
 FP cross_deriv_ddir(
     FP* block, const size_t base_idx,
-    const size_t dir1, FP* block_minus_d1, FP* block_plus_d1, const size_t stride_d1, const size_t jump_d1,
-    const size_t dir2, FP* block_minus_d2, FP* block_plus_d2, const size_t stride_d2, const size_t jump_d2,
+    const size_t dir1, FP* block_minus_d1, FP* block_plus_d1, const size_t stride_d1,
+    const size_t dir2, FP* block_minus_d2, FP* block_plus_d2, const size_t stride_d2,
     FP* block_diagonal_plus_plus, FP* block_diagonal_plus_minus, 
-    FP* block_diagonal_minus_plus, FP* block_diagonal_minus_minus, const int cube_width
+    FP* block_diagonal_minus_plus, FP* block_diagonal_minus_minus
 ){
     const FP const ls[LSSIZE * LSSIZE] = {
         L11, L12, L13, L14,
@@ -191,19 +198,19 @@ FP cross_deriv_ddir(
 
             for(int k1 = 1; k1 <= KERNEL_SIZE; k1++){
                 const int dim_idx_dir1 = dir1 + (k1 * sign1);
-                const bool overflow_dir1 = dim_idx_dir1 >= cube_width || dim_idx_dir1 < 0;
+                const bool overflow_dir1 = dim_idx_dir1 >= g_cube_width || dim_idx_dir1 < 0;
 
                 // move idx to the next spot in this direction
-                idx = overflow_dir1 ? flip(dim_idx_dir1 - sign1, idx, jump_d1, stride_d1) : (idx + sign1 * stride_d1);
+                idx = overflow_dir1 ? flip(dim_idx_dir1 - sign1, idx, stride_d1) : (idx + sign1 * stride_d1);
 
                 for(int k2 = 1; k2 <= KERNEL_SIZE; k2++){
                     const FP coef = ls[(k1 - 1) * LSSIZE + (k2 - 1)];
 
                     const int dim_idx_dir2 = dir2 + (k2 * sign2);
-                    const bool overflow_dir2 = dim_idx_dir2 >= cube_width || dim_idx_dir2 < 0;
+                    const bool overflow_dir2 = dim_idx_dir2 >= g_cube_width || dim_idx_dir2 < 0;
 
                     // move in this direction
-                    idx = overflow_dir2 ? flip(dim_idx_dir2 - sign2, idx, jump_d2, stride_d2) : (idx + sign2 * stride_d2);
+                    idx = overflow_dir2 ? flip(dim_idx_dir2 - sign2, idx, stride_d2) : (idx + sign2 * stride_d2);
                     
                     // comparação como se fosse tuplas
                     FP* acess_block;
