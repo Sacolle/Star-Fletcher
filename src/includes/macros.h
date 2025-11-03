@@ -8,7 +8,7 @@
 #define CUBE_I(x, y, z) ((x) + ((y) * g_cube_width) + ((z) * g_cube_width * g_cube_width))
 
 static inline size_t cube_idx(size_t x, size_t y, size_t z){
-    extern size_t g_cube_width;
+    extern uint64_t g_cube_width;
     return x + g_cube_width * (y + z * g_cube_width);
 }
 

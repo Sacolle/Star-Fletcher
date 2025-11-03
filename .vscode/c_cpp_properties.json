@@ -5,7 +5,9 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${env:STARPU_STORE_PATH}/include/starpu/1.4",
-                "${env:HWLOC_STORE_PATH}/include/"
+                "${env:HWLOC_STORE_PATH}/include/",
+                "${env:CRITERION_STORE_PATH}/include/",
+                "${env:CRITERION_STORE_PATH}/include/criterion/internal"
             ],
             "defines": [],
             "compilerPath": "${env:GCC_STORE_PATH}/bin/gcc",

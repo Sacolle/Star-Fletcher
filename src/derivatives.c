@@ -2,12 +2,12 @@
 
 
 #include<stdbool.h>
+#include<assert.h>
 
+#include "macros.h"
 
 
 #define KERNEL_SIZE 4
-
-extern uint64_t g_cube_width;
 
 // espelha no eixo
 // a deirvação baseia-se na fórmula do índice f(x, y, z) = x + Wy + W²z
@@ -23,13 +23,13 @@ extern uint64_t g_cube_width;
 //
 // Tudo isso pode ser reduzido para:
 // W * stride - stride - 2 * stride * dir + idx
-// pois a direção correlaciona ao stride
+// pois a cada direção tem seu stride associado (x: 1, y: W, z: W²)
 // Portanto
 // flip no eixo X deve-se passar stride = 1
 // flip no eixo Y deve-se passar stride = cube_width
-// flip no eixo Y deve-se passar stride = cube_width²
-static inline flip(const size_t line_idx, const size_t idx, const size_t stride){
-    return (stride * g_cube_width - stride) - 2 * line_idx * stride + idx;
+// flip no eixo Z deve-se passar stride = cube_width²
+static inline size_t flip(const size_t line_idx, const size_t idx, const int stride, const int cube_width){
+    return (stride * cube_width - stride) - 2 * line_idx * stride + idx;
 }
 
 //NOTE: this might do some insane overflow errors
@@ -37,7 +37,7 @@ static inline flip(const size_t line_idx, const size_t idx, const size_t stride)
 FP deriv_dir(
     FP* block, FP* block_minus, FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 
-    const FP dinv, FP aggr, const FP const ls[4]
+    const FP dinv, FP aggr, const FP ls[4], const int cube_width
 ) {  
     // sign is either -1 or 1.
     for(int sign = -1; sign <= 1; sign += 2){
@@ -47,14 +47,14 @@ FP deriv_dir(
         for(int k = 1; k <= KERNEL_SIZE; k++){  
             line_idx += sign;
 
-            if(line_idx >= g_cube_width){
+            if(line_idx >= cube_width){
                 access_block = block_plus;
                 line_idx = 0;
-                idx = flip(0, idx, stride);
+                idx = flip(0, idx, stride, cube_width);
             }else if(line_idx < 0){
                 access_block = block_minus;
-                line_idx = g_cube_width;
-                idx = flip(g_cube_width, idx, stride);
+                line_idx = cube_width - 1;
+                idx = flip(cube_width - 1, idx, stride, cube_width);
             }else{
                 idx = (idx + sign * stride);
             }
@@ -67,7 +67,7 @@ FP deriv_dir(
     return aggr * dinv;  
 }
 
-const FP const fst_deriv_coef[4] = {L1, L2, L3, L4};  
+static const FP fst_deriv_coef[4] = {L1, L2, L3, L4};  
 /*
     #define Der1(p, i, s, dinv) (
     L1 * (p[i + s] - p[i - s]) + 
@@ -79,16 +79,16 @@ const FP const fst_deriv_coef[4] = {L1, L2, L3, L4};
 FP fst_deriv_dir(
     FP* block, FP* block_minus, FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 
-    const FP dinv 
+    const FP dinv, const int cube_width
 ){
     return deriv_dir(
         block, block_minus, block_plus, 
         dir, base_idx, stride, 
-        dinv, 0.0, fst_deriv_coef
+        dinv, 0.0, fst_deriv_coef, cube_width
     );
 }
 
-const FP const snd_deriv_coef[4] = {K1, K2, K3, K4};  
+static const FP snd_deriv_coef[4] = {K1, K2, K3, K4};  
 /*
     #define Der2(p, i, s, d2inv) ((
     K0 * p[i] + 
@@ -102,13 +102,13 @@ const FP const snd_deriv_coef[4] = {K1, K2, K3, K4};
 FP snd_deriv_dir(
     FP* block, FP* block_minus, FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 
-    const FP d2inv 
+    const FP d2inv, const int cube_width
 ){
     const FP center = K0 * block[base_idx];
     return deriv_dir(
         block, block_minus, block_plus, 
         dir, base_idx, stride,  
-        d2inv, center, snd_deriv_coef
+        d2inv, center, snd_deriv_coef, cube_width
     );
 }
 
@@ -155,20 +155,32 @@ FP snd_deriv_dir(
         p[i + (4,4,0)] - p[i + (-4,4,0)] - p[i +(4,-4,0)] + p[i + (-4,-4,0)]
     ) 
 */
+
+#define WIDTH_OF_BLOCKPOS_MASK 2
+enum BlockPos {
+    Center = 0, 
+    Minus = 1, 
+    Plus = 2
+};
+
 #define LSSIZE 4
 
-//usando uma tupla booleana para simplificar os casos
-#define TUP(t1, t2) ((t1 << 1) | t2)
+//usando uma tupla para poder usar o switch na hora de determinar os casos
+#define TUP(t1, t2) (((t1) << WIDTH_OF_BLOCKPOS_MASK) | (t2))
+
+//const bool s2neg = sign2 == -1;
+//FP* other_block_d2 = s2neg ? block_minus_d2 : block_plus_d2; 
 
 //TODO: validar esse bloco
 FP cross_deriv_ddir(
     FP* block, const size_t base_idx,
-    const size_t dir1, FP* block_minus_d1, FP* block_plus_d1, const size_t stride_d1,
-    const size_t dir2, FP* block_minus_d2, FP* block_plus_d2, const size_t stride_d2,
+    const size_t dir1, FP* block_minus_d1, FP* block_plus_d1, const int stride_d1,
+    const size_t dir2, FP* block_minus_d2, FP* block_plus_d2, const int stride_d2,
     FP* block_diagonal_plus_plus, FP* block_diagonal_plus_minus, 
-    FP* block_diagonal_minus_plus, FP* block_diagonal_minus_minus
+    FP* block_diagonal_minus_plus, FP* block_diagonal_minus_minus,
+    const int cube_width
 ){
-    const FP const ls[LSSIZE * LSSIZE] = {
+    static const FP ls[LSSIZE * LSSIZE] = {
         L11, L12, L13, L14,
         L12, L22, L23, L24,
         L13, L23, L33, L34,
@@ -179,52 +191,64 @@ FP cross_deriv_ddir(
     // do for minus the idx and plus the idx
     // sign is either -1 or 1.
     for(int sign1 = -1; sign1 <= 1; sign1 += 2){
-        const bool s1neg = sign1 == -1;
-        FP* other_block_d1 = s1neg ? block_minus_d1 : block_plus_d1; 
-        for(int sign2 = -1; sign2 <= 1; sign2 += 2){
-            const bool s2neg = sign2 == -1;
-            FP* other_block_d2 = s2neg ? block_minus_d2 : block_plus_d2; 
+        int line_idx1 = dir1;
+        enum BlockPos access_block_d1 = Center;
 
-            //find which diagonal is going to be possibly acessed
-            FP* diagonal_block;
-            switch (TUP(s1neg, s2neg)){
-                case (TUP(true, true)): diagonal_block = block_diagonal_minus_minus; break;
-                case (TUP(true, false)): diagonal_block = block_diagonal_minus_plus; break;
-                case (TUP(false, true)): diagonal_block = block_diagonal_plus_minus; break;
-                case (TUP(false, false)): diagonal_block = block_diagonal_plus_plus; break;
-            }
+        for(int sign2 = -1; sign2 <= 1; sign2 += 2){
+            int line_idx2 = dir2;
+            enum BlockPos access_block_d2 = Center;
 
             size_t idx = base_idx;
-
             for(int k1 = 1; k1 <= KERNEL_SIZE; k1++){
-                const int dim_idx_dir1 = dir1 + (k1 * sign1);
-                const bool overflow_dir1 = dim_idx_dir1 >= g_cube_width || dim_idx_dir1 < 0;
+                line_idx1 += sign1;
 
-                // move idx to the next spot in this direction
-                idx = overflow_dir1 ? flip(dim_idx_dir1 - sign1, idx, stride_d1) : (idx + sign1 * stride_d1);
+                if(line_idx1 >= cube_width){
+                    access_block_d1 = Plus;
+                    line_idx1 = 0;
+                    idx = flip(0, idx, stride_d1, cube_width);
+                }else if(line_idx1 < 0){
+                    access_block_d2 = Minus;
+                    line_idx1 = cube_width - 1;
+                    idx = flip(cube_width - 1, idx, stride_d1, cube_width);
+                }else{
+                    idx = (idx + sign1 * stride_d1);
+                }
 
                 for(int k2 = 1; k2 <= KERNEL_SIZE; k2++){
+                    line_idx2 += sign2;
+
+                    if(line_idx2 >= cube_width){
+                        access_block_d2 = Plus;
+                        line_idx2 = 0;
+                        idx = flip(0, idx, stride_d2, cube_width);
+                    }else if(line_idx2 < 0){
+                        access_block_d2 = Minus;
+                        line_idx2 = cube_width - 1;
+                        idx = flip(cube_width - 1, idx, stride_d2, cube_width);
+                    }else{
+                        idx = (idx + sign2 * stride_d2);
+                    }
+                    FP* access_block;
+                    switch (TUP(access_block_d1, access_block_d2)){
+                    case TUP(Minus, Minus):  access_block = block_diagonal_minus_minus; break;
+                    case TUP(Minus, Center): access_block = block_minus_d1; break;
+                    case TUP(Minus, Plus):   access_block = block_diagonal_minus_plus; break;
+                    case TUP(Center, Minus): access_block = block_minus_d2; break;
+                    case TUP(Center, Center):access_block = block; break;
+                    case TUP(Center, Plus):  access_block = block_plus_d2; break;
+                    case TUP(Plus, Minus):   access_block = block_diagonal_plus_minus; break;
+                    case TUP(Plus, Center):  access_block = block_plus_d1; break;
+                    case TUP(Plus, Plus):    access_block = block_diagonal_plus_plus; break;
+                    default:
+                        assert(false && "Unreachable!");
+                        break;
+                    }
                     const FP coef = ls[(k1 - 1) * LSSIZE + (k2 - 1)];
 
-                    const int dim_idx_dir2 = dir2 + (k2 * sign2);
-                    const bool overflow_dir2 = dim_idx_dir2 >= g_cube_width || dim_idx_dir2 < 0;
-
-                    // move in this direction
-                    idx = overflow_dir2 ? flip(dim_idx_dir2 - sign2, idx, stride_d2) : (idx + sign2 * stride_d2);
-                    
-                    // comparação como se fosse tuplas
-                    FP* acess_block;
-                    switch (TUP(overflow_dir1, overflow_dir2)){
-                        case (TUP(true, true)): acess_block = diagonal_block; break;
-                        case (TUP(true, false)): acess_block = other_block_d1; break;
-                        case (TUP(false, true)): acess_block = other_block_d2; break;
-                        case (TUP(false, false)): acess_block = block; break;
-                    }
-
-                    aggr += coef * (sign1 * sign2) * (acess_block[idx]);
+                    aggr += coef * (sign1 * sign2) * (access_block[idx]);
                 }
             }
         }
     }
-
+    return aggr;
 }

@@ -9,7 +9,7 @@
     let 
         system = "x86_64-linux";
         starpuOverlay = f: p: {
-            StarPU = p.callPackage ./starpu.nix { maxBuffers = 10; };
+            StarPU = p.callPackage ../../starpu.nix { maxBuffers = 10; };
         };
         pkgs = import nixpkgs {
             inherit system;
@@ -36,11 +36,12 @@
             # for use in vscode intellisence
             GCC_STORE_PATH = "${pkgs.gcc}";
             STARPU_STORE_PATH = "${pkgs.StarPU}";
+            CRITERION_STORE_PATH = "${pkgs.criterion.dev}";
             HWLOC_STORE_PATH = "${pkgs.hwloc.dev}";
 
             shellHook = ''
                 export SHELL=/run/current-system/sw/bin/bash
-                echo Added StarPU, Hwloc and gcc to ENV
+                echo Added StarPU, Hwloc, criterion and gcc to ENV
             '';
         };
     };

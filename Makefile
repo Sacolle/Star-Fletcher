@@ -1,16 +1,23 @@
-CFLAGS += $$(pkg-config --cflags starpu-1.4) -g -pthread -O0 -Wall
-LDLIBS += $$(pkg-config --libs starpu-1.4)
+
+export STARPU_CFLAGS := $(shell pkg-config --cflags starpu-1.4)
+export STARPU_LDLIBS := $(shell pkg-config --libs starpu-1.4)
+
+CFLAGS := $(STARPU_CFLAGS) -g -pthread -O0 -Wall
+LDLIBS += $(STARPU_LDLIBS) 
+
+
+export PARENT_DIR := $(CURDIR)
 
 BIN = main
 
 SRCDIR = src
 OBJDIR = objs
-INCLUDEDIR = src/includes
+export INCLUDEDIR = src/includes
 
 SRCS := $(wildcard $(SRCDIR)/*.c)
 OBJS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o,$(SRCS))
 
-.PHONY: all clean run print
+.PHONY: all clean run print test
 
 all: $(BIN)
 
@@ -23,11 +30,15 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 run: $(BIN)
 	@echo "Runing $(BIN)."
-	./$(BIN) 4 80 10
+	./$(BIN) 100 80 10 4
 
 print:
 	@echo "Sources: $(SRCS)"
 	@echo "Objects: $(OBJS)"
 
+# need to pass the commands directly inline
+test:
+	$(MAKE) -C tests 
+
 clean:
-	rm -f $(TARGETS) *.o
+	rm -f $(BIN) *.o
