@@ -27,6 +27,8 @@
 
                 # for bash to work properlly inside vscode
                 bashInteractive
+                # for fuser
+                psmisc
                 # debug tools
                 gdb
                 gcc

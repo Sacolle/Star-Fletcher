@@ -32,42 +32,40 @@ static inline size_t flip(const size_t line_idx, const size_t idx, const int str
     return (stride * cube_width - stride) - 2 * line_idx * stride + idx;
 }
 
-//NOTE: this might do some insane overflow errors
-//TODO: 
-FP deriv_dir(
+// `NOTE`: this might do some insane overflow errors
+// Agrega os 4 itens no sentido `sign_for_idx`, na dimensão indicada por `stride`;
+// soma ou subtrai dependendo do `sign_for_math`.
+FP deriv_kernel_sum(
     FP* block, FP* block_minus, FP* block_plus, 
-    const int dir, const size_t base_idx, const int stride, 
-    const FP dinv, FP aggr, const FP ls[4], const int cube_width
-) {  
-    // sign is either -1 or 1.
-    for(int sign = -1; sign <= 1; sign += 2){
-        FP* access_block = block;
-        size_t idx = base_idx;
-        int line_idx = dir;
-        for(int k = 1; k <= KERNEL_SIZE; k++){  
-            line_idx += sign;
+    const int dir, const int sign_for_idx, const int sign_for_math,
+    const size_t base_idx, const int stride, 
+    const FP coef[4], const int cube_width
+) { 
+    FP aggr = 0.0;
+    FP* access_block = block;
+    int idx = base_idx;
+    int line_idx = dir;
+    for(int k = 1; k <= KERNEL_SIZE; k++){  
+        line_idx += sign_for_idx;
+        if(line_idx >= cube_width){
+            access_block = block_plus;
+            //flip from the extreme plus to the extreme minus
+            idx = flip(cube_width - 1, idx, stride, cube_width);
+            //set line idx to be the corret one after the flip
+            line_idx = 0;
+        }else if(line_idx < 0){
+            access_block = block_minus;
+            idx = flip(0, idx, stride, cube_width);
+            line_idx = cube_width - 1;
+        }else{
+            idx = (idx + sign_for_idx * stride);
+        }
 
-            if(line_idx >= cube_width){
-                access_block = block_plus;
-                line_idx = 0;
-                idx = flip(0, idx, stride, cube_width);
-            }else if(line_idx < 0){
-                access_block = block_minus;
-                line_idx = cube_width - 1;
-                idx = flip(cube_width - 1, idx, stride, cube_width);
-            }else{
-                idx = (idx + sign * stride);
-            }
-
-            const FP coef = ls[k - 1];
-            // if overflowed access the other buffer
-            aggr += sign * coef * access_block[idx];  
-        }  
-    }
-    return aggr * dinv;  
+        // if overflowed access the other buffer
+        aggr += sign_for_math * coef[k - 1] * access_block[idx];  
+    }  
+    return aggr;  
 }
-
-static const FP fst_deriv_coef[4] = {L1, L2, L3, L4};  
 /*
     #define Der1(p, i, s, dinv) (
     L1 * (p[i + s] - p[i - s]) + 
@@ -81,14 +79,18 @@ FP fst_deriv_dir(
     const int dir, const size_t base_idx, const int stride, 
     const FP dinv, const int cube_width
 ){
-    return deriv_dir(
-        block, block_minus, block_plus, 
-        dir, base_idx, stride, 
-        dinv, 0.0, fst_deriv_coef, cube_width
-    );
+    static const FP fst_deriv_coef[4] = {L1, L2, L3, L4};  
+    FP aggr = 0.0;
+    for(int sign = -1; sign <= 1; sign += 2){
+        aggr += deriv_kernel_sum(
+            block, block_minus, block_plus, 
+            dir, sign, sign, base_idx, stride, 
+            fst_deriv_coef, cube_width
+        );
+    }
+    return aggr * dinv;
 }
 
-static const FP snd_deriv_coef[4] = {K1, K2, K3, K4};  
 /*
     #define Der2(p, i, s, d2inv) ((
     K0 * p[i] + 
@@ -99,20 +101,23 @@ static const FP snd_deriv_coef[4] = {K1, K2, K3, K4};
     ) * (d2inv))
 
 */
+
 FP snd_deriv_dir(
     FP* block, FP* block_minus, FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 
     const FP d2inv, const int cube_width
 ){
-    const FP center = K0 * block[base_idx];
-    return deriv_dir(
-        block, block_minus, block_plus, 
-        dir, base_idx, stride,  
-        d2inv, center, snd_deriv_coef, cube_width
-    );
+    static const FP snd_deriv_coef[4] = {K1, K2, K3, K4};  
+    FP aggr = K0 * block[base_idx];
+    for(int sign = -1; sign <= 1; sign += 2){
+        aggr += deriv_kernel_sum(
+            block, block_minus, block_plus, 
+            dir, sign, 1, base_idx, stride, 
+            snd_deriv_coef, cube_width
+        );
+    }
+    return aggr * d2inv;
 }
-
-
 /*
 
     // assumindo s11 sendo o stride de x e s21 sendo o stride em Y
@@ -191,40 +196,40 @@ FP cross_deriv_ddir(
     // do for minus the idx and plus the idx
     // sign is either -1 or 1.
     for(int sign1 = -1; sign1 <= 1; sign1 += 2){
-        int line_idx1 = dir1;
-        enum BlockPos access_block_d1 = Center;
-
         for(int sign2 = -1; sign2 <= 1; sign2 += 2){
-            int line_idx2 = dir2;
-            enum BlockPos access_block_d2 = Center;
 
-            size_t idx = base_idx;
+            int line_idx1 = dir1;
+            enum BlockPos access_block_d1 = Center;
+            size_t outer_idx = base_idx;
             for(int k1 = 1; k1 <= KERNEL_SIZE; k1++){
                 line_idx1 += sign1;
 
                 if(line_idx1 >= cube_width){
                     access_block_d1 = Plus;
+                    outer_idx = flip(cube_width - 1, outer_idx, stride_d1, cube_width);
                     line_idx1 = 0;
-                    idx = flip(0, idx, stride_d1, cube_width);
                 }else if(line_idx1 < 0){
-                    access_block_d2 = Minus;
+                    access_block_d1 = Minus;
+                    outer_idx = flip(0, outer_idx, stride_d1, cube_width);
                     line_idx1 = cube_width - 1;
-                    idx = flip(cube_width - 1, idx, stride_d1, cube_width);
                 }else{
-                    idx = (idx + sign1 * stride_d1);
+                    outer_idx = (outer_idx + sign1 * stride_d1);
                 }
-
+                //loop variables
+                int line_idx2 = dir2;
+                enum BlockPos access_block_d2 = Center;
+                size_t idx = outer_idx;
                 for(int k2 = 1; k2 <= KERNEL_SIZE; k2++){
                     line_idx2 += sign2;
 
                     if(line_idx2 >= cube_width){
                         access_block_d2 = Plus;
+                        idx = flip(cube_width - 1, idx, stride_d2, cube_width);
                         line_idx2 = 0;
-                        idx = flip(0, idx, stride_d2, cube_width);
                     }else if(line_idx2 < 0){
                         access_block_d2 = Minus;
+                        idx = flip(0, idx, stride_d2, cube_width);
                         line_idx2 = cube_width - 1;
-                        idx = flip(cube_width - 1, idx, stride_d2, cube_width);
                     }else{
                         idx = (idx + sign2 * stride_d2);
                     }
