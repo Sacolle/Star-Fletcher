@@ -44,6 +44,7 @@
             shellHook = ''
                 export SHELL=/run/current-system/sw/bin/bash
                 echo Added StarPU, Hwloc, criterion and gcc to ENV
+                zsh
             '';
         };
     };

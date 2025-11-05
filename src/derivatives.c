@@ -60,8 +60,6 @@ FP deriv_kernel_sum(
         }else{
             idx = (idx + sign_for_idx * stride);
         }
-
-        // if overflowed access the other buffer
         aggr += sign_for_math * coef[k - 1] * access_block[idx];  
     }  
     return aggr;  
