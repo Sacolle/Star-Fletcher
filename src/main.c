@@ -3,25 +3,24 @@
 #include <stdint.h>
 
 #include "kernel.h"
-
 #include "macros.h"
+#include "floatingpoint.h"
+#include "argparse.h"
+#include "medium.h"
 
-const uint64_t BORDER_SIZE = 4;
+
+const uint64_t BORDER_WIDTH = 4;
 
 
-// number of iterations
-uint64_t  g_iterations = 0;
 // width for the volume of the whole sistem
-uint64_t g_volume_width = 0;
+size_t g_volume_width = 0;
 // amount of segments in a dimension. 
 // if g_volume_width = 100 and g_width_in_cubes = 10
 // there are 10 segmentations by dimension, resulting in 1000 total cubes of 
 // volume 1000
-uint64_t g_width_in_cubes = 0;
+size_t g_width_in_cubes = 0;
 // width for the segmented cube
-uint64_t g_cube_width = 0;
-
-uint64_t g_absorption_width = 0;
+size_t g_cube_width = 0;
 
 
 void print_block(double* block){
@@ -69,6 +68,7 @@ void clear_block(double* block){
     }
 }
 
+//TODO: 
 void clear_pointers(starpu_data_handle_t* list){
     for(size_t i = 0; i < CUBE(g_width_in_cubes); i++){
         list[i] = NULL;
@@ -76,7 +76,7 @@ void clear_pointers(starpu_data_handle_t* list){
 }
 
 #define EPSILON 0.0001
-
+//TODO: mover para o sistema de testes
 void assert_block_clear_edge(double* block, size_t i, size_t j, size_t k){
     for(size_t z = 0; z < g_cube_width; z++){
         for(size_t y = 0; y < g_cube_width; y++){
@@ -90,6 +90,7 @@ void assert_block_clear_edge(double* block, size_t i, size_t j, size_t k){
         }
     }
 }
+
 
 struct cl_args {
     char name[64];
@@ -111,56 +112,170 @@ struct cl_args* make_cl_args(size_t i, size_t j, size_t k, size_t t){
 
     return cl_args;
 }
+//TODO: make test for these functions
+void multi_free(void** buffers, size_t amount){
+    for(size_t i = 0; i < amount; i++){
+        printf("Erro em alocar os blocos em malloc!\n");
+        free(buffers[i]);
+    }
+}
 
+int multi_malloc(void** buffers, size_t amount, size_t size){
+    size_t err_i = 0;
+    for(size_t i = 0; i < amount; i++){
+        if((buffers[i] = malloc(size)) == NULL){
+            err_i = i;
+            break;
+        }
+    }
+    // remove os buffers até o i que terminou no caso de erro
+    // pois se err_i = 2, o 3º elemento deu erro e deve-se desalocar os
+    // buffers 0 e 1 que foram alocados antes desse.
+    multi_free(buffers, err_i);
+    //err_i pode ser 0 e indicar erro, nesse caso buffer[0] será nulo
+    return err_i && buffers[0] == NULL;
+}
 
-void read_input(int argc, char **argv){
-    //get global parâmeters
-	assert(argc >= 5);
-    int iterations, volume_width, width_in_cubes, absorption_width;
+void multi_starpu_free(void** buffers, size_t amount, size_t size){
+    for(size_t i = 0; i < amount; i++){
+        printf("Erro em alocar os blocos em malloc!\n");
+        starpu_free_noflag(buffers[i], size);
+    }
+}
 
-	iterations = atoi(argv[1]);
-    assert(iterations > 0);
-    g_iterations = iterations;
+//TODO: validar que starpu_malloc retorna só 0 em sucesso
+int multi_starpu_malloc(void** buffers, size_t amount, size_t size){
+    size_t err_i = 0;
+    int err = 0;
+    for(size_t i = 0; i < amount; i++){
+        if((err = starpu_malloc(buffers[i], size)) != 0){
+            err_i = i;
+            break;
+        }
+    }
+    multi_starpu_free(buffers, err_i, size);
+    return err;
+}
 
-	volume_width = atoi(argv[2]);
-    assert(volume_width > 0);
-    g_volume_width = volume_width;
+struct starpu_codelet avrg_filter_cl = {
+    .cpu_funcs = { rtm_kernel },
+    .nbuffers = 8,
+    .modes = {
+        STARPU_W, // write cell at CUBE_I(x, y, z) at t
+        STARPU_R, // read cell at CUBE_I(x, y, z) at t - 1
+        STARPU_R, // read cell at CUBE_I(x, y, z - 1) at t - 1
+        STARPU_R, // read cell at CUBE_I(x, y, z + 1) at t - 1
+        STARPU_R, // read cell at CUBE_I(x, y - 1, z) at t - 1
+        STARPU_R, // read cell at CUBE_I(x, y + 1, z) at t - 1
+        STARPU_R, // read cell at CUBE_I(x - 1, y, z) at t - 1
+        STARPU_R  // read cell at CUBE_I(x + 1, y, z) at t - 1
+    },
+    .model = &starpu_perfmodel_nop,
+};
 
-	width_in_cubes = atoi(argv[3]);
-    assert(width_in_cubes > 0);
-    g_width_in_cubes = width_in_cubes;
+int main(int argc, char **argv){
+    enum Form form = 0;
+    char* form_str = NULL;
+    uint32_t nx, ny, nz, absorb_width;
+    FP dx, dy, dz, dt, tmax;
+
+    int err = 0;
+    if((err = read_args(argc, argv, 11, 
+        ARG_str, &form_str, 
+        ARG_u32, &nx, ARG_u32, &ny, ARG_u32, &nz, ARG_u32, &absorb_width, 
+        FP_ARG, &dx, FP_ARG, &dy, FP_ARG, &dz, FP_ARG, &dt, FP_ARG, &tmax,
+        ARG_u64, &g_width_in_cubes 
+    )) != 0){
+        printf("Error %s in parsing arg at %d\n.", get_parse_errors_name(err), get_parse_errors_local(err));
+        return EXIT_FAILURE;
+    }
+
+    if((form = str_to_medium(form_str)) < 0){
+        printf("Error in parsing %s as a medium.\n", form_str);
+        return EXIT_FAILURE;
+    }
+    //fazendo dessa forma para ficar igual ao fletecher base
+    g_volume_width = nx + 2 * absorb_width + 2 * BORDER_WIDTH;
 
     // the number of segments divides the total volume
     assert((g_volume_width % g_width_in_cubes == 0) && 
         "A largura do volume + kernel size devem ser divisíveis pela largura do segmento.\n");
 
-	absorption_width = atoi(argv[3]);
-    assert(absorption_width > 0);
-    g_absorption_width = absorption_width;
-
 	g_cube_width = g_volume_width / g_width_in_cubes;
-}
+    assert(g_cube_width && g_width_in_cubes && g_volume_width);
+ 
+    const int64_t st = (int64_t) FP_CEIL(tmax / dt);
 
-int main(int argc, char **argv){
-    read_input(argc, argv);
-    // check if all have been properly intialized
-    assert(g_absorption_width && g_cube_width && g_iterations && g_volume_width && g_width_in_cubes);
-  
-    struct starpu_codelet avrg_filter_cl = {
-        .cpu_funcs = { rtm_kernel },
-        .nbuffers = 8,
-        .modes = {
-            STARPU_W, // write cell at CUBE_I(x, y, z) at t
-            STARPU_R, // read cell at CUBE_I(x, y, z) at t - 1
-            STARPU_R, // read cell at CUBE_I(x, y, z - 1) at t - 1
-            STARPU_R, // read cell at CUBE_I(x, y, z + 1) at t - 1
-            STARPU_R, // read cell at CUBE_I(x, y - 1, z) at t - 1
-            STARPU_R, // read cell at CUBE_I(x, y + 1, z) at t - 1
-            STARPU_R, // read cell at CUBE_I(x - 1, y, z) at t - 1
-            STARPU_R  // read cell at CUBE_I(x + 1, y, z) at t - 1
-        },
-        .model = &starpu_perfmodel_nop,
-    };
+    // iSource
+    const size_t perturbation_source_cube = block_idx(g_width_in_cubes / 2, g_width_in_cubes / 2, g_width_in_cubes / 2);
+    const size_t perturbation_source_pos  = cube_idx(g_cube_width / 2, g_cube_width / 2, g_cube_width / 2);
+
+    const size_t volume_in_bytes = CUBE(g_volume_width) * sizeof(FP);
+    
+    // allocate the buffers that will be used in computing the 
+    // intermediary values
+    FP *vpz, *vsv, *epsilon, *delta, *phi, *theta;
+    FP* medium[6] = { vpz, vsv, epsilon, delta, phi, theta };
+    if(multi_malloc((void**) medium, 6, volume_in_bytes) != 0){
+        perror("Error in alocating all buffers.\n");
+        return EXIT_FAILURE;
+    }
+
+    initialize_medium();
+    border();
+    // initialize the medium
+    /*
+    // inicialize the buffers above based on the type of medium
+
+    // set the absorption zone for vpz and vsv
+
+    // inicialize the wave blocks with zero 
+    float *pp=NULL;
+    pp = (float *) malloc(sx*sy*sz*sizeof(float)); 
+    float *pc=NULL;
+    pc = (float *) malloc(sx*sy*sz*sizeof(float)); 
+    float *qp=NULL;
+    qp = (float *) malloc(sx*sy*sz*sizeof(float)); 
+    float *qc=NULL;
+    qc = (float *) malloc(sx*sy*sz*sizeof(float)); 
+    
+    // values that need to be pre computed
+    float *ch1dxx = NULL; // isotropy simetry deep angle
+    float *ch1dyy = NULL; // isotropy simetry deep angle
+    float *ch1dzz = NULL; // isotropy simetry deep angle
+    float *ch1dxy = NULL; // isotropy simetry deep angle
+    float *ch1dyz = NULL; // isotropy simetry deep angle
+    float *ch1dxz = NULL; // isotropy simetry deep angle
+    float *v2px = NULL;   // coeficient of H2(p)
+    float *v2pz = NULL;   // coeficient of H1(q)
+    float *v2sz = NULL;   // coeficient of H1(p-q) and H2(p-q)
+    float *v2pn = NULL;   // coeficient of H2(p)
+
+    for (int i = 0; i < sx * sy * sz; i++)
+    {
+        float sinTheta = sin(theta[i]);
+        float cosTheta = cos(theta[i]);
+        float sin2Theta = sin(2.0 * theta[i]);
+        float sinPhi = sin(phi[i]);
+        float cosPhi = cos(phi[i]);
+        float sin2Phi = sin(2.0 * phi[i]);
+        ch1dxx[i] = sinTheta * sinTheta * cosPhi * cosPhi;
+        ch1dyy[i] = sinTheta * sinTheta * sinPhi * sinPhi;
+        ch1dzz[i] = cosTheta * cosTheta;
+        ch1dxy[i] = sinTheta * sinTheta * sin2Phi;
+        ch1dyz[i] = sin2Theta * sinPhi;
+        ch1dxz[i] = sin2Theta * cosPhi;
+    }
+
+    // coeficients of H1 and H2 at PDEs
+    for (int i = 0; i < sx * sy * sz; i++){
+        v2sz[i] = vsv[i] * vsv[i];
+        v2pz[i] = vpz[i] * vpz[i];
+        v2px[i] = v2pz[i] * (1.0 + 2.0 * epsilon[i]);
+        v2pn[i] = v2pz[i] * (1.0 + 2.0 * delta[i]);
+    }
+    */
+
 	int ret = starpu_init(NULL);
 	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
 
@@ -204,7 +319,7 @@ int main(int argc, char **argv){
     starpu_data_handle_t* curr = (starpu_data_handle_t*) malloc(sizeof(starpu_data_handle_t) * CUBE(g_width_in_cubes));
     clear_pointers(curr);
 
-    for(int t = 0; t < g_iterations; t++){
+    for(int64_t t = 0; t < st; t++){
         starpu_iteration_push(t);
         for(int k = 0; k < g_width_in_cubes; k++){
             for(int j = 0; j < g_width_in_cubes; j++){
@@ -227,7 +342,7 @@ int main(int argc, char **argv){
                     struct cl_args* cl_args = make_cl_args(i, j, k, t + 1);
                     assert(cl_args != NULL);
 
-                    sprintf(cl_args->name, "[%d, %d, %d, %d]", i, j, k, t + 1);
+                    sprintf(cl_args->name, "[%d, %d, %d, %ld]", i, j, k, t + 1);
                     task->name = cl_args->name;
 
                     task->cl_arg = cl_args;

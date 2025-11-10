@@ -2,7 +2,7 @@
 export STARPU_CFLAGS := $(shell pkg-config --cflags starpu-1.4)
 export STARPU_LDLIBS := $(shell pkg-config --libs starpu-1.4)
 
-CFLAGS := $(STARPU_CFLAGS) -g -pthread -O0 -Wall
+CFLAGS := $(STARPU_CFLAGS) -g -pthread -O0 -Wall -lm
 LDLIBS += $(STARPU_LDLIBS) 
 
 
@@ -30,7 +30,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 run: $(BIN)
 	@echo "Runing $(BIN)."
-	./$(BIN) 100 80 10 4
+	./$(BIN) VTI 144 144 144 4 12.5 12.5 12.5 1 50.0 10
 
 print:
 	@echo "Sources: $(SRCS)"
