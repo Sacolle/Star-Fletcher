@@ -2,6 +2,7 @@
 #define PRECISION_H
 
 #include <math.h>
+#include <stdlib.h>
 
 // Choose precision type with -DFP_FLOAT or -DFP_LONG_DOUBLE (default = double)
 
@@ -21,6 +22,7 @@
     #define FP_MAX   fmaxf
     #define FP_ABS   fabsf
     #define FP_ARG   ARG_f32
+    #define FP_RAND()  ((float) rand() / (float) RAND_MAX)
     #define FP_LIT(x) x##f
 
 #elif defined(FP_LONG_DOUBLE)
@@ -38,6 +40,7 @@
     #define FP_MAX   fmaxl
     #define FP_ABS   fabsl
     #define FP_ARG   error
+    #define FP_RAND  error
     #define FP_LIT(x) x##L
 
 #else
@@ -56,6 +59,8 @@
     #define FP_MAX   fmax
     #define FP_ABS   fabs
     #define FP_ARG   ARG_f64
+    // essa implementação de rand para double é meio ruim, melhorar TODO:
+    #define FP_RAND()  ((double) rand() / (double) RAND_MAX)
     #define FP_LIT(x) x
 #endif
 

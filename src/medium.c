@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include "argparse.h"
 #include "macros.h"
@@ -130,79 +131,52 @@ void medium_random_velocity_boundary(
     for(size_t z = 0; z < g_volume_width; z++){
         for(size_t y = 0; y < g_volume_width; y++){
             for(size_t x = 0; x < g_volume_width; x++){
+
                 const size_t i = volume_idx(x, y, z);
 
                 // do nothing inside input grid
-                if (inbounds(z, inside_start, inside_end) &&
-                    inbounds(y, inside_start, inside_end) &&
+                if(inbounds(z, inside_start, inside_end) &&
+                    inbounds(y, inside_start, inside_end) && 
                     inbounds(x, inside_start, inside_end)){
                     continue;
                 }
-                // random speed inside absortion zone
-                else if (inbounds(z, border_width, g_volume_width - border_width) &&
-                         inbounds(y, border_width, g_volume_width - border_width) &&
-                         inbounds(x, border_width, g_volume_width - border_width))
-                {  /*
-                    if (iz > bordLen + nz)
-                    {
-                        distz = iz - bordLen - nz;
-                        ivelz = bordLen + nz;
-                    }
-                    else if (iz < firstIn)
-                    {
-                        distz = firstIn - iz;
-                        ivelz = firstIn;
-                    }
-                    else
-                    {
-                        distz = 0;
-                        ivelz = iz;
-                    }
-                    if (iy > bordLen + ny)
-                    {
-                        disty = iy - bordLen - ny;
-                        ively = bordLen + ny;
-                    }
-                    else if (iy < firstIn)
-                    {
-                        disty = firstIn - iy;
-                        ively = firstIn;
-                    }
-                    else
-                    {
-                        disty = 0;
-                        ively = iy;
-                    }
-                    if (ix > bordLen + nx)
-                    {
-                        distx = ix - bordLen - nx;
-                        ivelx = bordLen + nx;
-                    }
-                    else if (ix < firstIn)
-                    {
-                        distx = firstIn - ix;
-                        ivelx = firstIn;
-                    }
-                    else
-                    {
-                        distx = 0;
-                        ivelx = ix;
-                    }
-                    dist = (disty > distz) ? disty : distz;
-                    dist = (dist > distx) ? dist : distx;
-                    bordDist = (float)(dist)*frac;
-                    rfac = (float)rand() / (float)RAND_MAX;
-                    vpz[i] = vpz[ind(ivelx, ively, ivelz)] * (1.0 - bordDist) +
-                             maxP * rfac * bordDist;
-                    vsv[i] = vsv[ind(ivelx, ively, ivelz)] * (1.0 - bordDist) +
-                             maxS * rfac * bordDist;
-*/
-                }
+
                 // null speed at border
-                else{
-                    vpz[i] = 0.0;
-                    vsv[i] = 0.0;
+                // which is a point not within the bounds defided by the aborsb - inner - absobr
+                if(!(inbounds(z, border_width, g_volume_width - border_width) &&
+                    inbounds(y, border_width, g_volume_width - border_width) &&
+                    inbounds(x, border_width, g_volume_width - border_width))
+                ){
+                    vpz[i] = FP_LIT(0.0);
+                    vsv[i] = FP_LIT(0.0);
                 }
+
+                size_t ivelz = z, ively = y, ivelx = x;
+                FP distz = FP_LIT(0.0), disty = FP_LIT(0.0), distx = FP_LIT(0.0);
+
+                #define BOUNDS_CALC(var) do {\
+                    if ((var) >= inside_end){   \
+                        dist##var = (FP)(var - inside_end - 1); \
+                        ivel##var = inside_end - 1; \
+                    }else if ((var) < inside_start){ \
+                        dist##var = (FP)(inside_start - var); \
+                        ivel##var = inside_start; \
+                    }} while(0)
+                BOUNDS_CALC(z);
+                BOUNDS_CALC(y);
+                BOUNDS_CALC(x);
+
+                // random speed inside absortion zone
+                const FP dist = FP_MAX(distz, FP_MAX(disty, distx));
+                const FP frac = FP_LIT(1.0)/((FP) absorb_width);
+
+                const FP border_distance = dist * frac;
+                const FP random_factor = FP_RAND();
+
+                vpz[i] = vpz[ind(ivelx, ively, ivelz)] * (1.0 - border_distance) +
+                            max_speed_p * random_factor * border_distance;
+                vsv[i] = vsv[ind(ivelx, ively, ivelz)] * (1.0 - border_distance) +
+                            max_speed_s * random_factor * border_distance;
             }
         }
     }
