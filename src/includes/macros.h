@@ -1,8 +1,7 @@
 #ifndef GUARD_MACROS
 #define GUARD_MACROS
 
-//extern uint64_t g_cube_width;
-//extern uint64_t g_width_in_cubes;
+#include <stddef.h>
 
 // linear idx https://stackoverflow.com/a/34363187
 #define CUBE_I(x, y, z) ((x) + ((y) * g_cube_width) + ((z) * g_cube_width * g_cube_width))
@@ -10,7 +9,7 @@
 // the linear index of the point(x, y, z) inside a segmented cube
 // dependes on the global variable `g_cube_width`;
 static inline size_t cube_idx(size_t x, size_t y, size_t z){
-    extern const size_t g_cube_width;
+    extern size_t g_cube_width;
     return x + g_cube_width * (y + z * g_cube_width);
 }
 
@@ -19,14 +18,14 @@ static inline size_t cube_idx(size_t x, size_t y, size_t z){
 // the linear index of the block(i,j,k) in the total volume
 // dependes on the global variable `g_width_in_cubes`;
 static inline size_t block_idx(size_t i, size_t j, size_t k){
-    extern const size_t g_width_in_cubes;
+    extern size_t g_width_in_cubes;
     return i + g_width_in_cubes * (j + k * g_width_in_cubes);
 }
 
 // the linear index for a point (vx, vy, vz) in the whole volume
 // dependes on the global variable `g_volume_width`;
 static inline size_t volume_idx(size_t vx, size_t vy, size_t vz){
-    extern const size_t g_volume_width;
+    extern size_t g_volume_width;
     return vx + g_volume_width * (vy + vz * g_volume_width);
 }
 

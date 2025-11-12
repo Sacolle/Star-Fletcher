@@ -8,10 +8,6 @@
 #include "argparse.h"
 #include "macros.h"
 
-//TODO: define these
-#define SIGMA 1.0
-#define MAX_SIGMA 10.0
-#define MI 1.0
 
 int str_to_medium(const char *str){
     return str_to_enum(str, 3, "ISO", ISO, "VTI", VTI, "TTI", TTI);
@@ -20,7 +16,7 @@ int str_to_medium(const char *str){
 // TODO: test
 // stability condition
 FP medium_stability_condition(
-    FP dx, FP dy, FP dz,
+    const FP dx, const FP dy, const FP dz,
     FP *restrict vpz, FP *restrict epsilon, size_t size
 ){
     FP maxvel = vpz[0] * FP_SQRT(1.0 + 2 * epsilon[0]);
@@ -36,7 +32,7 @@ FP medium_stability_condition(
 
 // TODO: test
 void medium_initialize(
-    enum Form medium, size_t size,
+    const enum Form medium, const size_t size,
     FP *restrict vpz, FP *restrict vsv, FP *restrict epsilon,
     FP *restrict delta, FP *restrict phi, FP *restrict theta
 ){
@@ -57,8 +53,7 @@ void medium_initialize(
     case VTI: 
     {
         if (SIGMA > MAX_SIGMA){
-            printf("Since sigma (%f) is greater that threshold (%f), sigma is considered infinity and vsv is set to zero\n",
-                SIGMA, MAX_SIGMA);
+            //printf("Since sigma (%f) is greater that threshold (%f), sigma is considered infinity and vsv is set to zero\n", SIGMA, MAX_SIGMA);
         }
         for (size_t i = 0; i < size; i++){
             vpz[i]     = FP_LIT(3000.0);
@@ -78,8 +73,7 @@ void medium_initialize(
     {
         if (SIGMA > MAX_SIGMA)
         {
-            printf("Since sigma (%f) is greater that threshold (%f), sigma is considered infinity and vsv is set to zero\n",
-                SIGMA, MAX_SIGMA);
+            // printf("Since sigma (%f) is greater that threshold (%f), sigma is considered infinity and vsv is set to zero\n", SIGMA, MAX_SIGMA);
         }
         for (size_t i = 0; i < size; i++){
         {
@@ -105,28 +99,31 @@ static inline bool inbounds(size_t val, size_t lb, size_t ub){
     return val >= lb && val <= ub;
 }
 
-void medium_random_velocity_boundary(
-    uint32_t nx, uint32_t ny, uint32_t nz, 
-    size_t border_width, size_t absorb_width,
-    FP *restrict vpz, FP *restrict vsv
-){
-    //can mark as const?
-    extern const size_t g_volume_width;
-    const size_t outer_width = border_width + absorb_width;
-    FP max_speed_p = FP_LIT(0.0), max_speed_s = FP_LIT(0.0);
-
-    const size_t inside_start = outer_width;
-    const size_t inside_end = g_volume_width - outer_width;
-    for(size_t z = inside_start; z < inside_end; z++){
-        for(size_t y = inside_start; y < inside_end; y++){
-            for(size_t x = inside_start; x < inside_end; x++){
+FP max_speed_in_cube_segment(FP *v, const size_t start_idx, const size_t end_idx){
+    FP max_speed = FP_LIT(0.0);
+    for(size_t z = start_idx; z < end_idx; z++){
+        for(size_t y = start_idx; y < end_idx; y++){
+            for(size_t x = start_idx; x < end_idx; x++){
                 const size_t i = volume_idx(x, y, z);
-
-                max_speed_p = FP_MAX(vpz[i], max_speed_p);
-                max_speed_s = FP_MAX(vsv[i], max_speed_s);
+                max_speed = FP_MAX(v[i], max_speed);
             }
         }
     }
+    return max_speed;
+}
+
+void medium_random_velocity_boundary(
+    const size_t border_width, const size_t absorb_width,
+    FP *restrict vpz, FP *restrict vsv
+){
+    extern size_t g_volume_width;
+    const size_t outer_width = border_width + absorb_width;
+
+    const size_t inside_start = outer_width;
+    const size_t inside_end = g_volume_width - outer_width;
+
+    const FP max_speed_p = max_speed_in_cube_segment(vpz, inside_start, inside_end);
+    const FP max_speed_s = max_speed_in_cube_segment(vsv, inside_start, inside_end);
 
     for(size_t z = 0; z < g_volume_width; z++){
         for(size_t y = 0; y < g_volume_width; y++){
@@ -151,31 +148,33 @@ void medium_random_velocity_boundary(
                     vsv[i] = FP_LIT(0.0);
                 }
 
-                size_t ivelz = z, ively = y, ivelx = x;
-                FP distz = FP_LIT(0.0), disty = FP_LIT(0.0), distx = FP_LIT(0.0);
+                #define DIR_AMOUNT 3
+                size_t ivel[DIR_AMOUNT] = {x, y, z};
+                FP dist = FP_LIT(0.0);
 
-                #define BOUNDS_CALC(var) do {\
-                    if ((var) >= inside_end){   \
-                        dist##var = (FP)(var - inside_end - 1); \
-                        ivel##var = inside_end - 1; \
-                    }else if ((var) < inside_start){ \
-                        dist##var = (FP)(inside_start - var); \
-                        ivel##var = inside_start; \
-                    }} while(0)
-                BOUNDS_CALC(z);
-                BOUNDS_CALC(y);
-                BOUNDS_CALC(x);
+                // find the greates distance from the border for each direction, 
+                // if the direction is inside it's absobsion zone, also save the index of the closest
+                // inner point to this absorpsion zone
+                for(size_t dir_i = 0; dir_i < DIR_AMOUNT; dir_i++){
+                    const size_t dir = ivel[dir_i];
+                    if (dir >= inside_end){ 
+                        dist = FP_MAX(dist, (FP)(dir - inside_end - 1)); 
+                        ivel[dir_i] = inside_end - 1; 
+                    }else if (dir < inside_start){ 
+                        dist = FP_MAX(dist, (FP)(inside_start - dir)); 
+                        ivel[dir_i] = inside_start; 
+                    }
+                }
 
                 // random speed inside absortion zone
-                const FP dist = FP_MAX(distz, FP_MAX(disty, distx));
+                const size_t wave_idx = volume_idx(ivel[0], ivel[1], ivel[2]);
                 const FP frac = FP_LIT(1.0)/((FP) absorb_width);
-
                 const FP border_distance = dist * frac;
                 const FP random_factor = FP_RAND();
 
-                vpz[i] = vpz[ind(ivelx, ively, ivelz)] * (1.0 - border_distance) +
+                vpz[i] = vpz[wave_idx] * (1.0 - border_distance) +
                             max_speed_p * random_factor * border_distance;
-                vsv[i] = vsv[ind(ivelx, ively, ivelz)] * (1.0 - border_distance) +
+                vsv[i] = vsv[wave_idx] * (1.0 - border_distance) +
                             max_speed_s * random_factor * border_distance;
             }
         }

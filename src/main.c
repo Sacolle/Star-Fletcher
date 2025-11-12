@@ -43,6 +43,7 @@ void print_block(double* block){
 }
 
 //initialize block, the border consists of value 0.0
+/*
 void initialize_block(double* block, int i, int j, int k){
     for(size_t z = 0; z < g_cube_width; z++){
         for(size_t y = 0; y < g_cube_width; y++){
@@ -56,7 +57,7 @@ void initialize_block(double* block, int i, int j, int k){
             }
         }
     }
-}
+}*/
 
 void clear_block(double* block){
     for(size_t z = 0; z < g_cube_width; z++){
@@ -220,15 +221,26 @@ int main(int argc, char **argv){
         perror("Error in alocating all buffers.\n");
         return EXIT_FAILURE;
     }
-
-    initialize_medium();
-    border();
-    // initialize the medium
-    /*
+    
     // inicialize the buffers above based on the type of medium
-
+    medium_initialize(form, CUBE(g_volume_width), vpz, vsv, epsilon, delta, phi, theta);
+    
     // set the absorption zone for vpz and vsv
+    medium_random_velocity_boundary(BORDER_WIDTH, absorb_width, vpz, vsv);
+    /*
+        Alocate the below blocks in cubes 
+    // inicialize the wave blocks with zero 
+    float *pp=NULL;
+    pp = (float *) malloc(sx*sy*sz*sizeof(float)); 
+    float *pc=NULL;
+    pc = (float *) malloc(sx*sy*sz*sizeof(float)); 
+    float *qp=NULL;
+    qp = (float *) malloc(sx*sy*sz*sizeof(float)); 
+    float *qc=NULL;
+    qc = (float *) malloc(sx*sy*sz*sizeof(float)); 
+    */
 
+    /*
     // inicialize the wave blocks with zero 
     float *pp=NULL;
     pp = (float *) malloc(sx*sy*sz*sizeof(float)); 
@@ -384,7 +396,6 @@ int main(int argc, char **argv){
                 }
             }
         }
-        //TODO: call starpu_unregister_submit aqui para todos os valores em prev
         for(int ta = 0; ta < CUBE(g_width_in_cubes); ta++){
             starpu_data_unregister_submit(prev[ta]);
         }

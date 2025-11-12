@@ -9,6 +9,8 @@
 #define ARG_f64 6
 #define ARG_str 7
 
+#define ARG_usize 8
+
 // TODO: mover para uma classe de string, que dai pode ser mais genérico?
 // e dai pode-se usar um parâmetro de saída que é oculto na implementação dos casos específicos
 

@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <errno.h>
+#include <stddef.h>
 
 #include "argparse.h"
 
@@ -99,6 +100,16 @@ int read_args(int argc, char** argv, int count, ...){
 			case ARG_str: 
 				*(char**) val = argv[i];
 				break;
+			case ARG_usize:
+				if(is_neg(argv[i])) { err = OverflowConversion; goto exit; }
+				//size_max is the max val of type size_t, 
+				// if its the same as u64, use strtoull, else use srtoul
+				#if SIZE_MAX == UINT64_MAX
+				READ_TO_VAL(size_t, strtoull(argv[i], &rest, 10)); 
+				#else 
+				READ_TO_VAL(size_t, strtoul(argv[i], &rest, 10)); 
+				#endif
+				break;
 			default:
 				assert(0 && "Unreachable!");
 		}
@@ -107,8 +118,9 @@ int read_args(int argc, char** argv, int count, ...){
 	va_end(valist);
 	if(err == 0){
 		return 0;
+	}else{
+		return (i << MASKSIZE) | err;
 	}
-	return (i << MASKSIZE) | err;
 }
 
 int get_parse_errors_local(int err){
