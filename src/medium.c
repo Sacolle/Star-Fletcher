@@ -17,11 +17,11 @@ int str_to_medium(const char *str){
 // stability condition
 FP medium_stability_condition(
     const FP dx, const FP dy, const FP dz,
-    FP *restrict vpz, FP *restrict epsilon, size_t size
+    FP *restrict vpz, FP *restrict epsilon, const size_t size
 ){
-    FP maxvel = vpz[0] * FP_SQRT(1.0 + 2 * epsilon[0]);
+    FP maxvel = vpz[0] * FP_SQRT(FP_LIT(1.0) + FP_LIT(2.0) * epsilon[0]);
     for (size_t i = 1; i < size; i++){
-        maxvel = FP_MAX(maxvel, vpz[i] * FP_SQRT(1.0 + 2 * epsilon[i]));
+        maxvel = FP_MAX(maxvel, vpz[i] * FP_SQRT(FP_LIT(1.0) + FP_LIT(2.0) * epsilon[i]));
     }
     const FP mindelta = FP_MIN(FP_MIN(dx, dy), dz);
 
@@ -181,6 +181,57 @@ void medium_random_velocity_boundary(
                 vpz[i] = border_distance;
                 vsv[i] = border_distance;
                 */
+            }
+        }
+    }
+}
+
+void medium_calc_intermediary_values(
+    FP *restrict vpz, FP *restrict vsv, FP *restrict epsilon,
+    FP *restrict delta, FP *restrict phi, FP *restrict theta,
+    FP **restrict ch1dxx, FP **restrict ch1dyy, FP **restrict ch1dzz, 
+    FP **restrict ch1dxy, FP **restrict ch1dyz, FP **restrict ch1dxz, 
+    FP **restrict v2px, FP **restrict v2pz, FP **restrict v2sz, FP **restrict v2pn
+){
+    extern size_t g_width_in_cubes;
+    extern size_t g_cube_width;
+
+
+    for(size_t k = 0; k < g_width_in_cubes; k++){
+        for(size_t j = 0; j < g_width_in_cubes; j++){
+            for(size_t i = 0; i < g_width_in_cubes; i++){
+                //index the block
+                const size_t b_i = block_idx(i, j , k);
+
+                for(size_t z = 0; z < g_cube_width; z++){
+                    for(size_t y = 0; y < g_cube_width; y++){
+                        for(size_t x = 0; x < g_cube_width; x++){
+                            const size_t c_i = cube_idx(x, y, z);
+                            const size_t vol_i = volume_idx(x + i * g_cube_width, y + j * g_cube_width, z + k * g_cube_width);
+
+                            const FP sinTheta = FP_SIN(theta[vol_i]);
+                            const FP cosTheta = FP_COS(theta[vol_i]);
+                            const FP sin2Theta = FP_SIN(FP_LIT(2.0) * theta[vol_i]);
+                            const FP sinPhi = FP_SIN(phi[vol_i]);
+                            const FP cosPhi = FP_COS(phi[vol_i]);
+                            const FP sin2Phi = FP_SIN(FP_LIT(2.0) * phi[vol_i]);
+
+                            ch1dxx[b_i][c_i] = sinTheta * sinTheta * cosPhi * cosPhi;
+                            ch1dyy[b_i][c_i] = sinTheta * sinTheta * sinPhi * sinPhi;
+                            ch1dzz[b_i][c_i] = cosTheta * cosTheta;
+                            ch1dxy[b_i][c_i] = sinTheta * sinTheta * sin2Phi;
+                            ch1dyz[b_i][c_i] = sin2Theta * sinPhi;
+                            ch1dxz[b_i][c_i] = sin2Theta * cosPhi;
+
+                            // coeficients of H1 and H2 at PDEs
+                            const FP l_v2pz = vpz[vol_i] * vpz[vol_i];
+                            v2sz[b_i][c_i] = vsv[vol_i] * vsv[vol_i];
+                            v2pz[b_i][c_i] = l_v2pz;
+                            v2px[b_i][c_i] = l_v2pz * (FP_LIT(1.0) + FP_LIT(2.0) * epsilon[vol_i]);
+                            v2pn[b_i][c_i] = l_v2pz * (FP_LIT(1.0) + FP_LIT(2.0) * delta[vol_i]);
+                        }
+                    }
+                }
             }
         }
     }

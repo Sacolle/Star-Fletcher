@@ -192,6 +192,42 @@ void RandomVelocityBoundary(int sx, int sy, int sz,
     }
 }
 
+void intermediary_values(
+    int sx, int sy , int sz, 
+    FP *restrict vpz, FP *restrict vsv, FP *restrict epsilon,
+    FP *restrict delta, FP *restrict phi, FP *restrict theta,
+
+    FP* ch1dxx, FP* ch1dyy, FP* ch1dzz, 
+    FP* ch1dxy, FP* ch1dyz, FP* ch1dxz, 
+    FP* v2px, FP* v2pz, FP* v2sz, FP* v2pn
+){
+
+    // coeficients of derivatives at H1 operator
+    for (int i=0; i<sx*sy*sz; i++) {
+        FP sinTheta=FP_SIN(theta[i]);
+        FP cosTheta=FP_COS(theta[i]);
+        FP sin2Theta=FP_SIN(FP_LIT(2.0)*theta[i]);
+        FP sinPhi=FP_SIN(phi[i]);
+        FP cosPhi=FP_COS(phi[i]);
+        FP sin2Phi=FP_SIN(FP_LIT(2.0)*phi[i]);
+        ch1dxx[i]=sinTheta*sinTheta * cosPhi*cosPhi;
+        ch1dyy[i]=sinTheta*sinTheta * sinPhi*sinPhi;
+        ch1dzz[i]=cosTheta*cosTheta;
+        ch1dxy[i]=sinTheta*sinTheta * sin2Phi;
+        ch1dyz[i]=sin2Theta         * sinPhi;
+        ch1dxz[i]=sin2Theta         * cosPhi;
+    }
+
+    // coeficients of H1 and H2 at PDEs
+
+    for (int i=0; i<sx*sy*sz; i++){
+        v2sz[i]=vsv[i]*vsv[i];
+        v2pz[i]=vpz[i]*vpz[i];
+        v2px[i]=v2pz[i]*(FP_LIT(1.0)+FP_LIT(2.0)*epsilon[i]);
+        v2pn[i]=v2pz[i]*(FP_LIT(1.0)+FP_LIT(2.0)*delta[i]);
+    }
+}
+
 
 #define SEED 42
 
@@ -216,6 +252,8 @@ TestSuite(medium, .init = setup_seed);
 
 
 size_t g_volume_width;
+size_t g_cube_width;
+size_t g_width_in_cubes;
 
 Test(medium, proper_initialization){
 
@@ -312,4 +350,197 @@ Test(medium, correct_absorb){
             }
         }
     }
+}
+
+
+
+Test(medium, correct_intermediary_values){
+    //TODO:
+    const size_t seg = 3;
+    const size_t c_size = 10;
+    g_width_in_cubes = seg;
+    g_cube_width = c_size;
+
+    const int bord = 4;
+    const int absorb = 4;
+    const int nx = 14;
+    const int ny = 14;
+    const int nz = 14;
+    const int sx = nx + 2 * bord + 2 * absorb;
+    const int sy = ny + 2 * bord + 2 * absorb;
+    const int sz = nz + 2 * bord + 2 * absorb;
+
+    g_volume_width = sx;
+    const int size = sx * sy * sz;
+
+    FP vpz_base[size];
+    FP vsv_base[size];
+    FP epsilon_base[size];
+    FP delta_base[size];
+    FP phi_base[size];
+    FP theta_base[size];
+
+    FP vpz_myimpl[size];
+    FP vsv_myimpl[size];
+    FP epsilon_myimpl[size];
+    FP delta_myimpl[size];
+    FP phi_myimpl[size];
+    FP theta_myimpl[size];
+
+    fletcher_base_medium_initialize(TTI, sx, sy, sz, 
+        vpz_base, vsv_base, epsilon_base, delta_base, phi_base, theta_base);
+    
+    medium_initialize(TTI, size, 
+        vpz_myimpl, vsv_myimpl, epsilon_myimpl, delta_myimpl, phi_myimpl, theta_myimpl);
+
+
+    setup_seed();
+    RandomVelocityBoundary(sx, sy, sz, nx, ny, nz, bord, absorb, vpz_base, vsv_base);
+
+    setup_seed();
+    medium_random_velocity_boundary(bord, absorb, vpz_myimpl, vsv_myimpl);
+
+    const size_t total_seg = seg * seg * seg;
+    const size_t total_c_size = c_size * c_size * c_size;
+    
+    FP* ch1dxx_base = (FP*) malloc(sizeof(FP) * size);
+    cr_assert(ne(ptr,ch1dxx_base, NULL));
+
+    FP* ch1dyy_base = (FP*) malloc(sizeof(FP) * size);
+    cr_assert(ne(ptr,ch1dyy_base, NULL));
+
+    FP* ch1dzz_base = (FP*) malloc(sizeof(FP) * size);
+    cr_assert(ne(ptr,ch1dzz_base, NULL));
+
+    FP* ch1dxy_base = (FP*) malloc(sizeof(FP) * size);
+    cr_assert(ne(ptr,ch1dxy_base, NULL));
+
+    FP* ch1dyz_base = (FP*) malloc(sizeof(FP) * size);
+    cr_assert(ne(ptr,ch1dyz_base, NULL));
+
+    FP* ch1dxz_base = (FP*) malloc(sizeof(FP) * size);
+    cr_assert(ne(ptr,ch1dxz_base, NULL));
+
+    FP* v2px_base = (FP*) malloc(sizeof(FP) * size);
+    cr_assert(ne(ptr,v2px_base, NULL));
+
+    FP* v2pz_base = (FP*) malloc(sizeof(FP) * size);
+    cr_assert(ne(ptr,v2pz_base, NULL));
+
+    FP* v2sz_base = (FP*) malloc(sizeof(FP) * size);
+    cr_assert(ne(ptr,v2sz_base, NULL));
+
+    FP* v2pn_base = (FP*) malloc(sizeof(FP) * size);
+    cr_assert(ne(ptr,v2pn_base, NULL));
+
+
+
+    FP* ch1dxx_myimpl[total_seg];
+    FP* ch1dyy_myimpl[total_seg];
+    FP* ch1dzz_myimpl[total_seg];
+    FP* ch1dxy_myimpl[total_seg];
+    FP* ch1dyz_myimpl[total_seg];
+    FP* ch1dxz_myimpl[total_seg];
+    FP* v2px_myimpl[total_seg];
+    FP* v2pz_myimpl[total_seg];
+    FP* v2sz_myimpl[total_seg];
+    FP* v2pn_myimpl[total_seg];
+
+    FP** buffs[10] = {
+        ch1dxx_myimpl,
+        ch1dyy_myimpl,
+        ch1dzz_myimpl,
+        ch1dxy_myimpl,
+        ch1dyz_myimpl,
+        ch1dxz_myimpl,
+        v2px_myimpl,
+        v2pz_myimpl,
+        v2sz_myimpl,
+        v2pn_myimpl
+    };
+
+    for(int i = 0; i < 10; i++){
+        for(int seg = 0; seg < total_seg; seg++){
+            if((buffs[i][seg] = (FP*) malloc(sizeof(FP) * total_c_size)) == NULL){
+                cr_assert(false);
+            }
+        }
+    }
+
+    intermediary_values(sx, sy, sz, 
+        vpz_base, vsv_base, epsilon_base, delta_base, phi_base, theta_base,
+        ch1dxx_base, ch1dyy_base, ch1dzz_base, ch1dxy_base, ch1dyz_base, ch1dxz_base, 
+        v2px_base, v2pz_base, v2sz_base, v2pn_base
+    );
+
+    medium_calc_intermediary_values(
+        vpz_myimpl, vsv_myimpl, epsilon_myimpl, delta_myimpl, phi_myimpl, theta_myimpl,
+        (FP**) ch1dxx_myimpl, (FP**) ch1dyy_myimpl, (FP**) ch1dzz_myimpl,
+        (FP**) ch1dxy_myimpl, (FP**) ch1dyz_myimpl, (FP**) ch1dxz_myimpl, 
+        (FP**) v2px_myimpl, (FP**) v2pz_myimpl, (FP**) v2sz_myimpl, (FP**) v2pn_myimpl
+    );
+
+    for(size_t k = 0; k < g_width_in_cubes; k++){
+        for(size_t j = 0; j < g_width_in_cubes; j++){
+            for(size_t i = 0; i < g_width_in_cubes; i++){
+                //index the block
+                const size_t b_i = block_idx(i, j , k);
+
+                for(size_t z = 0; z < g_cube_width; z++){
+                    for(size_t y = 0; y < g_cube_width; y++){
+                        for(size_t x = 0; x < g_cube_width; x++){
+                            const size_t c_i = cube_idx(x, y, z);
+                            const size_t vol_i = volume_idx(x + i * g_cube_width, y + j * g_cube_width, z + k * g_cube_width);
+
+                            cr_expect(epsilon_eq(CRIT_FP, ch1dxx_base[vol_i], ch1dxx_myimpl[b_i][c_i], EPSILON), 
+                                "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
+
+                            cr_expect(epsilon_eq(CRIT_FP, ch1dyy_base[vol_i], ch1dyy_myimpl[b_i][c_i], EPSILON), 
+                                "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
+
+                            cr_expect(epsilon_eq(CRIT_FP, ch1dzz_base[vol_i], ch1dzz_myimpl[b_i][c_i], EPSILON), 
+                                "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
+
+                            cr_expect(epsilon_eq(CRIT_FP, ch1dxy_base[vol_i], ch1dxy_myimpl[b_i][c_i], EPSILON), 
+                                "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
+
+                            cr_expect(epsilon_eq(CRIT_FP, ch1dyz_base[vol_i], ch1dyz_myimpl[b_i][c_i], EPSILON), 
+                                "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
+
+                            cr_expect(epsilon_eq(CRIT_FP, ch1dxz_base[vol_i], ch1dxz_myimpl[b_i][c_i], EPSILON), 
+                                "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
+
+                            cr_expect(epsilon_eq(CRIT_FP, v2px_base[vol_i], v2px_myimpl[b_i][c_i], EPSILON), 
+                                "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
+
+                            cr_expect(epsilon_eq(CRIT_FP, v2pz_base[vol_i], v2pz_myimpl[b_i][c_i], EPSILON), 
+                                "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
+
+                            cr_expect(epsilon_eq(CRIT_FP, v2sz_base[vol_i], v2sz_myimpl[b_i][c_i], EPSILON), 
+                                "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
+
+                            cr_expect(epsilon_eq(CRIT_FP, v2pn_base[vol_i], v2pn_myimpl[b_i][c_i], EPSILON), 
+                                "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for(int i = 0; i < 10; i++){
+        for(int seg = 0; seg < total_seg; seg++){
+            free(buffs[i][seg]);
+        }
+    }
+    free(ch1dxx_base);
+    free(ch1dyy_base);
+    free(ch1dzz_base);
+    free(ch1dxy_base);
+    free(ch1dyz_base);
+    free(ch1dxz_base);
+    free(v2px_base);
+    free(v2pz_base);
+    free(v2sz_base);
+    free(v2pn_base);
 }
