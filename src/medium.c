@@ -132,33 +132,34 @@ void medium_random_velocity_boundary(
                 const size_t i = volume_idx(x, y, z);
 
                 // do nothing inside input grid
-                if(inbounds(z, inside_start, inside_end) &&
-                    inbounds(y, inside_start, inside_end) && 
-                    inbounds(x, inside_start, inside_end)){
+                if(inbounds(z, inside_start, inside_end - 1) &&
+                   inbounds(y, inside_start, inside_end - 1) && 
+                   inbounds(x, inside_start, inside_end - 1)){
                     continue;
                 }
 
                 // null speed at border
                 // which is a point not within the bounds defided by the aborsb - inner - absobr
-                if(!(inbounds(z, border_width, g_volume_width - border_width) &&
-                    inbounds(y, border_width, g_volume_width - border_width) &&
-                    inbounds(x, border_width, g_volume_width - border_width))
+                if(!(inbounds(z, border_width, g_volume_width - border_width - 1) &&
+                     inbounds(y, border_width, g_volume_width - border_width - 1) &&
+                     inbounds(x, border_width, g_volume_width - border_width - 1))
                 ){
                     vpz[i] = FP_LIT(0.0);
                     vsv[i] = FP_LIT(0.0);
+                    continue;
                 }
 
-                #define DIR_AMOUNT 3
-                size_t ivel[DIR_AMOUNT] = {x, y, z};
-                FP dist = FP_LIT(0.0);
 
                 // find the greates distance from the border for each direction, 
                 // if the direction is inside it's absobsion zone, also save the index of the closest
                 // inner point to this absorpsion zone
+                #define DIR_AMOUNT 3
+                size_t ivel[DIR_AMOUNT] = {x, y, z};
+                FP dist = FP_LIT(0.0);
                 for(size_t dir_i = 0; dir_i < DIR_AMOUNT; dir_i++){
                     const size_t dir = ivel[dir_i];
                     if (dir >= inside_end){ 
-                        dist = FP_MAX(dist, (FP)(dir - inside_end - 1)); 
+                        dist = FP_MAX(dist, (FP)(dir - inside_end + 1 )); 
                         ivel[dir_i] = inside_end - 1; 
                     }else if (dir < inside_start){ 
                         dist = FP_MAX(dist, (FP)(inside_start - dir)); 
@@ -176,6 +177,10 @@ void medium_random_velocity_boundary(
                             max_speed_p * random_factor * border_distance;
                 vsv[i] = vsv[wave_idx] * (1.0 - border_distance) +
                             max_speed_s * random_factor * border_distance;
+                /*
+                vpz[i] = border_distance;
+                vsv[i] = border_distance;
+                */
             }
         }
     }

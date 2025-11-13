@@ -1,5 +1,5 @@
-#ifndef PRECISION_H
-#define PRECISION_H
+#ifndef _FLOATING_POINTG_GUARD_
+#define _FLOATING_POINTG_GUARD_
 
 #include <math.h>
 #include <stdlib.h>

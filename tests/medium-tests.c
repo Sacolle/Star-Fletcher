@@ -4,8 +4,10 @@
 #include <criterion/logging.h>
 
 #include <stdint.h>
+#include <float.h>
 
 #include "medium.h"
+#include "macros.h"
 
 #define ind(ix,iy,iz) (((iz) * sy + (iy)) * sx + (ix))
 // functions extracted from [fletcher-base](https://github.com/gabrielfrtg/fletcher-base/tree/main)
@@ -114,9 +116,9 @@ void RandomVelocityBoundary(int sx, int sy, int sz,
                     continue;
                 }
                 // random speed inside absortion zone
-                else if ((iz >= bord && iz <= 2 * bordLen + nz) &&
-                         (iy >= bord && iy <= 2 * bordLen + ny) &&
-                         (ix >= bord && ix <= 2 * bordLen + nx))
+                else if ((iz >= bord && iz <= (bord + absorb + nz + absorb - 1)) &&
+                         (iy >= bord && iy <= (bord + absorb + ny + absorb - 1)) &&
+                         (ix >= bord && ix <= (bord + absorb + nx + absorb - 1)))
                 {
                     if (iz > bordLen + nz)
                     {
@@ -167,10 +169,16 @@ void RandomVelocityBoundary(int sx, int sy, int sz,
                     dist = (dist > distx) ? dist : distx;
                     bordDist = (FP)(dist)*frac;
                     rfac = (FP)rand() / (FP)RAND_MAX;
+
                     vpz[i] = vpz[ind(ivelx, ively, ivelz)] * (1.0 - bordDist) +
                              maxP * rfac * bordDist;
                     vsv[i] = vsv[ind(ivelx, ively, ivelz)] * (1.0 - bordDist) +
                              maxS * rfac * bordDist;
+
+                    /*
+                    vpz[i] = bordDist;
+                    vsv[i] = bordDist;
+                    */
                 }
                 // null speed at border
                 else
@@ -194,26 +202,18 @@ void setup_seed(void)
 
 TestSuite(medium, .init = setup_seed);
 
-/*
-void medium_initialize(
-    const enum Form medium, const size_t size,
-    FP *restrict vpz, FP *restrict vsv, FP *restrict epsilon,
-    FP *restrict delta, FP *restrict phi, FP *restrict theta
-);
-
-void medium_random_velocity_boundary(
-    const size_t border_width, const size_t absorb_width,
-    FP *restrict vpz, FP *restrict vsv
-);*/
-
 //usado para os testes se adequarem a compilação
 #if defined(FP_FLOAT)
     #define CRIT_FP flt
+    #define EPSILON FLT_EPSILON
 #elif defined(FP_LONG_DOUBLE)
     #define CRIT_FP ldbl
+    #define EPSILON LDBL_EPSILON
 #else
     #define CRIT_FP dbl
+    #define EPSILON DBL_EPSILON
 #endif
+
 
 size_t g_volume_width;
 
@@ -248,12 +248,12 @@ Test(medium, proper_initialization){
             vpz_myimpl, vsv_myimpl, epsilon_myimpl, delta_myimpl, phi_myimpl, theta_myimpl);
 
         for(int i = 0; i < size; i++){
-            cr_assert(epsilon_eq(CRIT_FP, vpz_base[i], vpz_myimpl[i], 0.001));
-            cr_assert(epsilon_eq(CRIT_FP, vsv_base[i], vsv_myimpl[i], 0.001));
-            cr_assert(epsilon_eq(CRIT_FP, epsilon_base[i], epsilon_myimpl[i], 0.001));
-            cr_assert(epsilon_eq(CRIT_FP, delta_base[i], delta_myimpl[i], 0.001));
-            cr_assert(epsilon_eq(CRIT_FP, phi_base[i], phi_myimpl[i], 0.001));
-            cr_assert(epsilon_eq(CRIT_FP, theta_base[i], theta_myimpl[i], 0.001));
+            cr_assert(epsilon_eq(CRIT_FP, vpz_base[i], vpz_myimpl[i], EPSILON));
+            cr_assert(epsilon_eq(CRIT_FP, vsv_base[i], vsv_myimpl[i], EPSILON));
+            cr_assert(epsilon_eq(CRIT_FP, epsilon_base[i], epsilon_myimpl[i], EPSILON));
+            cr_assert(epsilon_eq(CRIT_FP, delta_base[i], delta_myimpl[i], EPSILON));
+            cr_assert(epsilon_eq(CRIT_FP, phi_base[i], phi_myimpl[i], EPSILON));
+            cr_assert(epsilon_eq(CRIT_FP, theta_base[i], theta_myimpl[i], EPSILON));
         }
     }
 
@@ -263,11 +263,11 @@ Test(medium, proper_initialization){
 
 Test(medium, correct_absorb){
 
-    const int bord = 2;
-    const int absorb = 2;
-    const int nx = 12;
-    const int ny = 12;
-    const int nz = 12;
+    const int bord = 4;
+    const int absorb = 4;
+    const int nx = 14;
+    const int ny = 14;
+    const int nz = 14;
     const int sx = nx + 2 * bord + 2 * absorb;
     const int sy = ny + 2 * bord + 2 * absorb;
     const int sz = nz + 2 * bord + 2 * absorb;
@@ -296,15 +296,20 @@ Test(medium, correct_absorb){
         vpz_myimpl, vsv_myimpl, epsilon_myimpl, delta_myimpl, phi_myimpl, theta_myimpl);
 
 
+    setup_seed();
     RandomVelocityBoundary(sx, sy, sz, nx, ny, nz, bord, absorb, vpz_base, vsv_base);
 
+    setup_seed();
+    medium_random_velocity_boundary(bord, absorb, vpz_myimpl, vsv_myimpl);
 
-    medium_random_velocity_boundary(bord, absorb, vpz_base, vsv_base);
 
-    for(int i = 0; i < size; i++){
-        cr_assert(epsilon_eq(CRIT_FP, vpz_base[i], vpz_myimpl[i], 0.001));
-        cr_assert(epsilon_eq(CRIT_FP, vsv_base[i], vsv_myimpl[i], 0.001));
+    for(int z = 0; z < sz; z++){
+        for(int y = 0; y < sy; y++){
+            for(int x = 0; x < sx; x++){
+                const size_t i = volume_idx(x, y, z);
+                cr_assert(epsilon_eq(CRIT_FP, vpz_base[i], vpz_myimpl[i], EPSILON), "vpz at (%d, %d, %d)", x, y, z);
+                cr_assert(epsilon_eq(CRIT_FP, vsv_base[i], vsv_myimpl[i], EPSILON), "vsv at (%d, %d, %d)", x, y, z);
+            }
+        }
     }
-
-    
 }

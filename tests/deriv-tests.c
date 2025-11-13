@@ -39,6 +39,26 @@ Test(random, random_doubles_in_range){
     }
 }
 
+Test(random, random_retries){
+    const size_t size = 1000;
+    FP first_list[size];
+    FP second_list[size];
+
+    srand(SEED);
+    for(int i = 0; i < size; i++){
+        first_list[i] = FP_RAND();
+    }
+
+    srand(SEED);
+    for(int i = 0; i < size; i++){
+        second_list[i] = FP_RAND();
+    }
+
+    for(int i = 0; i < size; i++){
+        cr_assert(epsilon_eq(dbl, first_list[i], second_list[i], 0.0001));
+    }
+}
+
 TestSuite(derivative, .init = setup_seed);
 
 
