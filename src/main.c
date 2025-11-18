@@ -8,6 +8,8 @@
 #include "argparse.h"
 #include "medium.h"
 
+#include "vector.h"
+
 
 const uint64_t BORDER_WIDTH = 4;
 
@@ -19,8 +21,14 @@ size_t g_volume_width = 0;
 // there are 10 segmentations by dimension, resulting in 1000 total cubes of 
 // volume 1000
 size_t g_width_in_cubes = 0;
+
+
 // width for the segmented cube
 size_t g_cube_width = 0;
+
+
+#define CUBE_SIZE (g_cube_width * g_cube_width * g_cube_width)
+#define TOTAL_CUBES (g_width_in_cubes * g_width_in_cubes * g_width_in_cubes)
 
 
 void print_block(double* block){
@@ -113,28 +121,46 @@ struct cl_args* make_cl_args(size_t i, size_t j, size_t k, size_t t){
 
     return cl_args;
 }
+
+int allocate(vector(void*) v, void** ptr, size_t size){
+    if((*ptr = malloc(size)) == NULL){
+        return 1;
+    }
+    vector_push(v, *ptr);
+    return 0;
+}
+
+int allocate_starpu(vector(void*) v, void** ptr, size_t size){
+    if(starpu_malloc(ptr, size) != 0){
+        return 1;
+    }
+    vector_push(v, *ptr);
+    return 0;
+}
+
+int allocate_multi_starpu(vector(void*) v, void** buffers, size_t amount, size_t size){
+    for(size_t i = 0; i < amount; i++){
+        if(allocate_starpu(v, buffers + i, size) != 0) return 1;
+    }
+    return 0;
+}
+
+/*
 //TODO: make test for these functions
 void multi_free(void** buffers, size_t amount){
     for(size_t i = 0; i < amount; i++){
-        printf("Erro em alocar os blocos em malloc!\n");
         free(buffers[i]);
     }
 }
 
 int multi_malloc(void** buffers, size_t amount, size_t size){
-    size_t err_i = 0;
     for(size_t i = 0; i < amount; i++){
         if((buffers[i] = malloc(size)) == NULL){
-            err_i = i;
-            break;
+            multi_free(buffers, i);
+            return 1;
         }
     }
-    // remove os buffers até o i que terminou no caso de erro
-    // pois se err_i = 2, o 3º elemento deu erro e deve-se desalocar os
-    // buffers 0 e 1 que foram alocados antes desse.
-    multi_free(buffers, err_i);
-    //err_i pode ser 0 e indicar erro, nesse caso buffer[0] será nulo
-    return err_i && buffers[0] == NULL;
+    return 0;
 }
 
 void multi_starpu_free(void** buffers, size_t amount, size_t size){
@@ -146,23 +172,49 @@ void multi_starpu_free(void** buffers, size_t amount, size_t size){
 
 //TODO: validar que starpu_malloc retorna só 0 em sucesso
 int multi_starpu_malloc(void** buffers, size_t amount, size_t size){
-    size_t err_i = 0;
-    int err = 0;
     for(size_t i = 0; i < amount; i++){
-        if((err = starpu_malloc(buffers[i], size)) != 0){
-            err_i = i;
+        if(starpu_malloc(buffers[i], size) != 0){
+            multi_starpu_free(buffers, i, size);
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void two_layer_multi_free(void*** buffers, size_t amount_l1, size_t amount_l2, size_t size){
+    for(size_t err_i; err_i < amount_l1; err_i++){
+        multi_starpu_free(buffers[err_i], amount_l2, size);
+    }
+    multi_free((void**) buffers, amount_l1);
+}
+
+// essa função é horrenda, depois quando for usar uma estrutura de dados para gerir as alocações é melhor mudar
+int two_layer_multi_malloc(void*** buffers, size_t amount_l1, size_t amount_l2, size_t size){
+    size_t i = 0;
+    int err = 0;
+    for(i = 0; i < amount_l1; i++){
+        if((buffers[i] = malloc(sizeof(void*) * amount_l2)) == NULL){
+            err = 1;
+            break;
+        }
+        if((err = multi_starpu_malloc(buffers[i], amount_l2, size)) != 0){
             break;
         }
     }
-    multi_starpu_free(buffers, err_i, size);
-    return err;
+
+    if(err){
+        two_layer_multi_free(buffers, amount_l1, amount_l2, size);
+        return 1;
+    }
+    return 0;
 }
+*/
 
 struct starpu_codelet avrg_filter_cl = {
     .cpu_funcs = { rtm_kernel },
     .nbuffers = 8,
     .modes = {
-        STARPU_W, // write cell at CUBE_I(x, y, z) at t
+        STARPU_W, // write cell at CUBE_I(x, y, z) at tsizeof
         STARPU_R, // read cell at CUBE_I(x, y, z) at t - 1
         STARPU_R, // read cell at CUBE_I(x, y, z - 1) at t - 1
         STARPU_R, // read cell at CUBE_I(x, y, z + 1) at t - 1
@@ -173,6 +225,7 @@ struct starpu_codelet avrg_filter_cl = {
     },
     .model = &starpu_perfmodel_nop,
 };
+
 
 int main(int argc, char **argv){
     enum Form form = 0;
@@ -211,98 +264,86 @@ int main(int argc, char **argv){
     const size_t perturbation_source_cube = block_idx(g_width_in_cubes / 2, g_width_in_cubes / 2, g_width_in_cubes / 2);
     const size_t perturbation_source_pos  = cube_idx(g_cube_width / 2, g_cube_width / 2, g_cube_width / 2);
 
-    const size_t volume_in_bytes = CUBE(g_volume_width) * sizeof(FP);
-    
+	int ret = starpu_init(NULL);
+	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
+
+    vector(void*) starpu_allocations;
+    vector(void*) allocs;
+    vector(void*) medium_allocs;
+
+    // if x fails (!= 0), exit the program;
+    #define TRY(x) (x) != 0 ? (printf("[error] Failed at line %d: "# x , __LINE__); goto exit) : 0
+
     // allocate the buffers that will be used in computing the 
     // intermediary values
     FP *vpz, *vsv, *epsilon, *delta, *phi, *theta;
-    FP* medium[6] = { vpz, vsv, epsilon, delta, phi, theta };
-    if(multi_malloc((void**) medium, 6, volume_in_bytes) != 0){
-        perror("Error in alocating all buffers.\n");
-        return EXIT_FAILURE;
-    }
-    
+    const size_t medium_size = sizeof(FP) * CUBE(g_volume_width);
+
+    TRY(allocate(medium_allocs, &vpz, medium_size));
+    TRY(allocate(medium_allocs, &vsv, medium_size));
+    TRY(allocate(medium_allocs, &epsilon, medium_size));
+    TRY(allocate(medium_allocs, &delta, medium_size));
+    TRY(allocate(medium_allocs, &phi, medium_size));
+    TRY(allocate(medium_allocs, &theta, medium_size));
+
     // inicialize the buffers above based on the type of medium
     medium_initialize(form, CUBE(g_volume_width), vpz, vsv, epsilon, delta, phi, theta);
     
     // set the absorption zone for vpz and vsv
     medium_random_velocity_boundary(BORDER_WIDTH, absorb_width, vpz, vsv);
-    /*
-        Alocate the below blocks in cubes 
-    // inicialize the wave blocks with zero 
-    float *pp=NULL;
-    pp = (float *) malloc(sx*sy*sz*sizeof(float)); 
-    float *pc=NULL;
-    pc = (float *) malloc(sx*sy*sz*sizeof(float)); 
-    float *qp=NULL;
-    qp = (float *) malloc(sx*sy*sz*sizeof(float)); 
-    float *qc=NULL;
-    qc = (float *) malloc(sx*sy*sz*sizeof(float)); 
-    */
 
-    /*
-    // inicialize the wave blocks with zero 
-    float *pp=NULL;
-    pp = (float *) malloc(sx*sy*sz*sizeof(float)); 
-    float *pc=NULL;
-    pc = (float *) malloc(sx*sy*sz*sizeof(float)); 
-    float *qp=NULL;
-    qp = (float *) malloc(sx*sy*sz*sizeof(float)); 
-    float *qc=NULL;
-    qc = (float *) malloc(sx*sy*sz*sizeof(float)); 
-    
-    // values that need to be pre computed
-    float *ch1dxx = NULL; // isotropy simetry deep angle
-    float *ch1dyy = NULL; // isotropy simetry deep angle
-    float *ch1dzz = NULL; // isotropy simetry deep angle
-    float *ch1dxy = NULL; // isotropy simetry deep angle
-    float *ch1dyz = NULL; // isotropy simetry deep angle
-    float *ch1dxz = NULL; // isotropy simetry deep angle
-    float *v2px = NULL;   // coeficient of H2(p)
-    float *v2pz = NULL;   // coeficient of H1(q)
-    float *v2sz = NULL;   // coeficient of H1(p-q) and H2(p-q)
-    float *v2pn = NULL;   // coeficient of H2(p)
 
-    for (int i = 0; i < sx * sy * sz; i++)
-    {
-        float sinTheta = sin(theta[i]);
-        float cosTheta = cos(theta[i]);
-        float sin2Theta = sin(2.0 * theta[i]);
-        float sinPhi = sin(phi[i]);
-        float cosPhi = cos(phi[i]);
-        float sin2Phi = sin(2.0 * phi[i]);
-        ch1dxx[i] = sinTheta * sinTheta * cosPhi * cosPhi;
-        ch1dyy[i] = sinTheta * sinTheta * sinPhi * sinPhi;
-        ch1dzz[i] = cosTheta * cosTheta;
-        ch1dxy[i] = sinTheta * sinTheta * sin2Phi;
-        ch1dyz[i] = sin2Theta * sinPhi;
-        ch1dxz[i] = sin2Theta * cosPhi;
+    FP **ch1dxx, **ch1dyy, **ch1dzz, **ch1dxy, **ch1dyz, **ch1dxz, **v2px, **v2pz, **v2sz, **v2pn;
+    #define ALLOCATE_PRECOMP_VALUES(v) \
+        TRY(allocate(allocs, (void**) &v, TOTAL_CUBES * sizeof(FP*))); \
+        TRY(allocate_multi_starpu(starpu_allocations, v, TOTAL_CUBES, CUBE_SIZE * sizeof(FP)))
+
+    ALLOCATE_PRECOMP_VALUES(ch1dxx);
+    ALLOCATE_PRECOMP_VALUES(ch1dyy);
+    ALLOCATE_PRECOMP_VALUES(ch1dzz);
+    ALLOCATE_PRECOMP_VALUES(ch1dxy);
+    ALLOCATE_PRECOMP_VALUES(ch1dyz);
+    ALLOCATE_PRECOMP_VALUES(ch1dxz);
+    ALLOCATE_PRECOMP_VALUES(v2px);
+    ALLOCATE_PRECOMP_VALUES(v2pz);
+    ALLOCATE_PRECOMP_VALUES(v2sz);
+    ALLOCATE_PRECOMP_VALUES(v2pn);
+
+
+    medium_calc_intermediary_values(
+        vpz, vsv, epsilon, delta, phi, theta,
+        ch1dxx, ch1dyy, ch1dzz, ch1dxy, ch1dyz, ch1dxz, 
+        v2px, v2pz, v2sz, v2pn
+    );
+
+    //at this point the values for the medium will not be used again
+    vector_free_all(medium_allocs, free);
+
+    // alocate the initial values for the waves pp, pc, qp, qc.
+    // the null_block holds all zeros, which all blocks in pp and qp are
+    // the propagation_block holds the point in which the propagation is set
+    // therefore all data handles set are referêncing the null_block or the progration_block
+    // which is only referênced once.
+    FP *null_block, *propagation_block; 
+
+    TRY(allocate_starpu(starpu_allocations, &null_block, CUBE_SIZE * sizeof(FP)));
+    TRY(allocate_starpu(starpu_allocations, &propagation_block, CUBE_SIZE * sizeof(FP)));
+
+    for(size_t b_i = 0; b_i < CUBE_SIZE; b_i++){
+        null_block[b_i] = propagation_block[b_i] = FP_LIT(0.0);
     }
-
-    // coeficients of H1 and H2 at PDEs
-    for (int i = 0; i < sx * sy * sz; i++){
-        v2sz[i] = vsv[i] * vsv[i];
-        v2pz[i] = vpz[i] * vpz[i];
-        v2px[i] = v2pz[i] * (1.0 + 2.0 * epsilon[i]);
-        v2pn[i] = v2pz[i] * (1.0 + 2.0 * delta[i]);
-    }
-    */
-
-	int ret = starpu_init(NULL);
-	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
+    //TODO: insert the propagation source in the propagation block
 
 
-    // é necessário inicializar duas matrizes iniciais, pois para computar o bloco(x,y,z,t)
-    // também é necessário o bloco(x,y,z,t-1)
-    // agora ao invés de um blocão, os blocos seram disjuntos
-    starpu_data_handle_t* prev = (starpu_data_handle_t*) malloc(sizeof(starpu_data_handle_t) * CUBE(g_width_in_cubes));
-    clear_pointers(prev);
+    // a iteração do bloco t depende dos blocos t - 1 e t - 2.
+    starpu_data_handle_t* iterations[3];
+    TRY(allocate(allocs, &iterations[0], TOTAL_CUBES * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, &iterations[1], TOTAL_CUBES * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, &iterations[2], TOTAL_CUBES * sizeof(starpu_data_handle_t)));
 
-    // need this because the starpu automatic alocation happens on demand
-    // an if can be used to free this at the end of the code or after the first iteration
-    // rn it is left as a TODO: free this sometime
-    double* initial_values[CUBE(g_width_in_cubes)];
 
+    //starpu_data_handle_t* prev = (starpu_data_handle_t*) malloc(sizeof(starpu_data_handle_t) * CUBE(g_width_in_cubes));
+/*
     for(int k = 0; k < g_width_in_cubes; k++){
         for(int j = 0; j < g_width_in_cubes; j++){
             for(int i = 0; i < g_width_in_cubes; i++){
@@ -445,8 +486,7 @@ int main(int argc, char **argv){
             }
         }
     }
-    free(prev);
-    free(curr);
+    */
 	starpu_shutdown();
 	return 0;
 }
