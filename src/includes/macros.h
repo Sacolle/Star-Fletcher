@@ -4,7 +4,7 @@
 #include <stddef.h>
 
 // linear idx https://stackoverflow.com/a/34363187
-#define CUBE_I(x, y, z) ((x) + ((y) * g_cube_width) + ((z) * g_cube_width * g_cube_width))
+//#define CUBE_I(x, y, z) ((x) + ((y) * g_cube_width) + ((z) * g_cube_width * g_cube_width))
 
 // the linear index of the point(x, y, z) inside a segmented cube
 // dependes on the global variable `g_cube_width`;
@@ -13,7 +13,7 @@ static inline size_t cube_idx(size_t x, size_t y, size_t z){
     return x + g_cube_width * (y + z * g_cube_width);
 }
 
-#define BLOCK_I(i, j, k) ((i) + ((j) * g_width_in_cubes) + ((k) * g_width_in_cubes * g_width_in_cubes))
+//#define BLOCK_I(i, j, k) ((i) + ((j) * g_width_in_cubes) + ((k) * g_width_in_cubes * g_width_in_cubes))
 
 // the linear index of the block(i,j,k) in the total volume
 // dependes on the global variable `g_width_in_cubes`;
@@ -39,5 +39,8 @@ static inline size_t volume_idx(size_t vx, size_t vy, size_t vz){
 #define START(blk, idx) (FSTBLK(blk) && (idx) < BORDER_WIDTH)
 #define END(blk, idx) (LSTBLK(blk) && (idx) >= (g_cube_width - BORDER_WIDTH))
 #define INEDGE(blk_idx, cidx) (START(blk_idx, cidx) || END(blk_idx, cidx))
+
+//if exp != 0, run body and goto tag
+#define TRYTO(exp, body, tag) if((exp) != 0) { body; goto tag; }
 
 #endif

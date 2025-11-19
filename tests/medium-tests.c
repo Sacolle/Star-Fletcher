@@ -353,9 +353,25 @@ Test(medium, correct_absorb){
 }
 
 
+//TODO: adapt to test framework
+/*
+Test(medium, assert_block_clear_edge){
+    for(size_t z = 0; z < g_cube_width; z++){
+        for(size_t y = 0; y < g_cube_width; y++){
+            for(size_t x = 0; x < g_cube_width; x++){
+                const size_t idx = CUBE_I(x, y, z);
+                if( INEDGE(k, z) || INEDGE(j, y) || INEDGE(i, x)){
+                    assert(block[idx] < EPSILON);
+                    assert(block[idx] > -EPSILON);
+                }
+            }
+        }
+    }
+}*/
+
+
 
 Test(medium, correct_intermediary_values){
-    //TODO:
     const size_t seg = 3;
     const size_t c_size = 10;
     g_width_in_cubes = seg;

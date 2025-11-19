@@ -12,7 +12,7 @@
 
 enum Form { ISO, VTI, TTI };
 
-int str_to_medium(const char* str);
+int str_to_medium(const char *str, enum Form* form);
 
 //int medium_initialize();
 // calculates the stability condition of the time step
@@ -42,5 +42,8 @@ void medium_calc_intermediary_values(
     FP **restrict ch1dxy, FP **restrict ch1dyz, FP **restrict ch1dxz, 
     FP **restrict v2px, FP **restrict v2pz, FP **restrict v2sz, FP **restrict v2pn
 );
+
+
+FP medium_source_value(const FP dt, const int64_t it);
 
 #endif

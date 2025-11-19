@@ -12,16 +12,18 @@
 
 
 
-int str_to_enum(const char* word, int count, ...){
+int str_to_enum(const char* word, int* err, int count, ...){
 	va_list valist;
 	va_start(valist, count);
-	int ret = -1;
+	int ret = 0;
+	*err = 1;
 	for(int i = 0; i < count; i++){
 		char* str = va_arg(valist, char*);
 		int enum_value = va_arg(valist, int);
 
 		if(strcmp(word, str) == 0){
 			ret = enum_value;
+			*err = 0;
 			break;
 		}
 	}

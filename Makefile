@@ -17,7 +17,7 @@ export INCLUDEDIR = src/includes
 SRCS := $(wildcard $(SRCDIR)/*.c)
 OBJS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o,$(SRCS))
 
-.PHONY: all clean run print test
+.PHONY: all clean run print test debug
 
 all: $(BIN)
 
@@ -31,6 +31,9 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 run: $(BIN)
 	@echo "Runing $(BIN)."
 	./$(BIN) VTI 144 144 144 4 12.5 12.5 12.5 1 50.0 10
+
+debug: $(BIN)
+	gdb --args ./$(BIN) VTI 144 144 144 4 12.5 12.5 12.5 1 50.0 10
 
 print:
 	@echo "Sources: $(SRCS)"

@@ -8,9 +8,11 @@
 #include "argparse.h"
 #include "macros.h"
 
-
-int str_to_medium(const char *str){
-    return str_to_enum(str, 3, "ISO", ISO, "VTI", VTI, "TTI", TTI);
+//return != 0 if err
+int str_to_medium(const char *str, enum Form* form){
+    int err = 0;
+    *form = str_to_enum(str, &err, 3, "ISO", ISO, "VTI", VTI, "TTI", TTI);
+    return err;
 }
 
 // TODO: test
@@ -30,7 +32,6 @@ FP medium_stability_condition(
 }
 
 
-// TODO: test
 void medium_initialize(
     const enum Form medium, const size_t size,
     FP *restrict vpz, FP *restrict vsv, FP *restrict epsilon,
@@ -235,4 +236,20 @@ void medium_calc_intermediary_values(
             }
         }
     }
+}
+
+
+#define FCUT        FP_LIT(40.0)
+#define PICUBE      FP_LIT(31.00627668029982017537)
+#define TWOSQRTPI   FP_LIT(3.54490770181103205458)
+#define THREESQRTPI FP_LIT(5.31736155271654808184)
+
+//TODO: test
+FP medium_source_value(const FP dt, const int64_t it){
+    const FP tf = TWOSQRTPI / FCUT;
+    const FP fc = FCUT / THREESQRTPI;
+    const FP fct = fc * (((FP) it) * dt - tf);
+    const FP expo = PICUBE * fct * fct;
+
+    return ((FP_LIT(1.0) - FP_LIT(2.0) * expo) * FP_EXP(-expo));
 }

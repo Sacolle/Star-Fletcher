@@ -22,7 +22,6 @@ size_t g_volume_width = 0;
 // volume 1000
 size_t g_width_in_cubes = 0;
 
-
 // width for the segmented cube
 size_t g_cube_width = 0;
 
@@ -30,7 +29,7 @@ size_t g_cube_width = 0;
 #define CUBE_SIZE (g_cube_width * g_cube_width * g_cube_width)
 #define TOTAL_CUBES (g_width_in_cubes * g_width_in_cubes * g_width_in_cubes)
 
-
+/*
 void print_block(double* block){
     printf("[\n");
     for(size_t z = 0; z < g_cube_width; z++){
@@ -50,28 +49,11 @@ void print_block(double* block){
     printf("]");
 }
 
-//initialize block, the border consists of value 0.0
-/*
-void initialize_block(double* block, int i, int j, int k){
+void clear_block(FP* block){
     for(size_t z = 0; z < g_cube_width; z++){
         for(size_t y = 0; y < g_cube_width; y++){
             for(size_t x = 0; x < g_cube_width; x++){
-                //if it starts or ends in an edge, set to 0
-                if( INEDGE(k, z) || INEDGE(j, y) || INEDGE(i, x)){
-                    block[CUBE_I(x, y, z)] = 0.0;
-                }else{
-                    block[CUBE_I(x, y, z)] = 10.0 * ((double) rand() / RAND_MAX);
-                }
-            }
-        }
-    }
-}*/
-
-void clear_block(double* block){
-    for(size_t z = 0; z < g_cube_width; z++){
-        for(size_t y = 0; y < g_cube_width; y++){
-            for(size_t x = 0; x < g_cube_width; x++){
-                block[CUBE_I(x, y, z)] = 0.0;
+                block[cube_idx(x, y, z)] = 0.0;
             }
         }
     }
@@ -83,30 +65,14 @@ void clear_pointers(starpu_data_handle_t* list){
         list[i] = NULL;
     }
 }
-
-#define EPSILON 0.0001
-//TODO: mover para o sistema de testes
-void assert_block_clear_edge(double* block, size_t i, size_t j, size_t k){
-    for(size_t z = 0; z < g_cube_width; z++){
-        for(size_t y = 0; y < g_cube_width; y++){
-            for(size_t x = 0; x < g_cube_width; x++){
-                const size_t idx = CUBE_I(x, y, z);
-                if( INEDGE(k, z) || INEDGE(j, y) || INEDGE(i, x)){
-                    assert(block[idx] < EPSILON);
-                    assert(block[idx] > -EPSILON);
-                }
-            }
-        }
-    }
-}
-
+*/
 
 struct cl_args {
-    char name[64];
-    uint32_t i;
-    uint32_t j;
-    uint32_t k;
-    uint32_t t;
+    //char name[64];
+    size_t i;
+    size_t j;
+    size_t k;
+    size_t t;
 };
 
 struct cl_args* make_cl_args(size_t i, size_t j, size_t k, size_t t){
@@ -114,15 +80,11 @@ struct cl_args* make_cl_args(size_t i, size_t j, size_t k, size_t t){
     if(cl_args == NULL){
         return NULL;
     }
-    cl_args->i = i;
-    cl_args->j = j;
-    cl_args->k = k;
-    cl_args->t = t;
-
+    *cl_args = (struct cl_args){.i = i, .j = j, .k = k, .t = t};
     return cl_args;
 }
 
-int allocate(vector(void*) v, void** ptr, size_t size){
+int allocate(vector(void*) v, void** ptr, const size_t size){
     if((*ptr = malloc(size)) == NULL){
         return 1;
     }
@@ -130,7 +92,7 @@ int allocate(vector(void*) v, void** ptr, size_t size){
     return 0;
 }
 
-int allocate_starpu(vector(void*) v, void** ptr, size_t size){
+int allocate_starpu(vector(void*) v, void** ptr, const size_t size){
     if(starpu_malloc(ptr, size) != 0){
         return 1;
     }
@@ -138,153 +100,124 @@ int allocate_starpu(vector(void*) v, void** ptr, size_t size){
     return 0;
 }
 
-int allocate_multi_starpu(vector(void*) v, void** buffers, size_t amount, size_t size){
-    for(size_t i = 0; i < amount; i++){
-        if(allocate_starpu(v, buffers + i, size) != 0) return 1;
-    }
-    return 0;
-}
-
-/*
-//TODO: make test for these functions
-void multi_free(void** buffers, size_t amount){
-    for(size_t i = 0; i < amount; i++){
-        free(buffers[i]);
-    }
-}
-
-int multi_malloc(void** buffers, size_t amount, size_t size){
-    for(size_t i = 0; i < amount; i++){
-        if((buffers[i] = malloc(size)) == NULL){
-            multi_free(buffers, i);
-            return 1;
-        }
-    }
-    return 0;
-}
-
-void multi_starpu_free(void** buffers, size_t amount, size_t size){
-    for(size_t i = 0; i < amount; i++){
-        printf("Erro em alocar os blocos em malloc!\n");
-        starpu_free_noflag(buffers[i], size);
-    }
-}
-
-//TODO: validar que starpu_malloc retorna só 0 em sucesso
-int multi_starpu_malloc(void** buffers, size_t amount, size_t size){
-    for(size_t i = 0; i < amount; i++){
-        if(starpu_malloc(buffers[i], size) != 0){
-            multi_starpu_free(buffers, i, size);
-            return 1;
-        }
-    }
-    return 0;
-}
-
-void two_layer_multi_free(void*** buffers, size_t amount_l1, size_t amount_l2, size_t size){
-    for(size_t err_i; err_i < amount_l1; err_i++){
-        multi_starpu_free(buffers[err_i], amount_l2, size);
-    }
-    multi_free((void**) buffers, amount_l1);
-}
-
-// essa função é horrenda, depois quando for usar uma estrutura de dados para gerir as alocações é melhor mudar
-int two_layer_multi_malloc(void*** buffers, size_t amount_l1, size_t amount_l2, size_t size){
-    size_t i = 0;
-    int err = 0;
-    for(i = 0; i < amount_l1; i++){
-        if((buffers[i] = malloc(sizeof(void*) * amount_l2)) == NULL){
-            err = 1;
-            break;
-        }
-        if((err = multi_starpu_malloc(buffers[i], amount_l2, size)) != 0){
-            break;
-        }
-    }
-
-    if(err){
-        two_layer_multi_free(buffers, amount_l1, amount_l2, size);
-        return 1;
-    }
-    return 0;
-}
-*/
-
-struct starpu_codelet avrg_filter_cl = {
+struct starpu_codelet rtm_codelet = {
     .cpu_funcs = { rtm_kernel },
-    .nbuffers = 8,
+    .nbuffers = 31,
     .modes = {
-        STARPU_W, // write cell at CUBE_I(x, y, z) at tsizeof
-        STARPU_R, // read cell at CUBE_I(x, y, z) at t - 1
-        STARPU_R, // read cell at CUBE_I(x, y, z - 1) at t - 1
-        STARPU_R, // read cell at CUBE_I(x, y, z + 1) at t - 1
-        STARPU_R, // read cell at CUBE_I(x, y - 1, z) at t - 1
-        STARPU_R, // read cell at CUBE_I(x, y + 1, z) at t - 1
-        STARPU_R, // read cell at CUBE_I(x - 1, y, z) at t - 1
-        STARPU_R  // read cell at CUBE_I(x + 1, y, z) at t - 1
+        STARPU_W, // w at (i, j, k) of t[0]
+
+        // precomputed values
+        STARPU_R, // r at (i, j, k) of ch1dxx
+        STARPU_R, // r at (i, j, k) of ch1dyy
+        STARPU_R, // r at (i, j, k) of ch1dzz
+        STARPU_R, // r at (i, j, k) of ch1dxy
+        STARPU_R, // r at (i, j, k) of ch1dyz
+        STARPU_R, // r at (i, j, k) of ch1dxz
+        STARPU_R, // r at (i, j, k) of v2px
+        STARPU_R, // r at (i, j, k) of v2pz
+        STARPU_R, // r at (i, j, k) of v2sz
+        STARPU_R, // r at (i, j, k) of v2pn
+
+        STARPU_R, // r at (i, j, k) of t[1]
+        // layer when k - 1
+        // o x o
+        // x x x 
+        // o x o
+        STARPU_R, // r at (i + 0, j + 0, k - 1) of t[1]
+        STARPU_R, // r at (i + 0, j - 1, k - 1) of t[1]
+        STARPU_R, // r at (i - 1, j + 0, k - 1) of t[1]
+        STARPU_R, // r at (i + 1, j + 0, k - 1) of t[1]
+        STARPU_R, // r at (i + 0, j + 1, k - 1) of t[1]
+
+        // layer when k
+        // x x x
+        // x o x 
+        // x x x
+        STARPU_R, // r at (i - 1, j - 1, k + 0) of t[1]
+        STARPU_R, // r at (i + 0, j - 1, k + 0) of t[1]
+        STARPU_R, // r at (i + 1, j - 1, k + 0) of t[1]
+        STARPU_R, // r at (i - 1, j + 0, k + 0) of t[1]
+        STARPU_R, // r at (i + 1, j + 0, k + 0) of t[1]
+        STARPU_R, // r at (i - 1, j + 1, k + 0) of t[1]
+        STARPU_R, // r at (i + 0, j + 1, k + 0) of t[1]
+        STARPU_R, // r at (i + 1, j + 1, k + 0) of t[1]
+
+        // layer when k + 1
+        // o x o
+        // x x x 
+        // o x o
+        STARPU_R, // r at (i + 0, j + 0, k + 1) of t[1]
+        STARPU_R, // r at (i + 0, j - 1, k + 1) of t[1]
+        STARPU_R, // r at (i - 1, j + 0, k + 1) of t[1]
+        STARPU_R, // r at (i + 1, j + 0, k + 1) of t[1]
+        STARPU_R, // r at (i + 0, j + 1, k + 1) of t[1]
+
+        STARPU_R  // r at (i, j, k) of t[2]
     },
     .model = &starpu_perfmodel_nop,
 };
+#ifdef RELEASE
+// if x fails (!= 0), exit the program;
+#define TRY(x,...) TRYTO(x, program_status = EXIT_FAILURE, program_end)
+#else
+// if x fails (!= 0), goto the end of main and log status;
+#define TRY(x,...) TRYTO(x, program_status = EXIT_FAILURE; \
+    printf("[error] Failed at line %d\n", __LINE__); \
+    printf("[err-msg] " __VA_ARGS__);, program_end)
+#endif
+
+// turns a null return into an err
+// if ptr == null -> 1 else 0
+#define NULLTOERR(ptr) ((ptr) == NULL ? 1 : 0)
 
 
 int main(int argc, char **argv){
+    //need to be toplevel for the try macro
+    int program_status = EXIT_SUCCESS;
+    vector(void*) starpu_allocations = NULL;
+    vector(void*) allocs = NULL;
+    vector(void*) medium_allocs = NULL;
+
     enum Form form = 0;
     char* form_str = NULL;
     uint32_t nx, ny, nz, absorb_width;
     FP dx, dy, dz, dt, tmax;
 
     int err = 0;
-    if((err = read_args(argc, argv, 11, 
+    TRY(err = read_args(argc, argv, 11, 
         ARG_str, &form_str, 
         ARG_u32, &nx, ARG_u32, &ny, ARG_u32, &nz, ARG_u32, &absorb_width, 
         FP_ARG, &dx, FP_ARG, &dy, FP_ARG, &dz, FP_ARG, &dt, FP_ARG, &tmax,
         ARG_u64, &g_width_in_cubes 
-    )) != 0){
-        printf("Error %s in parsing arg at %d\n.", get_parse_errors_name(err), get_parse_errors_local(err));
-        return EXIT_FAILURE;
-    }
+    ), "Error %s in parsing arg at %d\n.", get_parse_errors_name(err), get_parse_errors_local(err));
 
-    if((form = str_to_medium(form_str)) < 0){
-        printf("Error in parsing %s as a medium.\n", form_str);
-        return EXIT_FAILURE;
-    }
+    TRY(str_to_medium(form_str, &form), "Failed at string to medium conversion");
+    
     //fazendo dessa forma para ficar igual ao fletecher base
     g_volume_width = nx + 2 * absorb_width + 2 * BORDER_WIDTH;
 
     // the number of segments divides the total volume
-    assert((g_volume_width % g_width_in_cubes == 0) && 
+    TRY(g_volume_width % g_width_in_cubes, 
         "A largura do volume + kernel size devem ser divisíveis pela largura do segmento.\n");
 
 	g_cube_width = g_volume_width / g_width_in_cubes;
-    assert(g_cube_width && g_width_in_cubes && g_volume_width);
  
     const int64_t st = (int64_t) FP_CEIL(tmax / dt);
 
-    // iSource
-    const size_t perturbation_source_cube = block_idx(g_width_in_cubes / 2, g_width_in_cubes / 2, g_width_in_cubes / 2);
-    const size_t perturbation_source_pos  = cube_idx(g_cube_width / 2, g_cube_width / 2, g_cube_width / 2);
-
 	int ret = starpu_init(NULL);
 	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
-
-    vector(void*) starpu_allocations;
-    vector(void*) allocs;
-    vector(void*) medium_allocs;
-
-    // if x fails (!= 0), exit the program;
-    #define TRY(x) (x) != 0 ? (printf("[error] Failed at line %d: "# x , __LINE__); goto exit) : 0
 
     // allocate the buffers that will be used in computing the 
     // intermediary values
     FP *vpz, *vsv, *epsilon, *delta, *phi, *theta;
     const size_t medium_size = sizeof(FP) * CUBE(g_volume_width);
 
-    TRY(allocate(medium_allocs, &vpz, medium_size));
-    TRY(allocate(medium_allocs, &vsv, medium_size));
-    TRY(allocate(medium_allocs, &epsilon, medium_size));
-    TRY(allocate(medium_allocs, &delta, medium_size));
-    TRY(allocate(medium_allocs, &phi, medium_size));
-    TRY(allocate(medium_allocs, &theta, medium_size));
+    TRY(allocate(medium_allocs, (void**) &vpz, medium_size));
+    TRY(allocate(medium_allocs, (void**) &vsv, medium_size));
+    TRY(allocate(medium_allocs, (void**) &epsilon, medium_size));
+    TRY(allocate(medium_allocs, (void**) &delta, medium_size));
+    TRY(allocate(medium_allocs, (void**) &phi, medium_size));
+    TRY(allocate(medium_allocs, (void**) &theta, medium_size));
 
     // inicialize the buffers above based on the type of medium
     medium_initialize(form, CUBE(g_volume_width), vpz, vsv, epsilon, delta, phi, theta);
@@ -296,7 +229,8 @@ int main(int argc, char **argv){
     FP **ch1dxx, **ch1dyy, **ch1dzz, **ch1dxy, **ch1dyz, **ch1dxz, **v2px, **v2pz, **v2sz, **v2pn;
     #define ALLOCATE_PRECOMP_VALUES(v) \
         TRY(allocate(allocs, (void**) &v, TOTAL_CUBES * sizeof(FP*))); \
-        TRY(allocate_multi_starpu(starpu_allocations, v, TOTAL_CUBES, CUBE_SIZE * sizeof(FP)))
+        for(size_t i = 0; i < TOTAL_CUBES; i++) \
+            TRY(allocate_starpu(starpu_allocations, (void**)(v + i), CUBE_SIZE * sizeof(FP)));
 
     ALLOCATE_PRECOMP_VALUES(ch1dxx);
     ALLOCATE_PRECOMP_VALUES(ch1dyy);
@@ -326,151 +260,189 @@ int main(int argc, char **argv){
     // which is only referênced once.
     FP *null_block, *propagation_block; 
 
-    TRY(allocate_starpu(starpu_allocations, &null_block, CUBE_SIZE * sizeof(FP)));
-    TRY(allocate_starpu(starpu_allocations, &propagation_block, CUBE_SIZE * sizeof(FP)));
+    TRY(allocate_starpu(starpu_allocations, (void**) &null_block, CUBE_SIZE * sizeof(FP)));
+    TRY(allocate_starpu(starpu_allocations, (void**) &propagation_block, CUBE_SIZE * sizeof(FP)));
 
     for(size_t b_i = 0; b_i < CUBE_SIZE; b_i++){
         null_block[b_i] = propagation_block[b_i] = FP_LIT(0.0);
     }
-    //TODO: insert the propagation source in the propagation block
-
+    // iSource in the cube
+    const size_t perturbation_source_pos  = cube_idx(g_cube_width / 2, g_cube_width / 2, g_cube_width / 2);
+    //insert in this block the propagration source
+    propagation_block[perturbation_source_pos] = medium_source_value(dt, 0);
 
     // a iteração do bloco t depende dos blocos t - 1 e t - 2.
+    // aloca-se mais data_handles que necessário, compreendendo 0..g_width_in_cubes + 2
+    // isso evita checks de bounds, pois os cubos internos tem uma borda que evita acessar fora deles no limite do volume
+    // esses buffers extras exitem para inserir buffers válidos na ordem certa, mas eles nunca são acessados
+    // na hora de fazer o `starpu_block_data_register` e `starpu_data_unregister_submit`, evita os blocos de borda
+    // dessa forma, dentro do loop de execução de taregas i - 1 ou i + 1 são sempre índices válidos na lista de `data_handle_t`.
     starpu_data_handle_t* iterations[3];
-    TRY(allocate(allocs, &iterations[0], TOTAL_CUBES * sizeof(starpu_data_handle_t)));
-    TRY(allocate(allocs, &iterations[1], TOTAL_CUBES * sizeof(starpu_data_handle_t)));
-    TRY(allocate(allocs, &iterations[2], TOTAL_CUBES * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &iterations[0], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &iterations[1], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &iterations[2], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+
+    starpu_data_handle_t *hdl_ch1dxx, *hdl_ch1dyy, *hdl_ch1dzz, *hdl_ch1dxy, *hdl_ch1dyz, *hdl_ch1dxz, 
+        *hdl_v2px, *hdl_v2pz, *hdl_v2sz, *hdl_v2pn;
+    TRY(allocate(allocs, (void**) &hdl_ch1dxx, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &hdl_ch1dyy, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &hdl_ch1dzz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &hdl_ch1dxy, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &hdl_ch1dyz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &hdl_ch1dxz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &hdl_v2px,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &hdl_v2pz,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &hdl_v2sz,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &hdl_v2pn,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
 
 
-    //starpu_data_handle_t* prev = (starpu_data_handle_t*) malloc(sizeof(starpu_data_handle_t) * CUBE(g_width_in_cubes));
-/*
-    for(int k = 0; k < g_width_in_cubes; k++){
-        for(int j = 0; j < g_width_in_cubes; j++){
-            for(int i = 0; i < g_width_in_cubes; i++){
+    #define BLOCK_REGISTER(handle, ptr) starpu_block_data_register((handle), STARPU_MAIN_RAM, (uintptr_t) (ptr), \
+        g_cube_width, SQUARE(g_cube_width), g_cube_width, g_cube_width, g_cube_width, sizeof(FP))
 
-                double* allocated_block = (double*) malloc(sizeof(double) * CUBE(g_cube_width));
-                initialize_block(allocated_block, i, j, k);
-                initial_values[BLOCK_I(i, j, k)] = allocated_block;
-
-                // let starpu allocate the data by setting home_node = -1 
-                // problem: the data is only alocated when writen with STARPU_W
-                // wich will only happen in the codelet, (i think)
-                // so the first iterations need to allocate the memory manually
-                starpu_block_data_register(&prev[BLOCK_I(i,j,k)], STARPU_MAIN_RAM, (uintptr_t) allocated_block, 
-                    //stride for y  stride for z
-                    g_cube_width, SQUARE(g_cube_width),
-                    // width         height        depth
-                    g_cube_width, g_cube_width, g_cube_width, 
-                    sizeof(double)
-                );
-                // assert that its properly registered
-                assert(prev[BLOCK_I(i,j,k)] != NULL);
-            }
-        }
+    for(size_t idx = 0; idx < TOTAL_CUBES; idx++){
+        BLOCK_REGISTER(hdl_ch1dxx + idx, ch1dxx[idx]);
+        BLOCK_REGISTER(hdl_ch1dyy + idx, ch1dyy[idx]);
+        BLOCK_REGISTER(hdl_ch1dzz + idx, ch1dzz[idx]);
+        BLOCK_REGISTER(hdl_ch1dxy + idx, ch1dxy[idx]);
+        BLOCK_REGISTER(hdl_ch1dyz + idx, ch1dyz[idx]);
+        BLOCK_REGISTER(hdl_ch1dxz + idx, ch1dxz[idx]);
+        BLOCK_REGISTER(hdl_v2px + idx, v2px[idx]);
+        BLOCK_REGISTER(hdl_v2pz + idx, v2pz[idx]);
+        BLOCK_REGISTER(hdl_v2sz + idx, v2sz[idx]);
+        BLOCK_REGISTER(hdl_v2pn + idx, v2pn[idx]);
     }
 
-    starpu_data_handle_t* curr = (starpu_data_handle_t*) malloc(sizeof(starpu_data_handle_t) * CUBE(g_width_in_cubes));
-    clear_pointers(curr);
+    const size_t perturbation_source_cube = block_idx(
+        (g_width_in_cubes + 2) / 2, (g_width_in_cubes + 2) / 2, (g_width_in_cubes + 2) / 2);
+
+    for(size_t idx = 0; idx < CUBE(g_width_in_cubes + 2); idx++){
+        BLOCK_REGISTER(iterations[0] + idx, null_block);
+        // if we are initializing at the idx of the block that will be perturbed 
+        // used the block with the perturbation source
+        if(idx == perturbation_source_cube){
+            BLOCK_REGISTER(iterations[1] + idx, propagation_block);
+        }else{
+            BLOCK_REGISTER(iterations[1] + idx, null_block);
+        }
+        BLOCK_REGISTER(iterations[2] + idx, null_block);
+    }
 
     for(int64_t t = 0; t < st; t++){
         starpu_iteration_push(t);
-        for(int k = 0; k < g_width_in_cubes; k++){
-            for(int j = 0; j < g_width_in_cubes; j++){
-                for(int i = 0; i < g_width_in_cubes; i++){
+        for(size_t k = 1; k < g_width_in_cubes + 1; k++)
+        for(size_t j = 1; j < g_width_in_cubes + 1; j++)
+        for(size_t i = 1; i < g_width_in_cubes + 1; i++){
+            const size_t idx = block_idx(i, j, k);
+            //add to the curr buff
+            //let starpu allocate the data by setting home_node = -1 
+            starpu_block_data_register(&iterations[0][idx], -1, 0,
+                g_cube_width, SQUARE(g_cube_width),
+                g_cube_width, g_cube_width, g_cube_width, sizeof(FP)
+            );
 
-                    const int idx = BLOCK_I(i, j, k);
-                    //add to the curr buff
-                    //let starpu allocate the data by setting home_node = -1 
-                    starpu_block_data_register(&curr[idx], -1, 0,
-                        g_cube_width, SQUARE(g_cube_width),
-                        g_cube_width, g_cube_width, g_cube_width, 
-                        sizeof(double)
-                    );
+            // 
+            struct starpu_task* task = starpu_task_create();
 
-                    // 
-                    struct starpu_task* task = starpu_task_create();
+            task->cl = &rtm_codelet;
+            
+            struct cl_args* cl_args;
+            TRY(NULLTOERR(cl_args = make_cl_args(i, j, k, t + 1)));
 
-                    task->cl = &avrg_filter_cl;
-                    
-                    struct cl_args* cl_args = make_cl_args(i, j, k, t + 1);
-                    assert(cl_args != NULL);
+            //sprintf(cl_args->name, "[%d, %d, %d, %ld]", i, j, k, t + 1);
+            //task->name = cl_args->name;
 
-                    sprintf(cl_args->name, "[%d, %d, %d, %ld]", i, j, k, t + 1);
-                    task->name = cl_args->name;
+            task->cl_arg = cl_args;
+            task->cl_arg_size = sizeof(struct cl_args);
+            task->cl_arg_free = 1; // free the args after use
 
-                    task->cl_arg = cl_args;
-                    task->cl_arg_size = sizeof(struct cl_args);
-                    task->cl_arg_free = 1; // free the args after use
+            //select the handles
+            //          ^   ^
+            //          |  /
+            //          y z
+            //          |/
+            // -- x -- >
+            // ordem ao invés de rotacional vai ser via eixo,
+            // blocos do z (-1, +1), depois do y, depois do x
+            // dessa forma, o primeiro bloco é o (-1, -1, -1), 
+            // depois o (-1, -1, 0), (-1, -1, 1), (-1, 0, -1) ...
+            // essa lista inclui as diagonais que devem ser omitidas
+            task->handles[0] = iterations[0][idx]; // write block
 
+            //pre computed values do not have a border and have to be adjusted as such
+            const size_t precomp_idx = block_idx(i - 1, j - 1, k - 1);
+            task->handles[1] = hdl_ch1dxx[precomp_idx];
+            task->handles[2] = hdl_ch1dyy[precomp_idx];
+            task->handles[3] = hdl_ch1dzz[precomp_idx];
+            task->handles[4] = hdl_ch1dxy[precomp_idx];
+            task->handles[5] = hdl_ch1dyz[precomp_idx];
+            task->handles[6] = hdl_ch1dxz[precomp_idx];
+            task->handles[7] = hdl_v2px[precomp_idx];
+            task->handles[8] = hdl_v2pz[precomp_idx];
+            task->handles[9] = hdl_v2sz[precomp_idx];
+            task->handles[10]= hdl_v2pn[precomp_idx];
 
-                    //select the handles
-                    //need to stablish an order for selection, em 3d eg dificil
-                    //          ^   ^
-                    //          |  /
-                    //          y z
-                    //          |/
-                    // -- x -- >
-                    // ordem ao invés de rotacional vai ser via eixo,
-                    // blocos do z (-1, +1), depois do y, depois do x
-                    // no caso primeiro vai o bloco curr, 
-                    // depois o central prev e dps o resto na ordem estabelecida
+            task->handles[11] = iterations[1][idx];
 
-                    // buffers iniciais
-                    task->handles[0] = curr[idx]; 
-                    task->handles[1] = prev[idx];
-                    // se for o primeiro bloco da direção k, 
-                    // não usará este handle, mas tem que passar um buffer válido, então passa o central
-                    // se não for o primeiro bloco, passa o bloco anterior a esse, que será acessado
-                    task->handles[2] = FSTBLK(k) ? prev[idx] : prev[BLOCK_I(i, j, k - 1)];
-                    // repete só que caso haja o último bloco, e se existir passa o seguite a esse
-                    task->handles[3] = LSTBLK(k) ? prev[idx] : prev[BLOCK_I(i, j, k + 1)];
-                    // primeiro e último para eixo y
-                    task->handles[4] = FSTBLK(j) ? prev[idx] : prev[BLOCK_I(i, j - 1, k)];
-                    task->handles[5] = LSTBLK(j) ? prev[idx] : prev[BLOCK_I(i, j + 1, k)];
-                    // primeiro e último para eixo x
-                    task->handles[6] = FSTBLK(i) ? prev[idx] : prev[BLOCK_I(i - 1, j, k)];
-                    task->handles[7] = LSTBLK(i) ? prev[idx] : prev[BLOCK_I(i + 1, j, k)];
+            task->handles[12] = iterations[1][block_idx(i + 0, j + 0, k - 1)];
+            task->handles[13] = iterations[1][block_idx(i + 0, j - 1, k - 1)];
+            task->handles[14] = iterations[1][block_idx(i - 1, j + 0, k - 1)];
+            task->handles[15] = iterations[1][block_idx(i + 1, j + 0, k - 1)];
+            task->handles[16] = iterations[1][block_idx(i + 0, j + 1, k - 1)];
 
-                    ret = starpu_task_submit(task);
-                    //printf("iter: %d\n, %s", ++iter,t->name);
-                    STARPU_CHECK_RETURN_VALUE(ret, "starpu_task_submit");
-                }
-            }
+            task->handles[17] = iterations[1][block_idx(i - 1, j - 1, k + 0)];
+            task->handles[18] = iterations[1][block_idx(i + 0, j - 1, k + 0)];
+            task->handles[19] = iterations[1][block_idx(i + 1, j - 1, k + 0)];
+            task->handles[20] = iterations[1][block_idx(i - 1, j + 0, k + 0)];
+            task->handles[21] = iterations[1][block_idx(i + 1, j + 0, k + 0)];
+            task->handles[22] = iterations[1][block_idx(i - 1, j + 1, k + 0)];
+            task->handles[23] = iterations[1][block_idx(i + 0, j + 1, k + 0)];
+            task->handles[24] = iterations[1][block_idx(i + 1, j + 1, k + 0)];
+
+            task->handles[25] = iterations[1][block_idx(i + 0, j + 0, k + 1)];
+            task->handles[26] = iterations[1][block_idx(i + 0, j - 1, k + 1)];
+            task->handles[27] = iterations[1][block_idx(i - 1, j + 0, k + 1)];
+            task->handles[28] = iterations[1][block_idx(i + 1, j + 0, k + 1)];
+            task->handles[29] = iterations[1][block_idx(i + 0, j + 1, k + 1)];
+
+            task->handles[30] = iterations[2][idx];
+
+            TRY(starpu_task_submit(task));
         }
-        for(int ta = 0; ta < CUBE(g_width_in_cubes); ta++){
-            starpu_data_unregister_submit(prev[ta]);
+        //unregister all cubes from iteration t - 2
+        //in the inner data_handles
+        for(size_t k = 1; k < g_width_in_cubes + 1; k++)
+        for(size_t j = 1; j < g_width_in_cubes + 1; j++)
+        for(size_t i = 1; i < g_width_in_cubes + 1; i++){
+            starpu_data_unregister_submit(iterations[2][block_idx(i, j, k)]);
         }
-        //do a swap
-        starpu_data_handle_t* tmp = prev;
-        prev = curr;
-        curr = tmp;
+        // swap step
+        // do a swap, where t -> t - 1, t - 1 -> t - 2, t - 2 é descartado e o buffer é usado para t
+        starpu_data_handle_t* tmp = iterations[2];
+        iterations[2] = iterations[1];
+        iterations[1] = iterations[0];
+        iterations[0] = tmp;
+
         //write on a clear curr
-        clear_pointers(curr);
         starpu_iteration_pop();
     }
     printf("Submitted all tasks\n");
     //at least after all iterations
     starpu_task_wait_for_all();
 
-    //TODO: explicar
-    starpu_data_handle_t* result = prev;
+    // cleanup all remaning handles (iterations[2] and iteraions[1])
+    for(int k = 0; k < g_width_in_cubes + 2; k++){
+        for(int j = 0; j < g_width_in_cubes + 2; j++){
+            for(int i = 0; i < g_width_in_cubes + 2; i++){
+                starpu_data_handle_t h1 = iterations[1][block_idx(i, j, k)];
+                starpu_data_handle_t h2 = iterations[2][block_idx(i, j, k)];
 
-    //output the results in curr
-    //desregistra os blocos e limpa as tasks
-    double* result_block = (double*) malloc(sizeof(double) * CUBE(g_cube_width));
-    clear_block(result_block);
+                /* first need to acquire the data
+                TRY(starpu_data_acquire(h1, STARPU_R));
 
-    for(int k = 0; k < g_width_in_cubes; k++){
-        for(int j = 0; j < g_width_in_cubes; j++){
-            for(int i = 0; i < g_width_in_cubes; i++){
-                starpu_data_handle_t handle = result[BLOCK_I(i,j,k)];
-
-                // first need to acquire the data
-                starpu_data_acquire(handle, STARPU_R);
-                //double* result_block = initial_values[BLOCK_I(i,j,k)];
                 starpu_ssize_t og_size = sizeof(double) * CUBE(g_cube_width);
                 starpu_ssize_t size = og_size;
-                int ret = starpu_data_pack(handle, (void**)&result_block, &size);
+                //TRY(starpu_data_pack(h1, (void**)&result_block, &size))
+
                 assert(og_size == size);
                 STARPU_CHECK_RETURN_VALUE(ret, "starpu_data_pack");
 
@@ -480,13 +452,20 @@ int main(int argc, char **argv){
                 clear_block(result_block);
                 //then release
                 starpu_data_release(handle);
-                starpu_data_unregister(handle);
-
-                free(initial_values[BLOCK_I(i,j,k)]);
+                */
+                starpu_data_unregister(h1);
+                starpu_data_unregister(h2);
             }
         }
     }
-    */
+
+    program_end:
+
+    vector_free_all(medium_allocs, free);
+    vector_free_all(allocs, free);
+    #define STARPU_FREE(x) starpu_free_noflag(x, CUBE_SIZE * sizeof(FP));
+    vector_free_all(starpu_allocations, STARPU_FREE);
+
 	starpu_shutdown();
-	return 0;
+	return program_status;
 }

@@ -19,7 +19,8 @@
 // count deve ser o número de opções passadas, sendo cada opção
 // uma string seguida de um int
 // str_to_enum("b", 3, "a", 21, "b", 67, "c", 47) -> 67
-int str_to_enum(const char* word, int count, ...);
+// se err != 0, indica erro na função
+int str_to_enum(const char* word, int* err, int count, ...);
 
 // dado uma sequência de `count` ARG_type tag, pointeiro para o valor,
 // realiza-se a leitura desses argumentos usando argv, realizando as checagem apropriadas
