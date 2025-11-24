@@ -174,7 +174,6 @@ enum BlockPos {
 //const bool s2neg = sign2 == -1;
 //FP* other_block_d2 = s2neg ? block_minus_d2 : block_plus_d2; 
 
-//TODO: validar esse bloco
 FP cross_deriv_ddir(
     FP* block, const size_t base_idx,
     const size_t dir1, FP* block_minus_d1, FP* block_plus_d1, const int stride_d1,

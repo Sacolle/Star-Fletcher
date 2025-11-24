@@ -9,7 +9,7 @@
     let 
         system = "x86_64-linux";
         starpuOverlay = f: p: {
-            StarPU = p.callPackage ../../starpu.nix { maxBuffers = 32; };
+            StarPU = p.callPackage ../../starpu.nix { maxBuffers = 56; };
         };
         pkgs = import nixpkgs {
             inherit system;

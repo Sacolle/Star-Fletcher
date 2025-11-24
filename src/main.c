@@ -67,23 +67,6 @@ void clear_pointers(starpu_data_handle_t* list){
 }
 */
 
-struct cl_args {
-    //char name[64];
-    size_t i;
-    size_t j;
-    size_t k;
-    size_t t;
-};
-
-struct cl_args* make_cl_args(size_t i, size_t j, size_t k, size_t t){
-    struct cl_args* cl_args = (struct cl_args*) malloc(sizeof(struct cl_args));
-    if(cl_args == NULL){
-        return NULL;
-    }
-    *cl_args = (struct cl_args){.i = i, .j = j, .k = k, .t = t};
-    return cl_args;
-}
-
 int allocate(vector(void*) v, void** ptr, const size_t size){
     if((*ptr = malloc(size)) == NULL){
         return 1;
@@ -102,10 +85,8 @@ int allocate_starpu(vector(void*) v, void** ptr, const size_t size){
 
 struct starpu_codelet rtm_codelet = {
     .cpu_funcs = { rtm_kernel },
-    .nbuffers = 31,
+    .nbuffers = 52,
     .modes = {
-        STARPU_W, // w at (i, j, k) of t[0]
-
         // precomputed values
         STARPU_R, // r at (i, j, k) of ch1dxx
         STARPU_R, // r at (i, j, k) of ch1dyy
@@ -118,41 +99,81 @@ struct starpu_codelet rtm_codelet = {
         STARPU_R, // r at (i, j, k) of v2sz
         STARPU_R, // r at (i, j, k) of v2pn
 
-        STARPU_R, // r at (i, j, k) of t[1]
+        STARPU_W, // w at (i, j, k) of p_wave_iter[0]
+
+        STARPU_R, // r at (i, j, k) of p_wave_iter[1]
         // layer when k - 1
         // o x o
         // x x x 
         // o x o
-        STARPU_R, // r at (i + 0, j + 0, k - 1) of t[1]
-        STARPU_R, // r at (i + 0, j - 1, k - 1) of t[1]
-        STARPU_R, // r at (i - 1, j + 0, k - 1) of t[1]
-        STARPU_R, // r at (i + 1, j + 0, k - 1) of t[1]
-        STARPU_R, // r at (i + 0, j + 1, k - 1) of t[1]
+        STARPU_R, // r at (i + 0, j + 0, k - 1) of p_wave_iter[1]
+        STARPU_R, // r at (i + 0, j - 1, k - 1) of p_wave_iter[1]
+        STARPU_R, // r at (i - 1, j + 0, k - 1) of p_wave_iter[1]
+        STARPU_R, // r at (i + 1, j + 0, k - 1) of p_wave_iter[1]
+        STARPU_R, // r at (i + 0, j + 1, k - 1) of p_wave_iter[1]
 
         // layer when k
         // x x x
         // x o x 
         // x x x
-        STARPU_R, // r at (i - 1, j - 1, k + 0) of t[1]
-        STARPU_R, // r at (i + 0, j - 1, k + 0) of t[1]
-        STARPU_R, // r at (i + 1, j - 1, k + 0) of t[1]
-        STARPU_R, // r at (i - 1, j + 0, k + 0) of t[1]
-        STARPU_R, // r at (i + 1, j + 0, k + 0) of t[1]
-        STARPU_R, // r at (i - 1, j + 1, k + 0) of t[1]
-        STARPU_R, // r at (i + 0, j + 1, k + 0) of t[1]
-        STARPU_R, // r at (i + 1, j + 1, k + 0) of t[1]
+        STARPU_R, // r at (i - 1, j - 1, k + 0) of p_wave_iter[1]
+        STARPU_R, // r at (i + 0, j - 1, k + 0) of p_wave_iter[1]
+        STARPU_R, // r at (i + 1, j - 1, k + 0) of p_wave_iter[1]
+        STARPU_R, // r at (i - 1, j + 0, k + 0) of p_wave_iter[1]
+        STARPU_R, // r at (i + 1, j + 0, k + 0) of p_wave_iter[1]
+        STARPU_R, // r at (i - 1, j + 1, k + 0) of p_wave_iter[1]
+        STARPU_R, // r at (i + 0, j + 1, k + 0) of p_wave_iter[1]
+        STARPU_R, // r at (i + 1, j + 1, k + 0) of p_wave_iter[1]
 
         // layer when k + 1
         // o x o
         // x x x 
         // o x o
-        STARPU_R, // r at (i + 0, j + 0, k + 1) of t[1]
-        STARPU_R, // r at (i + 0, j - 1, k + 1) of t[1]
-        STARPU_R, // r at (i - 1, j + 0, k + 1) of t[1]
-        STARPU_R, // r at (i + 1, j + 0, k + 1) of t[1]
-        STARPU_R, // r at (i + 0, j + 1, k + 1) of t[1]
+        STARPU_R, // r at (i + 0, j + 0, k + 1) of p_wave_iter[1]
+        STARPU_R, // r at (i + 0, j - 1, k + 1) of p_wave_iter[1]
+        STARPU_R, // r at (i - 1, j + 0, k + 1) of p_wave_iter[1]
+        STARPU_R, // r at (i + 1, j + 0, k + 1) of p_wave_iter[1]
+        STARPU_R, // r at (i + 0, j + 1, k + 1) of p_wave_iter[1]
 
-        STARPU_R  // r at (i, j, k) of t[2]
+        STARPU_R,  // r at (i, j, k) of p_wave_iter[2]
+
+        STARPU_W, // w at (i, j, k) of q_wave_iter[0]
+
+        STARPU_R, // r at (i, j, k) of q_wave_iter[1]
+        // layer when k - 1
+        // o x o
+        // x x x 
+        // o x o
+        STARPU_R, // r at (i + 0, j + 0, k - 1) of q_wave_iter[1]
+        STARPU_R, // r at (i + 0, j - 1, k - 1) of q_wave_iter[1]
+        STARPU_R, // r at (i - 1, j + 0, k - 1) of q_wave_iter[1]
+        STARPU_R, // r at (i + 1, j + 0, k - 1) of q_wave_iter[1]
+        STARPU_R, // r at (i + 0, j + 1, k - 1) of q_wave_iter[1]
+
+        // layer when k
+        // x x x
+        // x o x 
+        // x x x
+        STARPU_R, // r at (i - 1, j - 1, k + 0) of q_wave_iter[1]
+        STARPU_R, // r at (i + 0, j - 1, k + 0) of q_wave_iter[1]
+        STARPU_R, // r at (i + 1, j - 1, k + 0) of q_wave_iter[1]
+        STARPU_R, // r at (i - 1, j + 0, k + 0) of q_wave_iter[1]
+        STARPU_R, // r at (i + 1, j + 0, k + 0) of q_wave_iter[1]
+        STARPU_R, // r at (i - 1, j + 1, k + 0) of q_wave_iter[1]
+        STARPU_R, // r at (i + 0, j + 1, k + 0) of q_wave_iter[1]
+        STARPU_R, // r at (i + 1, j + 1, k + 0) of q_wave_iter[1]
+
+        // layer when k + 1
+        // o x o
+        // x x x 
+        // o x o
+        STARPU_R, // r at (i + 0, j + 0, k + 1) of q_wave_iter[1]
+        STARPU_R, // r at (i + 0, j - 1, k + 1) of q_wave_iter[1]
+        STARPU_R, // r at (i - 1, j + 0, k + 1) of q_wave_iter[1]
+        STARPU_R, // r at (i + 1, j + 0, k + 1) of q_wave_iter[1]
+        STARPU_R, // r at (i + 0, j + 1, k + 1) of q_wave_iter[1]
+
+        STARPU_R  // r at (i, j, k) of q_wave_iter[2]
     },
     .model = &starpu_perfmodel_nop,
 };
@@ -168,7 +189,6 @@ struct starpu_codelet rtm_codelet = {
 
 // turns a null return into an err
 // if ptr == null -> 1 else 0
-#define NULLTOERR(ptr) ((ptr) == NULL ? 1 : 0)
 
 
 int main(int argc, char **argv){
@@ -277,12 +297,18 @@ int main(int argc, char **argv){
     // esses buffers extras exitem para inserir buffers válidos na ordem certa, mas eles nunca são acessados
     // na hora de fazer o `starpu_block_data_register` e `starpu_data_unregister_submit`, evita os blocos de borda
     // dessa forma, dentro do loop de execução de taregas i - 1 ou i + 1 são sempre índices válidos na lista de `data_handle_t`.
-    starpu_data_handle_t* iterations[3];
-    TRY(allocate(allocs, (void**) &iterations[0], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
-    TRY(allocate(allocs, (void**) &iterations[1], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
-    TRY(allocate(allocs, (void**) &iterations[2], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    starpu_data_handle_t* p_wave_iter[3];
+    TRY(allocate(allocs, (void**) &p_wave_iter[0], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &p_wave_iter[1], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &p_wave_iter[2], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
 
-    starpu_data_handle_t *hdl_ch1dxx, *hdl_ch1dyy, *hdl_ch1dzz, *hdl_ch1dxy, *hdl_ch1dyz, *hdl_ch1dxz, 
+    starpu_data_handle_t* q_wave_iter[3];
+    TRY(allocate(allocs, (void**) &q_wave_iter[0], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &q_wave_iter[1], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(allocate(allocs, (void**) &q_wave_iter[2], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+
+    starpu_data_handle_t *hdl_ch1dxx, *hdl_ch1dyy, *hdl_ch1dzz, 
+        *hdl_ch1dxy, *hdl_ch1dyz, *hdl_ch1dxz, 
         *hdl_v2px, *hdl_v2pz, *hdl_v2sz, *hdl_v2pn;
     TRY(allocate(allocs, (void**) &hdl_ch1dxx, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
     TRY(allocate(allocs, (void**) &hdl_ch1dyy, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
@@ -316,15 +342,19 @@ int main(int argc, char **argv){
         (g_width_in_cubes + 2) / 2, (g_width_in_cubes + 2) / 2, (g_width_in_cubes + 2) / 2);
 
     for(size_t idx = 0; idx < CUBE(g_width_in_cubes + 2); idx++){
-        BLOCK_REGISTER(iterations[0] + idx, null_block);
+        BLOCK_REGISTER(p_wave_iter[0] + idx, null_block);
+        BLOCK_REGISTER(q_wave_iter[0] + idx, null_block);
         // if we are initializing at the idx of the block that will be perturbed 
         // used the block with the perturbation source
         if(idx == perturbation_source_cube){
-            BLOCK_REGISTER(iterations[1] + idx, propagation_block);
+            BLOCK_REGISTER(p_wave_iter[1] + idx, propagation_block);
+            BLOCK_REGISTER(q_wave_iter[1] + idx, propagation_block);
         }else{
-            BLOCK_REGISTER(iterations[1] + idx, null_block);
+            BLOCK_REGISTER(p_wave_iter[1] + idx, null_block);
+            BLOCK_REGISTER(q_wave_iter[1] + idx, null_block);
         }
-        BLOCK_REGISTER(iterations[2] + idx, null_block);
+        BLOCK_REGISTER(p_wave_iter[2] + idx, null_block);
+        BLOCK_REGISTER(q_wave_iter[2] + idx, null_block);
     }
 
     for(int64_t t = 0; t < st; t++){
@@ -335,18 +365,22 @@ int main(int argc, char **argv){
             const size_t idx = block_idx(i, j, k);
             //add to the curr buff
             //let starpu allocate the data by setting home_node = -1 
-            starpu_block_data_register(&iterations[0][idx], -1, 0,
+            starpu_block_data_register(&p_wave_iter[0][idx], -1, 0,
                 g_cube_width, SQUARE(g_cube_width),
                 g_cube_width, g_cube_width, g_cube_width, sizeof(FP)
             );
 
-            // 
+            starpu_block_data_register(&q_wave_iter[0][idx], -1, 0,
+                g_cube_width, SQUARE(g_cube_width),
+                g_cube_width, g_cube_width, g_cube_width, sizeof(FP)
+            );
+
             struct starpu_task* task = starpu_task_create();
 
             task->cl = &rtm_codelet;
             
             struct cl_args* cl_args;
-            TRY(NULLTOERR(cl_args = make_cl_args(i, j, k, t + 1)));
+            TRY(make_cl_args(&cl_args, i, j, k, t + 1, dx, dy, dz, dt));
 
             //sprintf(cl_args->name, "[%d, %d, %d, %ld]", i, j, k, t + 1);
             //task->name = cl_args->name;
@@ -366,61 +400,101 @@ int main(int argc, char **argv){
             // dessa forma, o primeiro bloco é o (-1, -1, -1), 
             // depois o (-1, -1, 0), (-1, -1, 1), (-1, 0, -1) ...
             // essa lista inclui as diagonais que devem ser omitidas
-            task->handles[0] = iterations[0][idx]; // write block
 
             //pre computed values do not have a border and have to be adjusted as such
             const size_t precomp_idx = block_idx(i - 1, j - 1, k - 1);
-            task->handles[1] = hdl_ch1dxx[precomp_idx];
-            task->handles[2] = hdl_ch1dyy[precomp_idx];
-            task->handles[3] = hdl_ch1dzz[precomp_idx];
-            task->handles[4] = hdl_ch1dxy[precomp_idx];
-            task->handles[5] = hdl_ch1dyz[precomp_idx];
-            task->handles[6] = hdl_ch1dxz[precomp_idx];
-            task->handles[7] = hdl_v2px[precomp_idx];
-            task->handles[8] = hdl_v2pz[precomp_idx];
-            task->handles[9] = hdl_v2sz[precomp_idx];
-            task->handles[10]= hdl_v2pn[precomp_idx];
+            task->handles[0] = hdl_ch1dxx[precomp_idx];
+            task->handles[1] = hdl_ch1dyy[precomp_idx];
+            task->handles[2] = hdl_ch1dzz[precomp_idx];
+            task->handles[3] = hdl_ch1dxy[precomp_idx];
+            task->handles[4] = hdl_ch1dyz[precomp_idx];
+            task->handles[5] = hdl_ch1dxz[precomp_idx];
+            task->handles[6] = hdl_v2px[precomp_idx];
+            task->handles[7] = hdl_v2pz[precomp_idx];
+            task->handles[8] = hdl_v2sz[precomp_idx];
+            task->handles[9] = hdl_v2pn[precomp_idx];
 
-            task->handles[11] = iterations[1][idx];
+            // p wave blocks
+            task->handles[10] = p_wave_iter[0][idx]; // write block
 
-            task->handles[12] = iterations[1][block_idx(i + 0, j + 0, k - 1)];
-            task->handles[13] = iterations[1][block_idx(i + 0, j - 1, k - 1)];
-            task->handles[14] = iterations[1][block_idx(i - 1, j + 0, k - 1)];
-            task->handles[15] = iterations[1][block_idx(i + 1, j + 0, k - 1)];
-            task->handles[16] = iterations[1][block_idx(i + 0, j + 1, k - 1)];
+            task->handles[11] = p_wave_iter[1][idx]; //central block when t - 1
 
-            task->handles[17] = iterations[1][block_idx(i - 1, j - 1, k + 0)];
-            task->handles[18] = iterations[1][block_idx(i + 0, j - 1, k + 0)];
-            task->handles[19] = iterations[1][block_idx(i + 1, j - 1, k + 0)];
-            task->handles[20] = iterations[1][block_idx(i - 1, j + 0, k + 0)];
-            task->handles[21] = iterations[1][block_idx(i + 1, j + 0, k + 0)];
-            task->handles[22] = iterations[1][block_idx(i - 1, j + 1, k + 0)];
-            task->handles[23] = iterations[1][block_idx(i + 0, j + 1, k + 0)];
-            task->handles[24] = iterations[1][block_idx(i + 1, j + 1, k + 0)];
+            task->handles[12] = p_wave_iter[1][block_idx(i + 0, j + 0, k - 1)];
+            task->handles[13] = p_wave_iter[1][block_idx(i + 0, j - 1, k - 1)];
+            task->handles[14] = p_wave_iter[1][block_idx(i - 1, j + 0, k - 1)];
+            task->handles[15] = p_wave_iter[1][block_idx(i + 1, j + 0, k - 1)];
+            task->handles[16] = p_wave_iter[1][block_idx(i + 0, j + 1, k - 1)];
 
-            task->handles[25] = iterations[1][block_idx(i + 0, j + 0, k + 1)];
-            task->handles[26] = iterations[1][block_idx(i + 0, j - 1, k + 1)];
-            task->handles[27] = iterations[1][block_idx(i - 1, j + 0, k + 1)];
-            task->handles[28] = iterations[1][block_idx(i + 1, j + 0, k + 1)];
-            task->handles[29] = iterations[1][block_idx(i + 0, j + 1, k + 1)];
+            task->handles[17] = p_wave_iter[1][block_idx(i - 1, j - 1, k + 0)];
+            task->handles[18] = p_wave_iter[1][block_idx(i + 0, j - 1, k + 0)];
+            task->handles[19] = p_wave_iter[1][block_idx(i + 1, j - 1, k + 0)];
+            task->handles[20] = p_wave_iter[1][block_idx(i - 1, j + 0, k + 0)];
+            task->handles[21] = p_wave_iter[1][block_idx(i + 1, j + 0, k + 0)];
+            task->handles[22] = p_wave_iter[1][block_idx(i - 1, j + 1, k + 0)];
+            task->handles[23] = p_wave_iter[1][block_idx(i + 0, j + 1, k + 0)];
+            task->handles[24] = p_wave_iter[1][block_idx(i + 1, j + 1, k + 0)];
 
-            task->handles[30] = iterations[2][idx];
+            task->handles[25] = p_wave_iter[1][block_idx(i + 0, j + 0, k + 1)];
+            task->handles[26] = p_wave_iter[1][block_idx(i + 0, j - 1, k + 1)];
+            task->handles[27] = p_wave_iter[1][block_idx(i - 1, j + 0, k + 1)];
+            task->handles[28] = p_wave_iter[1][block_idx(i + 1, j + 0, k + 1)];
+            task->handles[29] = p_wave_iter[1][block_idx(i + 0, j + 1, k + 1)];
+
+            task->handles[30] = p_wave_iter[2][idx]; //central block when t - 2
+
+            // q wave blocks
+            task->handles[31] = q_wave_iter[0][idx]; // write block
+
+            task->handles[32] = q_wave_iter[1][idx]; //central block when t - 1
+
+            task->handles[33] = q_wave_iter[1][block_idx(i + 0, j + 0, k - 1)];
+            task->handles[34] = q_wave_iter[1][block_idx(i + 0, j - 1, k - 1)];
+            task->handles[35] = q_wave_iter[1][block_idx(i - 1, j + 0, k - 1)];
+            task->handles[36] = q_wave_iter[1][block_idx(i + 1, j + 0, k - 1)];
+            task->handles[37] = q_wave_iter[1][block_idx(i + 0, j + 1, k - 1)];
+
+            task->handles[38] = q_wave_iter[1][block_idx(i - 1, j - 1, k + 0)];
+            task->handles[39] = q_wave_iter[1][block_idx(i + 0, j - 1, k + 0)];
+            task->handles[40] = q_wave_iter[1][block_idx(i + 1, j - 1, k + 0)];
+            task->handles[41] = q_wave_iter[1][block_idx(i - 1, j + 0, k + 0)];
+            task->handles[42] = q_wave_iter[1][block_idx(i + 1, j + 0, k + 0)];
+            task->handles[43] = q_wave_iter[1][block_idx(i - 1, j + 1, k + 0)];
+            task->handles[44] = q_wave_iter[1][block_idx(i + 0, j + 1, k + 0)];
+            task->handles[45] = q_wave_iter[1][block_idx(i + 1, j + 1, k + 0)];
+
+            task->handles[46] = q_wave_iter[1][block_idx(i + 0, j + 0, k + 1)];
+            task->handles[47] = q_wave_iter[1][block_idx(i + 0, j - 1, k + 1)];
+            task->handles[48] = q_wave_iter[1][block_idx(i - 1, j + 0, k + 1)];
+            task->handles[49] = q_wave_iter[1][block_idx(i + 1, j + 0, k + 1)];
+            task->handles[50] = q_wave_iter[1][block_idx(i + 0, j + 1, k + 1)];
+
+            task->handles[51] = q_wave_iter[2][idx]; //central block when t - 2
 
             TRY(starpu_task_submit(task));
         }
-        //unregister all cubes from iteration t - 2
-        //in the inner data_handles
-        for(size_t k = 1; k < g_width_in_cubes + 1; k++)
-        for(size_t j = 1; j < g_width_in_cubes + 1; j++)
-        for(size_t i = 1; i < g_width_in_cubes + 1; i++){
-            starpu_data_unregister_submit(iterations[2][block_idx(i, j, k)]);
+        // only start to unregister when the automatically allocated buffers reaches the t - 2.
+        if(t >= 2){
+            //unregister all cubes from iteration t - 2
+            //in the inner data_handles
+            for(size_t k = 1; k < g_width_in_cubes + 1; k++)
+            for(size_t j = 1; j < g_width_in_cubes + 1; j++)
+            for(size_t i = 1; i < g_width_in_cubes + 1; i++){
+                starpu_data_unregister_submit(p_wave_iter[2][block_idx(i, j, k)]);
+                starpu_data_unregister_submit(q_wave_iter[2][block_idx(i, j, k)]);
+            }
         }
         // swap step
         // do a swap, where t -> t - 1, t - 1 -> t - 2, t - 2 é descartado e o buffer é usado para t
-        starpu_data_handle_t* tmp = iterations[2];
-        iterations[2] = iterations[1];
-        iterations[1] = iterations[0];
-        iterations[0] = tmp;
+        starpu_data_handle_t* tmp;
+        tmp = p_wave_iter[2];
+        p_wave_iter[2] = p_wave_iter[1];
+        p_wave_iter[1] = p_wave_iter[0];
+        p_wave_iter[0] = tmp;
+
+        tmp = q_wave_iter[2];
+        q_wave_iter[2] = q_wave_iter[1];
+        q_wave_iter[1] = q_wave_iter[0];
+        q_wave_iter[0] = tmp;
 
         //write on a clear curr
         starpu_iteration_pop();
@@ -429,12 +503,15 @@ int main(int argc, char **argv){
     //at least after all iterations
     starpu_task_wait_for_all();
 
-    // cleanup all remaning handles (iterations[2] and iteraions[1])
-    for(int k = 0; k < g_width_in_cubes + 2; k++){
-        for(int j = 0; j < g_width_in_cubes + 2; j++){
-            for(int i = 0; i < g_width_in_cubes + 2; i++){
-                starpu_data_handle_t h1 = iterations[1][block_idx(i, j, k)];
-                starpu_data_handle_t h2 = iterations[2][block_idx(i, j, k)];
+    // cleanup all remaning handles (p_wave_iter[2] and iteraions[1])
+    for(size_t k = 1; k < g_width_in_cubes + 1; k++){
+        for(size_t j = 1; j < g_width_in_cubes + 1; j++){
+            for(size_t i = 1; i < g_width_in_cubes + 1; i++){
+                starpu_data_handle_t ph1 = p_wave_iter[1][block_idx(i, j, k)];
+                starpu_data_handle_t ph2 = p_wave_iter[2][block_idx(i, j, k)];
+
+                starpu_data_handle_t qh1 = q_wave_iter[1][block_idx(i, j, k)];
+                starpu_data_handle_t qh2 = q_wave_iter[2][block_idx(i, j, k)];
 
                 /* first need to acquire the data
                 TRY(starpu_data_acquire(h1, STARPU_R));
@@ -453,8 +530,10 @@ int main(int argc, char **argv){
                 //then release
                 starpu_data_release(handle);
                 */
-                starpu_data_unregister(h1);
-                starpu_data_unregister(h2);
+                starpu_data_unregister(ph1);
+                starpu_data_unregister(ph2);
+                starpu_data_unregister(qh1);
+                starpu_data_unregister(qh2);
             }
         }
     }
