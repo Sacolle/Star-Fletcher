@@ -5,19 +5,24 @@
 #include "floatingpoint.h"
 
 struct cl_args {
-    //char name[64];
-    size_t i;
-    size_t j;
-    size_t k;
-    size_t t;
+    size_t x_start;
+    size_t y_start;
+    size_t z_start;
+    size_t x_end;
+    size_t y_end;
+    size_t z_end;
     FP dx;
     FP dy;
     FP dz;
     FP dt;
 };
 
+int a = sizeof(struct cl_args);
+
 int make_cl_args(struct cl_args** cl_args, 
-    const size_t i, const size_t j, const size_t k, const size_t t, 
+    const size_t x_start, const size_t x_end,
+    const size_t y_start, const size_t y_end,
+    const size_t z_start, const size_t z_end,
     const FP dx, const FP dy, const FP dz, const FP dt);
 
 

@@ -1,6 +1,6 @@
 #include <starpu.h>
-#include <pthread.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "kernel.h"
 #include "macros.h"
@@ -11,7 +11,7 @@
 #include "vector.h"
 
 
-const uint64_t BORDER_WIDTH = 4;
+const size_t BORDER_WIDTH = 4;
 
 
 // width for the volume of the whole sistem
@@ -363,6 +363,7 @@ int main(int argc, char **argv){
         for(size_t j = 1; j < g_width_in_cubes + 1; j++)
         for(size_t i = 1; i < g_width_in_cubes + 1; i++){
             const size_t idx = block_idx(i, j, k);
+
             //add to the curr buff
             //let starpu allocate the data by setting home_node = -1 
             starpu_block_data_register(&p_wave_iter[0][idx], -1, 0,
@@ -378,9 +379,21 @@ int main(int argc, char **argv){
             struct starpu_task* task = starpu_task_create();
 
             task->cl = &rtm_codelet;
+
+            const size_t start_z = k == 1 ? BORDER_WIDTH : 0;
+            const size_t end_z = g_cube_width - (k == g_width_in_cubes ? BORDER_WIDTH : 0);
+            const size_t start_y = j == 1 ? BORDER_WIDTH : 0;
+            const size_t end_y = g_cube_width - (j == g_width_in_cubes ? BORDER_WIDTH : 0);
+            const size_t start_x = i == 1 ? BORDER_WIDTH : 0;
+            const size_t end_x = g_cube_width - (i == g_width_in_cubes ? BORDER_WIDTH : 0);
             
             struct cl_args* cl_args;
-            TRY(make_cl_args(&cl_args, i, j, k, t + 1, dx, dy, dz, dt));
+            TRY(make_cl_args(&cl_args, 
+                start_x, end_x,
+                start_y, end_y,
+                start_z, end_z,
+                dx, dy, dz, dt
+            ));
 
             //sprintf(cl_args->name, "[%d, %d, %d, %ld]", i, j, k, t + 1);
             //task->name = cl_args->name;
@@ -472,6 +485,9 @@ int main(int argc, char **argv){
 
             TRY(starpu_task_submit(task));
         }
+
+        //TODO: submit here a task that insert the perturbation on the handle
+
         // only start to unregister when the automatically allocated buffers reaches the t - 2.
         if(t >= 2){
             //unregister all cubes from iteration t - 2

@@ -7,28 +7,34 @@
 
 
 int make_cl_args(struct cl_args** cl_args, 
-    const size_t i, const size_t j, const size_t k, const size_t t, 
+    const size_t x_start, const size_t x_end,
+    const size_t y_start, const size_t y_end,
+    const size_t z_start, const size_t z_end,
     const FP dx, const FP dy, const FP dz, const FP dt
 ){
     *cl_args = (struct cl_args*) malloc(sizeof(struct cl_args));
     if(*cl_args == NULL){
         return 1;
     }
-    **cl_args = (struct cl_args){.i = i, .j = j, .k = k, .t = t, .dx = dx, .dy = dy, .dz = dz, .dt = dt};
+    **cl_args = (struct cl_args){
+        .x_start = x_start, .x_end = x_end,
+        .y_start = y_start, .y_end = y_end,
+        .z_start = z_start, .z_end = z_end,
+        .dx = dx, .dy = dy, .dz = dz, .dt = dt
+    };
     return 0;
 }
-
-extern size_t g_volume_width;
-extern size_t g_width_in_cubes;
-extern size_t g_cube_width;
-
 
 void rtm_kernel(void *descr[], void *cl_args){
     // do stuff here
     const struct cl_args* args = (struct cl_args*) cl_args;
-    const size_t i = args->i;
-    const size_t j = args->j;
-    const size_t k = args->k;
+
+    const size_t x_start = args->x_start;
+    const size_t y_start = args->y_start;
+    const size_t z_start = args->z_start;
+    const size_t x_end = args->x_end;
+    const size_t y_end = args->y_end;
+    const size_t z_end = args->z_end;
 
     const FP dx = args->dx;
     const FP dy = args->dy;
@@ -77,6 +83,8 @@ void rtm_kernel(void *descr[], void *cl_args){
     // STARPU_R, // r at (i - 1, j + 0, k - 1) of t[1]
     // STARPU_R, // r at (i + 1, j + 0, k - 1) of t[1]
     // STARPU_R, // r at (i + 0, j + 1, k - 1) of t[1]
+    // nomenclatura de variável é:
+    // pw (onda primária do bloco)  ip0 (i + 0)  jp0 (j + 0)  km1 (k - 1), em relação ao central
     const FP* pwip0jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[12]);
     const FP* pwip0jm1km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[13]);
     const FP* pwim1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[14]);
@@ -154,9 +162,9 @@ void rtm_kernel(void *descr[], void *cl_args){
     const FP* qwcentralt2 = (FP*) STARPU_BLOCK_GET_PTR(descr[51]);
 
 
-    for(size_t z = 0; z < cube_width_z; z++)
-    for(size_t y = 0; y < cube_width_y; y++)
-    for(size_t x = 0; x < cube_width_x; x++){
+    for(size_t z = z_start; z < z_end; z++)
+    for(size_t y = y_start; y < y_end; y++)
+    for(size_t x = x_start; x < x_end; x++){
         const size_t idx = cube_idx(x, y, z);
 
         const FP pxx = snd_deriv_dir(pwcentralt1, pwim1jp0kp0, pwip1jp0kp0, x, idx, stride_x, dxxinv, cube_width_x);
