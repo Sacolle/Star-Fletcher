@@ -8,20 +8,19 @@
     outputs = { self, nixpkgs }: 
     let 
         system = "x86_64-linux";
-        starpuOverlay = f: p: {
-            StarPU = p.callPackage ../../starpu.nix { maxBuffers = 56; };
+        pkgs = import nixpkgs { inherit system; };
+        StarPU = pkgs.callPackage ../../starpu.nix { maxBuffers = 56; };
+        StarPURelease = pkgs.callPackage ../../starpu.nix { 
+            maxBuffers = 56; 
+            buildMode = "release";
         };
-        pkgs = import nixpkgs {
-            inherit system;
-            overlays = [ starpuOverlay ];
-        };
-    in
-    {
-        devShells.${system}.default = pkgs.mkShell {
+
+        baseShell = StarPUVersion: extraArgs: pkgs.mkShell ({
             buildInputs = with pkgs; [
                 pkg-config
                 hwloc
-                StarPU
+                # StarPU
+                StarPUVersion
                 # project libs
                 criterion
 
@@ -37,7 +36,7 @@
             # export StarPU and hwloc store locations 
             # for use in vscode intellisence
             GCC_STORE_PATH = "${pkgs.gcc}";
-            STARPU_STORE_PATH = "${pkgs.StarPU}";
+            STARPU_STORE_PATH = "${StarPUVersion}";
             CRITERION_STORE_PATH = "${pkgs.criterion.dev}";
             HWLOC_STORE_PATH = "${pkgs.hwloc.dev}";
 
@@ -46,6 +45,13 @@
                 echo Added StarPU, Hwloc, criterion and gcc to ENV
                 zsh
             '';
+        } // extraArgs);
+    in
+    {
+        devShells.${system} = {
+            # default shell, compiles starpu in debug mode
+            default = baseShell StarPU { COMPILE_MODE = "debug"; };
+            release = baseShell StarPURelease { COMPILE_MODE = "release"; };
         };
     };
 }

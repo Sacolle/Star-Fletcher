@@ -2,9 +2,22 @@
 export STARPU_CFLAGS := $(shell pkg-config --cflags starpu-1.4)
 export STARPU_LDLIBS := $(shell pkg-config --libs starpu-1.4)
 
-CFLAGS := $(STARPU_CFLAGS) -g -pthread -O0 -Wall -lm
-LDLIBS += $(STARPU_LDLIBS) 
+CFLAGS := $(STARPU_CFLAGS) -Wall
+LDLIBS += $(STARPU_LDLIBS) -lm
 
+# if COMPILE_MODE is not define, the makefile will generate a
+# missing separator Error because it will fail to parse the echo line
+# AKA, doing this as a throw because the compile_mode should be defined
+ifndef COMPILE_MODE
+echo $(error, compile mode not defined)
+endif
+
+
+ifeq ($(COMPILE_MODE), release)
+CFLAGS += -O3
+else
+CFLAGS += -O0 -g
+endif
 
 export PARENT_DIR := $(CURDIR)
 
@@ -44,4 +57,4 @@ test:
 	$(MAKE) -C tests 
 
 clean:
-	rm -f $(BIN) *.o
+	rm -f $(BIN) $(OBJS)
