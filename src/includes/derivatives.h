@@ -34,23 +34,23 @@
 #define K4 FP_LIT(-0.00178571428571428571) // -1/560
 
 FP fst_deriv_dir(
-    FP* block, FP* block_minus, FP* block_plus, 
+    const FP* block, const FP* block_minus, const FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 
     const FP dinv, const int cube_width
 );
 
 FP snd_deriv_dir(
-    FP* block, FP* block_minus, FP* block_plus, 
+    const FP* block, const FP* block_minus, const FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 
     const FP d2inv, const int cube_width 
 );
 
 FP cross_deriv_ddir(
-    FP* block, const size_t base_idx,
-    const size_t dir1, FP* block_minus_d1, FP* block_plus_d1, const int stride_d1,
-    const size_t dir2, FP* block_minus_d2, FP* block_plus_d2, const int stride_d2,
-    FP* block_diagonal_plus_plus, FP* block_diagonal_plus_minus, 
-    FP* block_diagonal_minus_plus, FP* block_diagonal_minus_minus,
+    const FP* block, const size_t base_idx,
+    const size_t dir1, const FP* block_minus_d1, const FP* block_plus_d1, const int stride_d1,
+    const size_t dir2, const FP* block_minus_d2, const FP* block_plus_d2, const int stride_d2,
+    const FP* block_diagonal_plus_plus, const FP* block_diagonal_plus_minus, 
+    const FP* block_diagonal_minus_plus, const FP* block_diagonal_minus_minus,
     const int cube_width
 );
 

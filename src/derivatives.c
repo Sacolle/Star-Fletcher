@@ -36,13 +36,13 @@ static inline size_t flip(const size_t line_idx, const size_t idx, const int str
 // Agrega os 4 itens no sentido `sign_for_idx`, na dimensão indicada por `stride`;
 // soma ou subtrai dependendo do `sign_for_math`.
 FP deriv_kernel_sum(
-    FP* block, FP* block_minus, FP* block_plus, 
+    const FP* block, const FP* block_minus, const FP* block_plus, 
     const int dir, const int sign_for_idx, const int sign_for_math,
     const size_t base_idx, const int stride, 
     const FP coef[4], const int cube_width
 ) { 
     FP aggr = 0.0;
-    FP* access_block = block;
+    const FP* access_block = block;
     int idx = base_idx;
     int line_idx = dir;
     for(int k = 1; k <= KERNEL_SIZE; k++){  
@@ -73,7 +73,7 @@ FP deriv_kernel_sum(
     ) * (dinv)
 */
 FP fst_deriv_dir(
-    FP* block, FP* block_minus, FP* block_plus, 
+    const FP* block, const FP* block_minus, const FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 
     const FP dinv, const int cube_width
 ){
@@ -101,7 +101,7 @@ FP fst_deriv_dir(
 */
 
 FP snd_deriv_dir(
-    FP* block, FP* block_minus, FP* block_plus, 
+    const FP* block, const FP* block_minus, const FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 
     const FP d2inv, const int cube_width
 ){
@@ -175,11 +175,11 @@ enum BlockPos {
 //FP* other_block_d2 = s2neg ? block_minus_d2 : block_plus_d2; 
 
 FP cross_deriv_ddir(
-    FP* block, const size_t base_idx,
-    const size_t dir1, FP* block_minus_d1, FP* block_plus_d1, const int stride_d1,
-    const size_t dir2, FP* block_minus_d2, FP* block_plus_d2, const int stride_d2,
-    FP* block_diagonal_plus_plus, FP* block_diagonal_plus_minus, 
-    FP* block_diagonal_minus_plus, FP* block_diagonal_minus_minus,
+    const FP* block, const size_t base_idx,
+    const size_t dir1, const FP* block_minus_d1, const FP* block_plus_d1, const int stride_d1,
+    const size_t dir2, const FP* block_minus_d2, const FP* block_plus_d2, const int stride_d2,
+    const FP* block_diagonal_plus_plus, const FP* block_diagonal_plus_minus, 
+    const FP* block_diagonal_minus_plus, const FP* block_diagonal_minus_minus,
     const int cube_width
 ){
     static const FP ls[LSSIZE * LSSIZE] = {
@@ -230,7 +230,7 @@ FP cross_deriv_ddir(
                     }else{
                         idx = (idx + sign2 * stride_d2);
                     }
-                    FP* access_block;
+                    const FP* access_block;
                     switch (TUP(access_block_d1, access_block_d2)){
                     case TUP(Minus, Minus):  access_block = block_diagonal_minus_minus; break;
                     case TUP(Minus, Center): access_block = block_minus_d1; break;
