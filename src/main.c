@@ -83,6 +83,23 @@ int allocate_starpu(vector(void*) v, void** ptr, const size_t size){
     return 0;
 }
 
+// passes the iter[0] to iter[1], iter[1] to iter[2] and iter[2] to iter[0]
+static inline void rotate_for_next_iter(starpu_data_handle_t* iter[3]){
+    starpu_data_handle_t* tmp = iter[2]; 
+    iter[2] = iter[1]; 
+    iter[1] = iter[0]; 
+    iter[0] = tmp; 
+}
+
+struct starpu_codelet insert_perturbation_codelet = {
+    .cpu_funcs = { perturbation_kernel },
+    .nbuffers = 2,
+    .modes = { 
+        STARPU_RW, // p wave
+        STARPU_RW  // q wave
+    }
+};
+
 struct starpu_codelet rtm_codelet = {
     .cpu_funcs = { rtm_kernel },
     .nbuffers = 52,
@@ -387,8 +404,8 @@ int main(int argc, char **argv){
             const size_t start_x = i == 1 ? BORDER_WIDTH : 0;
             const size_t end_x = g_cube_width - (i == g_width_in_cubes ? BORDER_WIDTH : 0);
             
-            struct cl_args* cl_args;
-            TRY(make_cl_args(&cl_args, 
+            struct rtm_args* rtm_args;
+            TRY(make_rtm_args(&rtm_args, 
                 start_x, end_x,
                 start_y, end_y,
                 start_z, end_z,
@@ -398,8 +415,8 @@ int main(int argc, char **argv){
             //sprintf(cl_args->name, "[%d, %d, %d, %ld]", i, j, k, t + 1);
             //task->name = cl_args->name;
 
-            task->cl_arg = cl_args;
-            task->cl_arg_size = sizeof(struct cl_args);
+            task->cl_arg = rtm_args;
+            task->cl_arg_size = sizeof(struct rtm_args);
             task->cl_arg_free = 1; // free the args after use
 
             //select the handles
@@ -486,7 +503,21 @@ int main(int argc, char **argv){
             TRY(starpu_task_submit(task));
         }
 
-        //TODO: submit here a task that insert the perturbation on the handle
+        // task that insert the perturbation on the handle
+        struct starpu_task* perturb_task = starpu_task_create();
+
+        perturb_args_t* perturb_args;
+        TRY(make_perturb_args(&perturb_args, perturbation_source_pos, medium_source_value(dt, t)));
+
+        perturb_task->cl = &insert_perturbation_codelet;
+        perturb_task->cl_arg = perturb_args;
+        perturb_task->cl_arg_size = sizeof(perturb_args_t);
+        perturb_task->cl_arg_free = 1; // free the args after use
+
+        perturb_task->handles[0] = p_wave_iter[0][perturbation_source_cube];
+        perturb_task->handles[1] = q_wave_iter[0][perturbation_source_cube];
+
+        TRY(starpu_task_submit(perturb_task));
 
         // only start to unregister when the automatically allocated buffers reaches the t - 2.
         if(t >= 2){
@@ -499,20 +530,11 @@ int main(int argc, char **argv){
                 starpu_data_unregister_submit(q_wave_iter[2][block_idx(i, j, k)]);
             }
         }
-        // swap step
-        // do a swap, where t -> t - 1, t - 1 -> t - 2, t - 2 é descartado e o buffer é usado para t
-        starpu_data_handle_t* tmp;
-        tmp = p_wave_iter[2];
-        p_wave_iter[2] = p_wave_iter[1];
-        p_wave_iter[1] = p_wave_iter[0];
-        p_wave_iter[0] = tmp;
+        // rotate the iterations so that the currently computed values are the t - 1 values
+        // reuse the space for the t - 2 for the new t values
+        rotate_for_next_iter(p_wave_iter);
+        rotate_for_next_iter(q_wave_iter);
 
-        tmp = q_wave_iter[2];
-        q_wave_iter[2] = q_wave_iter[1];
-        q_wave_iter[1] = q_wave_iter[0];
-        q_wave_iter[0] = tmp;
-
-        //write on a clear curr
         starpu_iteration_pop();
     }
     printf("Submitted all tasks\n");

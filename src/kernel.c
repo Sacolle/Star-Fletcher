@@ -6,17 +6,17 @@
 #include "derivatives.h"
 
 
-int make_cl_args(struct cl_args** cl_args, 
+int make_rtm_args(rtm_args_t** rtm_args, 
     const size_t x_start, const size_t x_end,
     const size_t y_start, const size_t y_end,
     const size_t z_start, const size_t z_end,
     const FP dx, const FP dy, const FP dz, const FP dt
 ){
-    *cl_args = (struct cl_args*) malloc(sizeof(struct cl_args));
-    if(*cl_args == NULL){
+    *rtm_args = (rtm_args_t*) malloc(sizeof(rtm_args_t));
+    if(*rtm_args == NULL){
         return 1;
     }
-    **cl_args = (struct cl_args){
+    **rtm_args = (rtm_args_t){
         .x_start = x_start, .x_end = x_end,
         .y_start = y_start, .y_end = y_end,
         .z_start = z_start, .z_end = z_end,
@@ -25,9 +25,20 @@ int make_cl_args(struct cl_args** cl_args,
     return 0;
 }
 
+
+int make_perturb_args(perturb_args_t** perturb_args, const size_t idx, const FP value){
+    *perturb_args = (perturb_args_t*) malloc(sizeof(perturb_args_t));
+    if(*perturb_args == NULL){
+        return 1;
+    }
+    (*perturb_args)->source_idx = idx;
+    (*perturb_args)->perturb_value = value;
+    return 0;
+}
+
 void rtm_kernel(void *descr[], void *cl_args){
     // do stuff here
-    const struct cl_args* args = (struct cl_args*) cl_args;
+    const rtm_args_t* args = (rtm_args_t*) cl_args;
 
     const size_t x_start = args->x_start;
     const size_t y_start = args->y_start;
@@ -248,4 +259,17 @@ void rtm_kernel(void *descr[], void *cl_args){
         pwwrite[idx] = FP_LIT(2.0) * pwcentralt1[idx] - pwcentralt2[idx] + rhsp * dt * dt;
         qwwrite[idx] = FP_LIT(2.0) * qwcentralt1[idx] - qwcentralt2[idx] + rhsq * dt * dt;
     }
+}
+
+void perturbation_kernel(void *descr[], void *cl_args){
+    const perturb_args_t* args = (perturb_args_t*) cl_args;
+
+    const size_t idx = args->source_idx;
+    const FP value = args->perturb_value;
+
+    FP *const p_wave_block = (FP *const) STARPU_BLOCK_GET_PTR(descr[0]);
+    FP *const q_wave_block = (FP *const) STARPU_BLOCK_GET_PTR(descr[1]);
+
+    p_wave_block[idx] += value;
+    q_wave_block[idx] += value;
 }
