@@ -29,7 +29,6 @@ size_t g_cube_width = 0;
 #define CUBE_SIZE (g_cube_width * g_cube_width * g_cube_width)
 #define TOTAL_CUBES (g_width_in_cubes * g_width_in_cubes * g_width_in_cubes)
 
-/*
 void print_block(double* block){
     printf("[\n");
     for(size_t z = 0; z < g_cube_width; z++){
@@ -37,7 +36,7 @@ void print_block(double* block){
         for(size_t y = 0; y < g_cube_width; y++){
             printf("\t[");
             for(size_t x = 0; x < g_cube_width; x++){
-                printf("%.2f", block[CUBE_I(x, y, z)]);
+                printf("%.2f", block[cube_idx(x, y, z)]);
                 if(x != g_cube_width - 1){
                     printf(", ");
                 }
@@ -58,14 +57,6 @@ void clear_block(FP* block){
         }
     }
 }
-
-//TODO: 
-void clear_pointers(starpu_data_handle_t* list){
-    for(size_t i = 0; i < CUBE(g_width_in_cubes); i++){
-        list[i] = NULL;
-    }
-}
-*/
 
 int allocate(vector(void*) v, void** ptr, const size_t size){
     if((*ptr = malloc(size)) == NULL){
@@ -203,10 +194,6 @@ struct starpu_codelet rtm_codelet = {
     printf("[error] Failed at line %d\n", __LINE__); \
     printf("[err-msg] " __VA_ARGS__);, program_end)
 #endif
-
-// turns a null return into an err
-// if ptr == null -> 1 else 0
-
 
 int main(int argc, char **argv){
     //need to be toplevel for the try macro
@@ -541,6 +528,9 @@ int main(int argc, char **argv){
     //at least after all iterations
     starpu_task_wait_for_all();
 
+    FP* result_block;
+    TRY(allocate(allocs,(void**) &result_block, sizeof(FP) * CUBE_SIZE));
+
     // cleanup all remaning handles (p_wave_iter[2] and iteraions[1])
     for(size_t k = 1; k < g_width_in_cubes + 1; k++){
         for(size_t j = 1; j < g_width_in_cubes + 1; j++){
@@ -551,23 +541,18 @@ int main(int argc, char **argv){
                 starpu_data_handle_t qh1 = q_wave_iter[1][block_idx(i, j, k)];
                 starpu_data_handle_t qh2 = q_wave_iter[2][block_idx(i, j, k)];
 
-                /* first need to acquire the data
-                TRY(starpu_data_acquire(h1, STARPU_R));
+                // first need to acquire the data
+                TRY(starpu_data_acquire(ph1, STARPU_R));
 
-                starpu_ssize_t og_size = sizeof(double) * CUBE(g_cube_width);
-                starpu_ssize_t size = og_size;
-                //TRY(starpu_data_pack(h1, (void**)&result_block, &size))
+                starpu_ssize_t size = sizeof(double) * CUBE_SIZE;
+                TRY(starpu_data_pack(ph1, (void**)&result_block, &size));
 
-                assert(og_size == size);
-                STARPU_CHECK_RETURN_VALUE(ret, "starpu_data_pack");
-
-                //print_block(result_block);
-
-
+                print_block(result_block);
                 clear_block(result_block);
+
                 //then release
-                starpu_data_release(handle);
-                */
+                starpu_data_release(ph1);
+
                 starpu_data_unregister(ph1);
                 starpu_data_unregister(ph2);
                 starpu_data_unregister(qh1);

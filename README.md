@@ -79,3 +79,40 @@ $$
     & A_1 = 0^n + perturb
 \end{align}
 $$
+
+
+### TODO
+
+Adicionar um callback para reportar as métricas em um arquivo rsf.
+Adicionar no starpu_task::epilogue_callback, que executa antes das task que dependem da task que chamou este callback de serem executadas. O epilogo é chamado no host que excuta a task, AKA, a cpu que evoca no contexto MPI.
+
+Ou seja, passa a task executada para o callback.
+Obtém o handle apropriado.
+Faz IO
+Libera
+
+Exemplo do gepeto.
+```c
+void dump_callback(void *arg){
+    struct starpu_task *task = (struct starpu_task *)arg;
+
+    starpu_data_handle_t out = task->handles[2]; // output vector C
+
+    starpu_data_acquire(out, STARPU_R);
+    double *c = (double*) starpu_data_get_local_ptr(out);
+    size_t n = starpu_vector_get_nx(out);
+
+    printf("Result:\n");
+    for (size_t i = 0; i < n; i++)
+        printf("%f ", c[i]);
+    printf("\n");
+
+    starpu_data_release(out);
+}
+```
+
+Só preciso descobrir como fazer os arquivos rsf, considerando a estrutura cúbica do sistema.
+
+
+## TODO 2:
+Fazer testes da geração da onda de perturbação e dos kernel, se eles estão gerando os números corretos
