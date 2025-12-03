@@ -547,7 +547,7 @@ int main(int argc, char **argv){
                 starpu_ssize_t size = sizeof(double) * CUBE_SIZE;
                 TRY(starpu_data_pack(ph1, (void**)&result_block, &size));
 
-                print_block(result_block);
+                //print_block(result_block);
                 clear_block(result_block);
 
                 //then release

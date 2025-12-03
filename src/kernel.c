@@ -173,10 +173,20 @@ void rtm_kernel(void *descr[], void *cl_args){
     const FP* qwcentralt2 = (FP*) STARPU_BLOCK_GET_PTR(descr[51]);
 
 
-    for(size_t z = z_start; z < z_end; z++)
-    for(size_t y = y_start; y < y_end; y++)
-    for(size_t x = x_start; x < x_end; x++){
+    for(size_t z = 0; z < cube_width_z; z++)
+    for(size_t y = 0; y < cube_width_y; y++)
+    for(size_t x = 0; x < cube_width_x; x++){
         const size_t idx = cube_idx(x, y, z);
+
+        if(
+            (z < z_start || z >= z_end) || 
+            (y < y_start || y >= y_end) || 
+            (x < x_start || x >= x_end)
+        ){
+            pwwrite[idx] = FP_LIT(0.0);
+            qwwrite[idx] = FP_LIT(0.0);
+            continue;
+        }
 
         const FP pxx = snd_deriv_dir(pwcentralt1, pwim1jp0kp0, pwip1jp0kp0, x, idx, stride_x, dxxinv, cube_width_x);
         const FP pyy = snd_deriv_dir(pwcentralt1, pwip0jm1kp0, pwip0jp1kp0, y, idx, stride_y, dyyinv, cube_width_y);
