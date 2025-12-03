@@ -8,8 +8,17 @@
     outputs = { self, nixpkgs }: 
     let 
         system = "x86_64-linux";
-        pkgs = import nixpkgs { inherit system; };
-        StarPU = pkgs.callPackage ../../starpu.nix { maxBuffers = 56; };
+        fxtOverlay = f: p: {
+            fxt = p.callPackage ../../fxt.nix { static = true; };
+        };
+        pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ fxtOverlay ];
+        };
+        StarPU = pkgs.callPackage ../../starpu.nix { 
+            maxBuffers = 56; 
+            enableTrace = true; 
+        };
         StarPURelease = pkgs.callPackage ../../starpu.nix { 
             maxBuffers = 56; 
             buildMode = "release";
