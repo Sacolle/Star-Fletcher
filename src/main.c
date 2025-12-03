@@ -480,9 +480,9 @@ int main(int argc, char **argv){
 
     for(int64_t t = 1; t < st; t++){
         starpu_iteration_push(t);
-        for(size_t k = 1; k < g_width_in_cubes + 1; k++)
-        for(size_t j = 1; j < g_width_in_cubes + 1; j++)
-        for(size_t i = 1; i < g_width_in_cubes + 1; i++){
+        for(size_t k = 1; k < g_width_in_cubes + 1; k++) // z
+        for(size_t j = 1; j < g_width_in_cubes + 1; j++) // y
+        for(size_t i = 1; i < g_width_in_cubes + 1; i++){// x
             const size_t idx = block_idx(i, j, k);
 
             //add to the curr buff
