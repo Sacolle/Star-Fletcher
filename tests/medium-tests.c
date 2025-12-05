@@ -192,6 +192,21 @@ void RandomVelocityBoundary(int sx, int sy, int sz,
     }
 }
 
+
+#define FCUT        40.0
+#define PICUBE      31.00627668029982017537
+#define TWOSQRTPI    3.54490770181103205458
+#define THREESQRTPI  5.31736155271654808184
+
+FP Source(FP dt, int it){
+  FP tf, fc, fct, expo;
+  tf=TWOSQRTPI/FCUT;
+  fc=FCUT/THREESQRTPI;
+  fct=fc*(((FP)it)*dt-tf);
+  expo=PICUBE*fct*fct;
+  return ((FP_LIT(1.0)-FP_LIT(2.0)*expo)*FP_EXP(-expo));
+}
+
 void intermediary_values(
     int sx, int sy , int sz, 
     FP *restrict vpz, FP *restrict vsv, FP *restrict epsilon,
@@ -351,24 +366,6 @@ Test(medium, correct_absorb){
         }
     }
 }
-
-
-//TODO: adapt to test framework
-/*
-Test(medium, assert_block_clear_edge){
-    for(size_t z = 0; z < g_cube_width; z++){
-        for(size_t y = 0; y < g_cube_width; y++){
-            for(size_t x = 0; x < g_cube_width; x++){
-                const size_t idx = CUBE_I(x, y, z);
-                if( INEDGE(k, z) || INEDGE(j, y) || INEDGE(i, x)){
-                    assert(block[idx] < EPSILON);
-                    assert(block[idx] > -EPSILON);
-                }
-            }
-        }
-    }
-}*/
-
 
 
 Test(medium, correct_intermediary_values){
@@ -559,4 +556,91 @@ Test(medium, correct_intermediary_values){
     free(v2pz_base);
     free(v2sz_base);
     free(v2pn_base);
+}
+
+Test(medium, kernel_proper_computation){
+    const size_t seg = 3;
+    const size_t c_size = 10;
+    g_width_in_cubes = seg;
+    g_cube_width = c_size;
+
+    const int bord = 4;
+    const int absorb = 4;
+    const int nx = 14;
+    const int ny = 14;
+    const int nz = 14;
+    const int sx = nx + 2 * bord + 2 * absorb;
+    const int sy = ny + 2 * bord + 2 * absorb;
+    const int sz = nz + 2 * bord + 2 * absorb;
+
+    g_volume_width = sx;
+    const int size = sx * sy * sz;
+
+    FP vpz[size];
+    FP vsv[size];
+    FP epsilon[size];
+    FP delta[size];
+    FP phi[size];
+    FP theta[size];
+
+    medium_initialize(TTI, size, vpz, vsv, epsilon, delta, phi, theta);
+
+    medium_random_velocity_boundary(bord, absorb, vpz, vsv);
+
+    const size_t total_seg = seg * seg * seg;
+    const size_t total_c_size = c_size * c_size * c_size;
+
+    FP* ch1dxx[total_seg];
+    FP* ch1dyy[total_seg];
+    FP* ch1dzz[total_seg];
+    FP* ch1dxy[total_seg];
+    FP* ch1dyz[total_seg];
+    FP* ch1dxz[total_seg];
+    FP* v2px[total_seg];
+    FP* v2pz[total_seg];
+    FP* v2sz[total_seg];
+    FP* v2pn[total_seg];
+
+    FP** buffs[10] = { ch1dxx, ch1dyy, ch1dzz, ch1dxy, ch1dyz, ch1dxz, v2px, v2pz, v2sz, v2pn };
+
+    for(int i = 0; i < 10; i++){
+        for(int seg = 0; seg < total_seg; seg++){
+            if((buffs[i][seg] = (FP*) malloc(sizeof(FP) * total_c_size)) == NULL){
+                cr_assert(false);
+            }
+        }
+    }
+
+    medium_calc_intermediary_values(
+        vpz, vsv, epsilon, delta, phi, theta,
+        (FP**) ch1dxx, (FP**) ch1dyy, (FP**) ch1dzz,
+        (FP**) ch1dxy, (FP**) ch1dyz, (FP**) ch1dxz, 
+        (FP**) v2px, (FP**) v2pz, (FP**) v2sz, (FP**) v2pn
+    );
+
+    for(size_t k = 0; k < g_width_in_cubes; k++){
+        for(size_t j = 0; j < g_width_in_cubes; j++){
+            for(size_t i = 0; i < g_width_in_cubes; i++){
+                //index the block
+                const size_t b_i = block_idx(i, j, k);
+
+            }
+        }
+    }
+
+    for(int i = 0; i < 10; i++){
+        for(int seg = 0; seg < total_seg; seg++){
+            free(buffs[i][seg]);
+        }
+    }
+}
+
+
+Test(medium, source_value){
+    const float dt = 1.0;
+    for(int i = 0; i < 100; i++){
+        const FP proper = Source(dt, i + 1);
+        const FP mine = medium_source_value(dt, i + 1);
+        cr_expect(epsilon_eq(CRIT_FP, proper, mine, EPSILON), "i: %d", i);
+    }
 }

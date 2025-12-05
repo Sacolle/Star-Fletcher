@@ -244,12 +244,16 @@ void medium_calc_intermediary_values(
 #define TWOSQRTPI   FP_LIT(3.54490770181103205458)
 #define THREESQRTPI FP_LIT(5.31736155271654808184)
 
-//TODO: test
+
+//#include <stdio.h>
+
 FP medium_source_value(const FP dt, const int64_t it){
     const FP tf = TWOSQRTPI / FCUT;
     const FP fc = FCUT / THREESQRTPI;
     const FP fct = fc * (((FP) it) * dt - tf);
     const FP expo = PICUBE * fct * fct;
+    const FP result = ((FP_LIT(1.0) - FP_LIT(2.0) * expo) * FP_EXP(-expo));
 
-    return ((FP_LIT(1.0) - FP_LIT(2.0) * expo) * FP_EXP(-expo));
+    //printf("source: %lf\n", result);
+    return result;
 }

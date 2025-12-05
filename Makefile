@@ -43,10 +43,10 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 run: $(BIN)
 	@echo "Runing $(BIN)."
-	./$(BIN) VTI 64 64 64 4 12.5 12.5 12.5 1 20.0 10
+	./$(BIN) VTI 16 16 16 4 12.5 12.5 12.5 1 3.0 2
 
 debug: $(BIN)
-	gdb --args ./$(BIN) VTI 64 64 64 4 12.5 12.5 12.5 1 20.0 10
+	gdb --args ./$(BIN) VTI 16 16 16 4 12.5 12.5 12.5 1 6.0 2
 
 print:
 	@echo "Sources: $(SRCS)"

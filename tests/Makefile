@@ -20,4 +20,4 @@ MEDIUM_TEST_DEP += $(PARENT_DIR)/src/argparse.c $(PARENT_DIR)/src/includes/argpa
 MEDIUM_TEST_DEP += $(PARENT_DIR)/src/includes/macros.h $(PARENT_DIR)/src/includes/floatingpoint.h
 
 medium-tests: $(MEDIUM_TEST_DEP)
-	$(CC) -o $@.out $^ $(CRITERION_CFLAGS) $(CRITERION_LDLIBS) -I $(PARENT_DIR)/$(INCLUDEDIR) $(CFLAGS)
+	$(CC) -o $@.out $^ $(CRITERION_CFLAGS) $(CRITERION_LDLIBS) -I $(PARENT_DIR)/$(INCLUDEDIR) $(CFLAGS) -DFP_FLOAT

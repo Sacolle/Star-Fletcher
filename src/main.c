@@ -36,7 +36,7 @@ void print_block(double* block){
         for(size_t y = 0; y < g_cube_width; y++){
             printf("\t[");
             for(size_t x = 0; x < g_cube_width; x++){
-                printf("%.2f", block[cube_idx(x, y, z)]);
+                printf("%.2lf", block[cube_idx(x, y, z)]);
                 if(x != g_cube_width - 1){
                     printf(", ");
                 }
@@ -48,11 +48,11 @@ void print_block(double* block){
     printf("]");
 }
 
-void clear_block(FP* block){
-    for(size_t z = 0; z < g_cube_width; z++){
-        for(size_t y = 0; y < g_cube_width; y++){
-            for(size_t x = 0; x < g_cube_width; x++){
-                block[cube_idx(x, y, z)] = 0.0;
+void clear_block(FP* block, size_t width){
+    for(size_t z = 0; z < width; z++){
+        for(size_t y = 0; y < width; y++){
+            for(size_t x = 0; x < width; x++){
+                block[idx(x, y, z, width)] = 0.0;
             }
         }
     }
@@ -80,6 +80,50 @@ static inline void rotate_for_next_iter(starpu_data_handle_t* iter[3]){
     iter[2] = iter[1]; 
     iter[1] = iter[0]; 
     iter[0] = tmp; 
+}
+
+
+#define FSTBLK(blk) ((blk) == 1)
+#define LSTBLK(blk) ((blk) == g_width_in_cubes)
+#define START(blk, idx) (FSTBLK(blk) && (idx) < BORDER_WIDTH)
+#define END(blk, idx) (LSTBLK(blk) && (idx) >= (g_cube_width - BORDER_WIDTH))
+#define INEDGE(blk_idx, cidx) (START(blk_idx, cidx) || END(blk_idx, cidx))
+
+#define EPSILON 0.0001
+int has_clear_edge(FP* block, size_t i, size_t j, size_t k){
+    for(size_t z = 0; z < g_cube_width; z++){
+        for(size_t y = 0; y < g_cube_width; y++){
+            for(size_t x = 0; x < g_cube_width; x++){
+                const size_t idx = cube_idx(x, y, z);
+                if(INEDGE(k, z) || INEDGE(j, y) || INEDGE(i, x)){
+                    if(block[idx] < EPSILON || block[idx] > -EPSILON){
+
+                    }else{
+                        return 1;
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+void aggregate_block_buffers(FP* volume, FP* block, size_t i, size_t j, size_t k){
+    for(size_t z = 0; z < g_cube_width; z++)
+    for(size_t y = 0; y < g_cube_width; y++)
+    for(size_t x = 0; x < g_cube_width; x++){
+        //calculate the absolute index from the block index and the cords
+        const size_t idx_vol = volume_idx(x + i * g_cube_width, y + j * g_cube_width, z + k * g_cube_width);
+        const size_t idx_cube = cube_idx(x, y, z);
+
+        volume[idx_vol] = block[idx_cube];
+    }
+}
+
+void print_FP_list(FP* list, size_t size){
+    for(size_t i = 0; i < size; i++){
+        printf("%.2lf ", list[i]);
+    }
 }
 
 struct starpu_codelet insert_perturbation_codelet = {
@@ -207,6 +251,9 @@ int main(int argc, char **argv){
     uint32_t nx, ny, nz, absorb_width;
     FP dx, dy, dz, dt, tmax;
 
+	int ret = starpu_init(NULL);
+	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
+
     int err = 0;
     TRY(err = read_args(argc, argv, 11, 
         ARG_str, &form_str, 
@@ -228,8 +275,6 @@ int main(int argc, char **argv){
  
     const int64_t st = (int64_t) FP_CEIL(tmax / dt);
 
-	int ret = starpu_init(NULL);
-	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
 
     // allocate the buffers that will be used in computing the 
     // intermediary values
@@ -293,7 +338,8 @@ int main(int argc, char **argv){
     // iSource in the cube
     const size_t perturbation_source_pos  = cube_idx(g_cube_width / 2, g_cube_width / 2, g_cube_width / 2);
     //insert in this block the propagration source
-    propagation_block[perturbation_source_pos] = medium_source_value(dt, 0);
+    const FP starting_source_value = medium_source_value(dt, 0);
+    propagation_block[perturbation_source_pos] = starting_source_value;
 
     // a iteração do bloco t depende dos blocos t - 1 e t - 2.
     // aloca-se mais data_handles que necessário, compreendendo 0..g_width_in_cubes + 2
@@ -361,7 +407,7 @@ int main(int argc, char **argv){
         BLOCK_REGISTER(q_wave_iter[2] + idx, null_block);
     }
 
-    for(int64_t t = 0; t < st; t++){
+    for(int64_t t = 1; t < st; t++){
         starpu_iteration_push(t);
         for(size_t k = 1; k < g_width_in_cubes + 1; k++)
         for(size_t j = 1; j < g_width_in_cubes + 1; j++)
@@ -489,12 +535,13 @@ int main(int argc, char **argv){
 
             TRY(starpu_task_submit(task));
         }
-
+        /*
         // task that insert the perturbation on the handle
         struct starpu_task* perturb_task = starpu_task_create();
 
+        const FP source_value = medium_source_value(dt, t);
         perturb_args_t* perturb_args;
-        TRY(make_perturb_args(&perturb_args, perturbation_source_pos, medium_source_value(dt, t)));
+        TRY(make_perturb_args(&perturb_args, perturbation_source_pos, source_value));
 
         perturb_task->cl = &insert_perturbation_codelet;
         perturb_task->cl_arg = perturb_args;
@@ -505,7 +552,7 @@ int main(int argc, char **argv){
         perturb_task->handles[1] = q_wave_iter[0][perturbation_source_cube];
 
         TRY(starpu_task_submit(perturb_task));
-
+        */
         // only start to unregister when the automatically allocated buffers reaches the t - 2.
         if(t >= 2){
             //unregister all cubes from iteration t - 2
@@ -528,8 +575,12 @@ int main(int argc, char **argv){
     //at least after all iterations
     starpu_task_wait_for_all();
 
-    FP* result_block;
+    FP* result_block, *result_volume;
     TRY(allocate(allocs,(void**) &result_block, sizeof(FP) * CUBE_SIZE));
+    TRY(allocate(allocs,(void**) &result_volume, sizeof(FP) * CUBE(g_volume_width)));
+
+    clear_block(result_block, g_cube_width);
+    clear_block(result_volume, g_volume_width);
 
     // cleanup all remaning handles (p_wave_iter[2] and iteraions[1])
     for(size_t k = 1; k < g_width_in_cubes + 1; k++){
@@ -548,7 +599,11 @@ int main(int argc, char **argv){
                 TRY(starpu_data_pack(ph1, (void**)&result_block, &size));
 
                 //print_block(result_block);
-                clear_block(result_block);
+                aggregate_block_buffers(result_volume, result_block, i, j, k);
+                clear_block(result_block, g_cube_width);
+
+                //NOTE: função aqui para testar se a borda não está sendo violada
+                TRY(has_clear_edge(result_block, i, j, k), "block %ld, %ld, %ld fails clear block test", i, j, k);
 
                 //then release
                 starpu_data_release(ph1);
@@ -571,3 +626,4 @@ int main(int argc, char **argv){
 	starpu_shutdown();
 	return program_status;
 }
+
