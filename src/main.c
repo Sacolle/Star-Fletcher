@@ -115,7 +115,6 @@ void aggregate_block_buffers(FP* volume, FP* block, size_t i, size_t j, size_t k
         //calculate the absolute index from the block index and the cords
         const size_t idx_vol = volume_idx(x + i * g_cube_width, y + j * g_cube_width, z + k * g_cube_width);
         const size_t idx_cube = cube_idx(x, y, z);
-
         volume[idx_vol] = block[idx_cube];
     }
 }
@@ -535,7 +534,6 @@ int main(int argc, char **argv){
 
             TRY(starpu_task_submit(task));
         }
-        /*
         // task that insert the perturbation on the handle
         struct starpu_task* perturb_task = starpu_task_create();
 
@@ -552,7 +550,6 @@ int main(int argc, char **argv){
         perturb_task->handles[1] = q_wave_iter[0][perturbation_source_cube];
 
         TRY(starpu_task_submit(perturb_task));
-        */
         // only start to unregister when the automatically allocated buffers reaches the t - 2.
         if(t >= 2){
             //unregister all cubes from iteration t - 2
@@ -599,7 +596,7 @@ int main(int argc, char **argv){
                 TRY(starpu_data_pack(ph1, (void**)&result_block, &size));
 
                 //print_block(result_block);
-                aggregate_block_buffers(result_volume, result_block, i, j, k);
+                aggregate_block_buffers(result_volume, result_block, i - 1, j - 1, k - 1);
                 clear_block(result_block, g_cube_width);
 
                 //NOTE: função aqui para testar se a borda não está sendo violada
@@ -615,6 +612,7 @@ int main(int argc, char **argv){
             }
         }
     }
+    print_FP_list(result_volume, CUBE(g_volume_width));
 
     program_end:
 
