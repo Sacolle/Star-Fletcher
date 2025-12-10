@@ -1,6 +1,7 @@
 #include <starpu.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "kernel.h"
 #include "macros.h"
@@ -28,6 +29,9 @@ size_t g_cube_width = 0;
 
 #define CUBE_SIZE (g_cube_width * g_cube_width * g_cube_width)
 #define TOTAL_CUBES (g_width_in_cubes * g_width_in_cubes * g_width_in_cubes)
+
+#define MAXFILES 32
+const char* out_folder = "result";
 
 void print_block(double* block){
     printf("[\n");
@@ -228,6 +232,23 @@ struct starpu_codelet rtm_codelet = {
     },
     .model = &starpu_perfmodel_nop,
 };
+
+FILE* worker_files[MAXFILES];
+
+void save_to_file_callback(void *arg){
+    struct starpu_task *task = (struct starpu_task *)arg;
+
+    starpu_data_handle_t out = task->handles[11]; // central block of t - 1
+                                                  //
+    // https://files.inria.fr/starpu/doc/html/group__API__Data__Management.html#ga358aba7459b7f99a6dbaa189ce57b925
+    starpu_data_acquire(out, STARPU_R);
+    double *c = (double*) starpu_data_get_local_ptr(out);
+    size_t n = STARPU_BLOCK_GET_NX(out);
+    const int my_worker_id = starpu_worker_get_id();
+    fwrite(c, CUBE(n), sizeof(FP), worker_files[my_worker_id]);
+
+    starpu_data_release(out);
+}
 #ifdef RELEASE
 // if x fails (!= 0), exit the program;
 #define TRY(x,...) TRYTO(x, program_status = EXIT_FAILURE, program_end)
@@ -237,6 +258,7 @@ struct starpu_codelet rtm_codelet = {
     printf("[error] Failed at line %d\n", __LINE__); \
     printf("[err-msg] " __VA_ARGS__);, program_end)
 #endif
+
 
 int main(int argc, char **argv){
     //need to be toplevel for the try macro
@@ -249,6 +271,10 @@ int main(int argc, char **argv){
     char* form_str = NULL;
     uint32_t nx, ny, nz, absorb_width;
     FP dx, dy, dz, dt, tmax;
+
+    // NOTE: set a file for each worker so there's no race condition
+    for(size_t wf = 0; wf < MAXFILES; wf++) 
+        worker_files[wf] = NULL;
 
 	int ret = starpu_init(NULL);
 	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
@@ -274,6 +300,19 @@ int main(int argc, char **argv){
  
     const int64_t st = (int64_t) FP_CEIL(tmax / dt);
 
+
+    char file_name[64];
+    for(size_t worker_id = 0; worker_id < starpu_worker_get_count(); worker_id++){
+        switch (starpu_worker_get_type(worker_id)){
+        case STARPU_CPU_WORKER:
+            TRY(snprintf(file_name, 63, "%s/worker-out-%ld.bin", out_folder, worker_id) < 0 ? 1 : 0);
+            if((worker_files[worker_id] = fopen(file_name, "wb")) == NULL){
+                goto program_end;
+            }
+            break;
+        default: assert(0 && "No non-CPU worker should be available at this moment.");
+        }
+    }
 
     // allocate the buffers that will be used in computing the 
     // intermediary values
@@ -451,6 +490,9 @@ int main(int argc, char **argv){
             task->cl_arg_size = sizeof(struct rtm_args);
             task->cl_arg_free = 1; // free the args after use
 
+            task->callback_func = save_to_file_callback;
+            task->callback_arg = task;
+
             //select the handles
             //          ^   ^
             //          |  /
@@ -615,6 +657,12 @@ int main(int argc, char **argv){
     print_FP_list(result_volume, CUBE(g_volume_width));
 
     program_end:
+
+    for(size_t wf = 0; wf < MAXFILES; wf++){
+        if(worker_files[wf] != NULL){
+            fclose(worker_files[wf]);
+        } 
+    }
 
     vector_free_all(medium_allocs, free);
     vector_free_all(allocs, free);
