@@ -5,10 +5,9 @@
 
 #include "floatingpoint.h"
 
-//TODO: define these properly
-#define SIGMA 1.0
-#define MAX_SIGMA 10.0
-#define MI 1.0
+#define MI 0.2
+#define SIGMA 0.75
+#define MAX_SIGMA 10.0 
 
 enum Form { ISO, VTI, TTI };
 

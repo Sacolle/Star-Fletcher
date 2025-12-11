@@ -644,3 +644,44 @@ Test(medium, source_value){
         cr_expect(epsilon_eq(CRIT_FP, proper, mine, EPSILON), "i: %d", i);
     }
 }
+
+
+Test(medium, stability_condition){
+    g_volume_width = 10;
+    const float dx = 12.5, dy = 12.5, dz = 12.5;
+    const int sx = 10;
+    const int sy = 10;
+    const int sz = 10;
+    const int size = sx * sy * sz;
+
+    FP vpz[size];
+    FP vsv[size];
+    FP epsilon[size];
+    FP delta[size];
+    FP phi[size];
+    FP theta[size];
+ 
+    for(int prob = 0; prob < 3; prob++){
+        medium_initialize(prob, size, vpz, vsv, epsilon, delta, phi, theta);
+
+        medium_random_velocity_boundary(2, 2, vpz, vsv);
+
+        //math done by base fletcher
+        float maxvel;
+        maxvel=vpz[0]*sqrt(1.0+2*epsilon[0]);
+        for(size_t i = 1; i<sx*sy*sz; i++) {
+            maxvel = fmaxf(maxvel, vpz[i] * sqrt(1.0 + 2 * epsilon[i]));
+        }
+        float mindelta = dx;
+        if (dy < mindelta)
+            mindelta = dy;
+        if (dz < mindelta)
+            mindelta = dz;
+        float recdt;
+        recdt = (MI * mindelta) / maxvel;
+
+        const FP my_res = medium_stability_condition(dx, dy, dz, (FP*) vpz, (FP*) epsilon, size);
+
+        cr_expect(epsilon_eq(CRIT_FP, recdt, my_res, EPSILON));
+    }
+}

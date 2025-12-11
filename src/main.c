@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include <stdio.h>
+
 #include "kernel.h"
 #include "macros.h"
 #include "floatingpoint.h"
@@ -113,15 +115,9 @@ void aggregate_block_buffers(FP* volume, FP* block, size_t i, size_t j, size_t k
     for(size_t y = 0; y < g_cube_width; y++)
     for(size_t x = 0; x < g_cube_width; x++){
         //calculate the absolute index from the block index and the cords
-        const size_t idx_vol = volume_idx(x + i * g_cube_width, y + j * g_cube_width, z + k * g_cube_width);
+        const size_t idx_vol = block_cube_to_volume_idx(x, y, z, i, j, k);
         const size_t idx_cube = cube_idx(x, y, z);
         volume[idx_vol] = block[idx_cube];
-    }
-}
-
-void print_FP_list(FP* list, size_t size){
-    for(size_t i = 0; i < size; i++){
-        printf("%.2lf ", list[i]);
     }
 }
 
@@ -231,11 +227,14 @@ struct starpu_codelet rtm_codelet = {
 #ifdef RELEASE
 // if x fails (!= 0), exit the program;
 #define TRY(x,...) TRYTO(x, program_status = EXIT_FAILURE, program_end)
+#define DEBUG(...) 
 #else
 // if x fails (!= 0), goto the end of main and log status;
 #define TRY(x,...) TRYTO(x, program_status = EXIT_FAILURE; \
     printf("[error] Failed at line %d\n", __LINE__); \
     printf("[err-msg] " __VA_ARGS__);, program_end)
+
+#define DEBUG(...) printf("[debug] " __VA_ARGS__)
 #endif
 
 int main(int argc, char **argv){
@@ -274,6 +273,10 @@ int main(int argc, char **argv){
  
     const int64_t st = (int64_t) FP_CEIL(tmax / dt);
 
+    // the point in the global volume that the source is inserted
+    const size_t volume_propagation_idx = volume_idx(g_volume_width / 2, g_volume_width / 2, g_volume_width / 2);
+    DEBUG("Index of propagation is %ld.\n", volume_propagation_idx);
+
 
     // allocate the buffers that will be used in computing the 
     // intermediary values
@@ -293,6 +296,9 @@ int main(int argc, char **argv){
     // set the absorption zone for vpz and vsv
     medium_random_velocity_boundary(BORDER_WIDTH, absorb_width, vpz, vsv);
 
+    // run the stability condition for the size
+    const FP stability_condition = medium_stability_condition(dx, dy, dz, vpz, epsilon, CUBE(g_volume_width));
+    DEBUG("The stability condition (proper value for dt) for this problem is %lf.\n", stability_condition);
 
     FP **ch1dxx, **ch1dyy, **ch1dzz, **ch1dxy, **ch1dyz, **ch1dxz, **v2px, **v2pz, **v2sz, **v2pn;
     #define ALLOCATE_PRECOMP_VALUES(v) \
@@ -335,7 +341,7 @@ int main(int argc, char **argv){
         null_block[b_i] = propagation_block[b_i] = FP_LIT(0.0);
     }
     // iSource in the cube
-    const size_t perturbation_source_pos  = cube_idx(g_cube_width / 2, g_cube_width / 2, g_cube_width / 2);
+    const size_t perturbation_source_pos = volume_to_cube_idx(volume_propagation_idx);
     //insert in this block the propagration source
     const FP starting_source_value = medium_source_value(dt, 0);
     propagation_block[perturbation_source_pos] = starting_source_value;
@@ -386,9 +392,11 @@ int main(int argc, char **argv){
         BLOCK_REGISTER(hdl_v2sz + idx, v2sz[idx]);
         BLOCK_REGISTER(hdl_v2pn + idx, v2pn[idx]);
     }
-
-    const size_t perturbation_source_cube = block_idx(
-        (g_width_in_cubes + 2) / 2, (g_width_in_cubes + 2) / 2, (g_width_in_cubes + 2) / 2);
+    
+    // because it added a padding to every side of the block collection, 
+    // we need to move the perturbation_source cube by one in every direction
+    //block_idx((g_width_in_cubes + 2) / 2, (g_width_in_cubes + 2) / 2, (g_width_in_cubes + 2) / 2);
+    const size_t perturbation_source_cube = volume_to_block_idx(volume_propagation_idx) + block_idx(1, 1, 1);
 
     for(size_t idx = 0; idx < CUBE(g_width_in_cubes + 2); idx++){
         BLOCK_REGISTER(p_wave_iter[0] + idx, null_block);
@@ -568,7 +576,7 @@ int main(int argc, char **argv){
 
         starpu_iteration_pop();
     }
-    printf("Submitted all tasks\n");
+    DEBUG("Submitted all tasks\n");
     //at least after all iterations
     starpu_task_wait_for_all();
 
@@ -612,7 +620,40 @@ int main(int argc, char **argv){
             }
         }
     }
-    print_FP_list(result_volume, CUBE(g_volume_width));
+    const char* out_folder = "result";
+
+    // write to file out step
+    FILE *rsf_header = NULL, *rsf_body = NULL;
+    char filename[256];
+
+    sprintf(filename, "%s/out-%s.rsf", out_folder, form_str);
+    if((rsf_header = fopen(filename, "w+")) == NULL){
+        goto program_end;
+    }
+
+    sprintf(filename, "%s/out-%s.rsf@", out_folder, form_str);
+    if((rsf_body = fopen(filename, "wb")) == NULL){
+        fclose(rsf_header);
+        goto program_end;
+    }
+
+    fprintf(rsf_header,"in=\"./%s\"\n", filename);
+    fprintf(rsf_header,"data_format=\"native_float\"\n");
+    fprintf(rsf_header,"esize=%lu\n", sizeof(float)); 
+    fprintf(rsf_header,"n1=%ld\n", g_volume_width /*sx*/);
+    fprintf(rsf_header,"n2=%ld\n", g_volume_width /*sy*/);
+    fprintf(rsf_header,"n3=%ld\n", g_volume_width /*sz*/);
+    fprintf(rsf_header,"n4=%ld\n", 1);
+    fprintf(rsf_header,"d1=%f\n",dx);
+    fprintf(rsf_header,"d2=%f\n",dy);
+    fprintf(rsf_header,"d3=%f\n",dz);
+    fprintf(rsf_header,"d4=%f\n",dt);
+
+    fclose(rsf_header);
+
+    fwrite(result_volume, sizeof(FP), CUBE(g_volume_width), rsf_body);
+
+    fclose(rsf_body);
 
     program_end:
 
