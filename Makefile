@@ -47,7 +47,7 @@ run: $(BIN)
 
 run2: $(BIN)
 	@echo "Runing $(BIN)"
-	./$(BIN) TTI 64 64 64 4 12.5 12.5 12.5 0.1 1 4
+	./$(BIN) TTI 64 64 64 4 12.5 12.5 12.5 0.001 1 4
 
 debug: $(BIN)
 	gdb --args ./$(BIN) TTI 16 16 16 4 12.5 12.5 12.5 1 6.0 2

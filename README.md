@@ -5,43 +5,9 @@ O Objetivo agora é portar a aplicação [fletcher](https://github.com/gabrielfr
 Um desafio agora é fazer o programa gerar uma saída e ler essa saída. A geração está no âmbito de tentativa e erro. A leitura precisa de entendimento de como as ferramentas [Madagascar](https://ahay.org/wiki/Main_Page) funcionam.
 
 
-# Problema (ramblings of a madman)
-
-O algoritmo do kernel do fletcher não apenas escreve na iteração futura, mas lê ela também para obter a iteração seguinte.
-O funcionamente é: dadas iterações A e B, lê-se A e realiza-se B := ops(A) - B. A e B então são depências de leitura e B é a dependência de escrita. O problema vem que para realizar a próxima iteração, troca-se A e B de lugar. Então o valor da computação é escrito sobre o valor previamente computado que não pode ser descartado. Uma demonstação disso é o seguinte, assumindo ops(A) = 2 * A + 1:
-1. A = 1, B = ops(A) - B -> A = 1, B = 2 <|> (swap) A = 2, B = 1
-2. A = 2, B = ops(A) - B -> A = 2, B = 5 <|> (swap) A = 5, B = 2
-3. A = 5, B = ops(A) - B -> A = 5, B = 11 <|> (swap) A = 11, B = 5
-...
-
-Se A fosse a única dependêcia de leitura, e B de escrita, teriamos:
-B := F(A) -> A :=: B.
-B := F(F(A)) -> A :=: B.
-B := F(F(F(A))) -> A :=: B.
-B := F(F(F(F(A)))) -> A :=: B.
-em que o B nunca é lido diretamente, só como A depois do swap
-
-1. A = 1, B = ops(A) -> A = 1, B = 3 <|> (swap) A = 3, B = \
-Em que não importa o valor de B salvo, pois ele só depende de A. Isso resulta em uma cadeia de tarefas:
-A -> A -> A -> A -> ... 
-No qual B é só um intermediário e a implementação em flecha fica muito mais simples.
-
-Porém com B sendo uma depedência de leitura também, nenhum elemento da iteração pode ser descartado
-B := F(A) - B -> A :=: B.
-B := F(F(A) - B) - B -> A :=: B.
-B := F(F(F(A) - B) - B) - B -> A :=: B.
-B := F(F(F(F(A) - B) - B) - B) - B -> A :=: B.
-
-
-## TLDR:
-
-Não é tão simples como na aplicação da média gausiana o reaproveitamento dos cubos. Isso pois para calcular um cubo
-C(i, j, k, t) é necssário não só dos vizinhos e do cubo C(i, j, k, t - 1), 
-como o cubo C(i, j, k, t) deve ser conter o valor do cubo C(i, j, k, t - 2). 
-
-Essa ultima fraze tem que ser validada meio que algebrigamente antes que eu me sinta seguro de fazer o próximo passo.
-
 ## Formulação
+
+Reformulação das iterações quebrando a dependência RW:
 
 Formulação base:
 $$
@@ -81,38 +47,14 @@ $$
 $$
 
 
-### TODO
+### IO
 
-Adicionar um callback para reportar as métricas em um arquivo rsf.
-Adicionar no starpu_task::epilogue_callback, que executa antes das task que dependem da task que chamou este callback de serem executadas. O epilogo é chamado no host que excuta a task, AKA, a cpu que evoca no contexto MPI.
-
-Ou seja, passa a task executada para o callback.
-Obtém o handle apropriado.
-Faz IO
-Libera
-
-Exemplo do gepeto.
-```c
-void dump_callback(void *arg){
-    struct starpu_task *task = (struct starpu_task *)arg;
-
-    starpu_data_handle_t out = task->handles[2]; // output vector C
-
-    starpu_data_acquire(out, STARPU_R);
-    double *c = (double*) starpu_data_get_local_ptr(out);
-    size_t n = starpu_vector_get_nx(out);
-
-    printf("Result:\n");
-    for (size_t i = 0; i < n; i++)
-        printf("%f ", c[i]);
-    printf("\n");
-
-    starpu_data_release(out);
-}
-```
-
-Só preciso descobrir como fazer os arquivos rsf, considerando a estrutura cúbica do sistema.
+Escrever o IO do programa.
+Para isso será feita uma task em CPU, que é submtida para cada bloco antes de ser submetido que ele será deletado.
+Nela, cada thread vai escrever em seu respectivo arquivo, evitando condições de corrida. Para isso, utiliza-se o `starpu_worker_get_id()` e indexa-se um array global em que o índice é o id. Dessa forma, não há condições de corrida para as threads. 
+Com isso, salva o cúbo em formato binário, mas antes atribui um _header_, também em binário, da posição e do instânte, formando a quadra (i,j,k,t) que unicamente identifica cada cubo. Por enquanto só será salva as ondas _p_, mas as modificações para incluir as _q_ são, em teoria, triviais.
+Com os dados brutos é simples reconstruir para um formato .rsf . Deve-se salvar o header dos dados no .rsf que depois para reconstruir eles, como em um script em python, basta só passar essa entrada para ele que ele reconstroi os elementos. Pode-se usar o nome `chunk-<thread-id>-<medium>.prsf@`. O p para indicar a parcialidade.
 
 
-## TODO 2:
-Fazer testes da geração da onda de perturbação e dos kernel, se eles estão gerando os números corretos
+
+
