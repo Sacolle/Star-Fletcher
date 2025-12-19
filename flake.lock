@@ -1,6 +1,40 @@
 {
   "nodes": {
+    "madagascar": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1766079318,
+        "narHash": "sha256-dr69Fbghu7oeGkio++jM30AZdBr+SQtWJgJCvEb0Kgw=",
+        "owner": "Sacolle",
+        "repo": "nix-madagascar",
+        "rev": "add9b1a6378b82d102f4ff8b3e1447a21b734ff7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Sacolle",
+        "repo": "nix-madagascar",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
+      "locked": {
+        "lastModified": 1764677808,
+        "narHash": "sha256-H3lC7knbXOBrHI9hITQ7modLuX20mYJVhZORL5ioms0=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "1aab89277eb2d87823d5b69bae631a2496cff57a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-25.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
       "locked": {
         "lastModified": 1761907660,
         "narHash": "sha256-kJ8lIZsiPOmbkJypG+B5sReDXSD1KGu2VEPNqhRa/ew=",
@@ -18,7 +52,8 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "madagascar": "madagascar",
+        "nixpkgs": "nixpkgs_2"
       }
     }
   },

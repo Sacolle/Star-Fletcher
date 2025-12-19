@@ -3,9 +3,10 @@
 
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+        madagascar.url = "github:Sacolle/nix-madagascar";
     };
 
-    outputs = { self, nixpkgs }: 
+    outputs = { self, nixpkgs, madagascar }: 
     let 
         system = "x86_64-linux";
         fxtOverlay = f: p: {
@@ -44,6 +45,9 @@
                 # scripting
                 python313
                 python313Packages.numpy
+
+                #madagascar
+                madagascar.packages.${system}.default
             ];
             # export StarPU and hwloc store locations 
             # for use in vscode intellisence
