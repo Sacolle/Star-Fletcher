@@ -27,9 +27,14 @@ size_t g_width_in_cubes = 0;
 // width for the segmented cube
 size_t g_cube_width = 0;
 
+#define MAXFILES 32
+FILE* g_worker_files[MAXFILES];
+
 
 #define CUBE_SIZE (g_cube_width * g_cube_width * g_cube_width)
 #define TOTAL_CUBES (g_width_in_cubes * g_width_in_cubes * g_width_in_cubes)
+
+const char* out_folder = "result";
 
 void print_block(double* block){
     printf("[\n");
@@ -120,6 +125,44 @@ void aggregate_block_buffers(FP* volume, FP* block, size_t i, size_t j, size_t k
         volume[idx_vol] = block[idx_cube];
     }
 }
+
+typedef struct dump_block_args {
+    size_t i;
+    size_t j;
+    size_t k;
+    size_t t;
+} dump_block_args_t;
+
+int make_dump_block_args(dump_block_args_t** args, size_t i, size_t j, size_t k, size_t t){
+    if((*args = (dump_block_args_t*) malloc(sizeof(dump_block_args_t))) == NULL){
+        return 1;
+    }
+    **args = (dump_block_args_t) {i, j, k, t};
+    return 0;
+}
+
+
+void dump_block_kernel(void *descr[], void *cl_args){
+    const dump_block_args_t* args = (dump_block_args_t*) cl_args;
+    const FP* block = (FP*) STARPU_BLOCK_GET_PTR(descr[0]);
+
+    const size_t nx = STARPU_BLOCK_GET_NX(descr[0]);
+    const size_t ny = STARPU_BLOCK_GET_NY(descr[0]);
+    const size_t nz = STARPU_BLOCK_GET_NZ(descr[0]);
+
+    const int worker_id = starpu_worker_get_id();
+    // maybe validation here
+    FILE* worker_file = g_worker_files[worker_id];
+
+    fwrite(args, sizeof(dump_block_args_t), 1, worker_file);
+    fwrite(block, sizeof(FP), nx * ny * nz, worker_file);
+}
+
+struct starpu_codelet dump_block_codelet = {
+    .cpu_funcs = { dump_block_kernel },
+    .nbuffers = 1,
+    .modes = { STARPU_R }  // p wave
+};
 
 struct starpu_codelet insert_perturbation_codelet = {
     .cpu_funcs = { perturbation_kernel },
@@ -224,6 +267,8 @@ struct starpu_codelet rtm_codelet = {
     },
     .model = &starpu_perfmodel_nop,
 };
+
+
 #ifdef RELEASE
 // if x fails (!= 0), exit the program;
 #define TRY(x,...) TRYTO(x, program_status = EXIT_FAILURE, program_end)
@@ -237,6 +282,7 @@ struct starpu_codelet rtm_codelet = {
 #define DEBUG(...) printf("[debug] " __VA_ARGS__)
 #endif
 
+
 int main(int argc, char **argv){
     //need to be toplevel for the try macro
     int program_status = EXIT_SUCCESS;
@@ -248,6 +294,11 @@ int main(int argc, char **argv){
     char* form_str = NULL;
     uint32_t nx, ny, nz, absorb_width;
     FP dx, dy, dz, dt, tmax;
+
+    // NOTE: set a file for each worker so there's no race condition
+    for(size_t wf = 0; wf < MAXFILES; wf++){
+        g_worker_files[wf] = NULL;
+    }
 
 	int ret = starpu_init(NULL);
 	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
@@ -273,6 +324,19 @@ int main(int argc, char **argv){
  
     const int64_t st = (int64_t) FP_CEIL(tmax / dt);
 
+    // NOTE: code for initializing the files for each thread.
+    char file_name[64];
+    for(size_t worker_id = 0; worker_id < starpu_worker_get_count(); worker_id++){
+        switch (starpu_worker_get_type(worker_id)){
+        case STARPU_CPU_WORKER:
+            TRY(snprintf(file_name, 63, "%s/%s-worker-out-%ld.bin", out_folder, form_str, worker_id) < 0 ? 1 : 0);
+            if((g_worker_files[worker_id] = fopen(file_name, "wb")) == NULL){
+                goto program_end;
+            }
+            break;
+        default: assert(0 && "No non-CPU worker should be available at this moment.");
+        }
+    }
     // the point in the global volume that the source is inserted
     const size_t volume_propagation_idx = volume_idx(g_volume_width / 2, g_volume_width / 2, g_volume_width / 2);
     DEBUG("Index of propagation is %ld.\n", volume_propagation_idx);
@@ -434,7 +498,7 @@ int main(int argc, char **argv){
             );
 
             struct starpu_task* task = starpu_task_create();
-
+            task->name = "wave propagation";
             task->cl = &rtm_codelet;
 
             const size_t start_z = k == 1 ? BORDER_WIDTH : 0;
@@ -469,7 +533,7 @@ int main(int argc, char **argv){
             // blocos do z (-1, +1), depois do y, depois do x
             // dessa forma, o primeiro bloco é o (-1, -1, -1), 
             // depois o (-1, -1, 0), (-1, -1, 1), (-1, 0, -1) ...
-            // essa lista inclui as diagonais que devem ser omitidas
+            // essa lista inclui as diagonais que devem ser omitidas, *rsf_body = NULL
 
             //pre computed values do not have a border and have to be adjusted as such
             const size_t precomp_idx = block_idx(i - 1, j - 1, k - 1);
@@ -544,6 +608,7 @@ int main(int argc, char **argv){
         }
         // task that insert the perturbation on the handle
         struct starpu_task* perturb_task = starpu_task_create();
+        perturb_task->name = "wave insertion";
 
         const FP source_value = medium_source_value(dt, t);
         perturb_args_t* perturb_args;
@@ -558,13 +623,29 @@ int main(int argc, char **argv){
         perturb_task->handles[1] = q_wave_iter[0][perturbation_source_cube];
 
         TRY(starpu_task_submit(perturb_task));
-        // only start to unregister when the automatically allocated buffers reaches the t - 2.
-        if(t >= 2){
+
+        for(size_t k = 1; k < g_width_in_cubes + 1; k++)
+        for(size_t j = 1; j < g_width_in_cubes + 1; j++)
+        for(size_t i = 1; i < g_width_in_cubes + 1; i++){
+            // call the write task
+            dump_block_args_t* dump_args;
+            TRY(make_dump_block_args(&dump_args, i - 1, j - 1, k - 1, t - 1));
+
+            struct starpu_task* dump_block_task = starpu_task_create();
+            dump_block_task->name = "write block";
+            dump_block_task->cl = &dump_block_codelet;
+            dump_block_task->cl_arg = dump_args;
+            dump_block_task->cl_arg_size = sizeof(dump_block_args_t);
+            dump_block_task->cl_arg_free = 1;
+
+            dump_block_task->handles[0] = p_wave_iter[2][block_idx(i, j, k)];
+
+            TRY(starpu_task_submit(dump_block_task));
+
+            // only start to unregister when the automatically allocated buffers reaches the t - 2.
             //unregister all cubes from iteration t - 2
             //in the inner data_handles
-            for(size_t k = 1; k < g_width_in_cubes + 1; k++)
-            for(size_t j = 1; j < g_width_in_cubes + 1; j++)
-            for(size_t i = 1; i < g_width_in_cubes + 1; i++){
+            if(t >= 2){
                 starpu_data_unregister_submit(p_wave_iter[2][block_idx(i, j, k)]);
                 starpu_data_unregister_submit(q_wave_iter[2][block_idx(i, j, k)]);
             }
@@ -580,12 +661,12 @@ int main(int argc, char **argv){
     //at least after all iterations
     starpu_task_wait_for_all();
 
-    FP* result_block, *result_volume;
-    TRY(allocate(allocs,(void**) &result_block, sizeof(FP) * CUBE_SIZE));
-    TRY(allocate(allocs,(void**) &result_volume, sizeof(FP) * CUBE(g_volume_width)));
+    //FP* result_block, *result_volume;
+    //TRY(allocate(allocs,(void**) &result_block, sizeof(FP) * CUBE_SIZE));
+    //TRY(allocate(allocs,(void**) &result_volume, sizeof(FP) * CUBE(g_volume_width)));
 
-    clear_block(result_block, g_cube_width);
-    clear_block(result_volume, g_volume_width);
+    //clear_block(result_block, g_cube_width);
+    //clear_block(result_volume, g_volume_width);
 
     // cleanup all remaning handles (p_wave_iter[2] and iteraions[1])
     for(size_t k = 1; k < g_width_in_cubes + 1; k++){
@@ -596,7 +677,7 @@ int main(int argc, char **argv){
 
                 starpu_data_handle_t qh1 = q_wave_iter[1][block_idx(i, j, k)];
                 starpu_data_handle_t qh2 = q_wave_iter[2][block_idx(i, j, k)];
-
+                /*
                 // first need to acquire the data
                 TRY(starpu_data_acquire(ph1, STARPU_R));
 
@@ -612,7 +693,7 @@ int main(int argc, char **argv){
 
                 //then release
                 starpu_data_release(ph1);
-
+                */
                 starpu_data_unregister(ph1);
                 starpu_data_unregister(ph2);
                 starpu_data_unregister(qh1);
@@ -620,10 +701,9 @@ int main(int argc, char **argv){
             }
         }
     }
-    const char* out_folder = "result";
 
-    // write to file out step
-    FILE *rsf_header = NULL, *rsf_body = NULL;
+    //Write the header file
+    FILE *rsf_header = NULL;
     char filename[256];
 
     sprintf(filename, "%s/out-%s.rsf", out_folder, form_str);
@@ -631,31 +711,29 @@ int main(int argc, char **argv){
         goto program_end;
     }
 
-    sprintf(filename, "%s/out-%s.rsf@", out_folder, form_str);
-    if((rsf_body = fopen(filename, "wb")) == NULL){
-        fclose(rsf_header);
-        goto program_end;
-    }
-
-    fprintf(rsf_header,"in=\"./%s\"\n", filename);
+    fprintf(rsf_header,"in=\"./%s@\"\n", filename);
     fprintf(rsf_header,"data_format=\"native_float\"\n");
     fprintf(rsf_header,"esize=%lu\n", sizeof(float)); 
     fprintf(rsf_header,"n1=%ld\n", g_volume_width /*sx*/);
     fprintf(rsf_header,"n2=%ld\n", g_volume_width /*sy*/);
     fprintf(rsf_header,"n3=%ld\n", g_volume_width /*sz*/);
-    fprintf(rsf_header,"n4=%ld\n", 1);
+    fprintf(rsf_header,"n4=%ld\n", st - 1); // TODO: validar quantas iterações são realmente salvas
     fprintf(rsf_header,"d1=%f\n",dx);
     fprintf(rsf_header,"d2=%f\n",dy);
     fprintf(rsf_header,"d3=%f\n",dz);
     fprintf(rsf_header,"d4=%f\n",dt);
+    fprintf(rsf_header,"seg=%ld\n", g_width_in_cubes);
 
     fclose(rsf_header);
 
-    fwrite(result_volume, sizeof(FP), CUBE(g_volume_width), rsf_body);
-
-    fclose(rsf_body);
 
     program_end:
+
+    for(size_t wf = 0; wf < MAXFILES; wf++){
+        if(g_worker_files[wf] != NULL){
+            fclose(g_worker_files[wf]);
+        } 
+    }
 
     vector_free_all(medium_allocs, free);
     vector_free_all(allocs, free);

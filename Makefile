@@ -43,7 +43,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 run: $(BIN)
 	@echo "Runing $(BIN)."
-	./$(BIN) TTI 16 16 16 4 12.5 12.5 12.5 0.001 0.003 2
+	./$(BIN) TTI 64 64 64 4 12.5 12.5 12.5 0.001 0.5 4
 
 run2: $(BIN)
 	@echo "Runing $(BIN)"
