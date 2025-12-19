@@ -4,6 +4,22 @@ O Objetivo agora é portar a aplicação [fletcher](https://github.com/gabrielfr
 
 Um desafio agora é fazer o programa gerar uma saída e ler essa saída. A geração está no âmbito de tentativa e erro. A leitura precisa de entendimento de como as ferramentas [Madagascar](https://ahay.org/wiki/Main_Page) funcionam.
 
+## Execução
+
+Para compilar o código, basta executar 
+```
+make
+```
+
+Uma versão com parâmetros base pode ser executada com:
+```
+make run
+```
+Que logo depois executa o script que junta todos os chunks e gera o arquivo de saída `out-TTI.rsf@` para complementar o `out-TTI.rsf`.
+Com ele pode-se chamar `./scripts/visuzalize.sh ./result/out-TTI.rsf` para ver a visualização da onda.
+
+> como o arquivo `.rsf` aponta para um arquivo `./result/*.rsf@`, deve-se sempre passá-lo estando no diretório acima de result (`../result`)
+
 
 ## Formulação
 
@@ -45,16 +61,3 @@ $$
     & A_1 = 0^n + perturb
 \end{align}
 $$
-
-
-### IO
-
-Escrever o IO do programa.
-Para isso será feita uma task em CPU, que é submtida para cada bloco antes de ser submetido que ele será deletado.
-Nela, cada thread vai escrever em seu respectivo arquivo, evitando condições de corrida. Para isso, utiliza-se o `starpu_worker_get_id()` e indexa-se um array global em que o índice é o id. Dessa forma, não há condições de corrida para as threads. 
-Com isso, salva o cúbo em formato binário, mas antes atribui um _header_, também em binário, da posição e do instânte, formando a quadra (i,j,k,t) que unicamente identifica cada cubo. Por enquanto só será salva as ondas _p_, mas as modificações para incluir as _q_ são, em teoria, triviais.
-Com os dados brutos é simples reconstruir para um formato .rsf . Deve-se salvar o header dos dados no .rsf que depois para reconstruir eles, como em um script em python, basta só passar essa entrada para ele que ele reconstroi os elementos. Pode-se usar o nome `chunk-<thread-id>-<medium>.prsf@`. O p para indicar a parcialidade.
-
-
-
-
