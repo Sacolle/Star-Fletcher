@@ -2,7 +2,7 @@
 export STARPU_CFLAGS := $(shell pkg-config --cflags starpu-1.4)
 export STARPU_LDLIBS := $(shell pkg-config --libs starpu-1.4)
 
-CFLAGS := $(STARPU_CFLAGS) -Wall
+CFLAGS := $(STARPU_CFLAGS) -Wall -DFP_FLOAT
 LDLIBS += $(STARPU_LDLIBS) -lm
 
 # if COMPILE_MODE is not define, the makefile will generate a
@@ -43,7 +43,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 run: $(BIN)
 	@echo "Runing $(BIN)."
-	./$(BIN) VTI 16 16 16 4 12.5 12.5 12.5 1 3.0 2
+	./$(BIN) TTI 64 64 64 4 12.5 12.5 12.5 0.001 0.5 4
 
 run2: $(BIN)
 	@echo "Runing $(BIN)"

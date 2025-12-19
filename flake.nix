@@ -41,6 +41,9 @@
                 gdb
                 gcc
                 valgrind
+                # scripting
+                python313
+                python313Packages.numpy
             ];
             # export StarPU and hwloc store locations 
             # for use in vscode intellisence
