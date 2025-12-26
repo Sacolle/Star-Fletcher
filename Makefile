@@ -30,7 +30,7 @@ export INCLUDEDIR = src/includes
 SRCS := $(wildcard $(SRCDIR)/*.c)
 OBJS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o,$(SRCS))
 
-.PHONY: all clean run print test debug
+.PHONY: all clean run print test debug valgrind
 
 all: $(BIN)
 
@@ -50,7 +50,12 @@ run: $(BIN)
 
 
 debug: $(BIN)
-	gdb --args ./$(BIN) TTI 16 16 16 4 12.5 12.5 12.5 1 6.0 2
+	@mkdir -p result
+	gdb --args ./$(BIN) TTI 16 16 16 4 12.5 12.5 12.5 0.001 0.1 2
+
+valgrind: $(BIN)
+	@mkdir -p result
+	valgrind ./$(BIN) TTI 16 16 16 4 12.5 12.5 12.5 0.001 0.1 2
 
 print:
 	@echo "Sources: $(SRCS)"
