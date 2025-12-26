@@ -42,7 +42,8 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDEDIR)
 
 run: $(BIN)
-	@echo "Runing $(BIN)."
+	@mkdir -p result
+	@echo "Runing $(BIN). Out putting at ./result"
 	./$(BIN) TTI 64 64 64 4 12.5 12.5 12.5 0.001 0.5 4
 	@echo "congealing the data..."
 	python3 ./scripts/parse-rsf.py "./result/out-TTI.rsf"

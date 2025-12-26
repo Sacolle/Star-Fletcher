@@ -27,7 +27,8 @@ size_t g_width_in_cubes = 0;
 // width for the segmented cube
 size_t g_cube_width = 0;
 
-#define MAXFILES 32
+#define MAXFILES 64
+#define MAXFILENAME 128
 FILE* g_worker_files[MAXFILES];
 
 
@@ -325,11 +326,11 @@ int main(int argc, char **argv){
     const int64_t st = (int64_t) FP_CEIL(tmax / dt);
 
     // NOTE: code for initializing the files for each thread.
-    char file_name[64];
+    char file_name[MAXFILENAME];
     for(size_t worker_id = 0; worker_id < starpu_worker_get_count(); worker_id++){
         switch (starpu_worker_get_type(worker_id)){
         case STARPU_CPU_WORKER:
-            TRY(snprintf(file_name, 63, "%s/%s-worker-out-%ld.bin", out_folder, form_str, worker_id) < 0 ? 1 : 0);
+            TRY(snprintf(file_name, MAXFILENAME - 1, "%s/%s-worker-out-%ld.bin", out_folder, form_str, worker_id) < 0 ? 1 : 0);
             if((g_worker_files[worker_id] = fopen(file_name, "wb")) == NULL){
                 goto program_end;
             }
