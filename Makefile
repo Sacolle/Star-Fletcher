@@ -47,7 +47,7 @@ run: $(BIN)
 	./$(BIN) TTI 64 64 64 16 12.5 12.5 12.5 0.001 0.5 4
 	@echo "congealing the data..."
 	python3 ./scripts/parse-rsf.py "./result/out-TTI.rsf"
-	./scripts/visualize.sh result/out-TTI.rsf
+#	./scripts/visualize.sh result/out-TTI.rsf
 
 debug: $(BIN)
 	@mkdir -p result

@@ -13,9 +13,6 @@
 #include "vector.h"
 
 
-const size_t BORDER_WIDTH = 4;
-
-
 // width for the volume of the whole sistem
 size_t g_volume_width = 0;
 // amount of segments in a dimension. 
@@ -27,6 +24,8 @@ size_t g_width_in_cubes = 0;
 // width for the segmented cube
 size_t g_cube_width = 0;
 
+const size_t BORDER_WIDTH = 4;
+
 #define MAXFILES 64
 #define MAXFILENAME 128
 FILE* g_worker_files[MAXFILES];
@@ -36,6 +35,8 @@ FILE* g_worker_files[MAXFILES];
 #define TOTAL_CUBES (g_width_in_cubes * g_width_in_cubes * g_width_in_cubes)
 
 const char* out_folder = "result";
+
+const FP dt_output = FP_LIT(0.01);
 
 void print_block(double* block){
     printf("[\n");
@@ -478,8 +479,10 @@ int main(int argc, char **argv){
         BLOCK_REGISTER(p_wave_iter[2] + idx, null_block);
         BLOCK_REGISTER(q_wave_iter[2] + idx, null_block);
     }
-
-    for(int64_t t = 1; t < st; t++){
+    // TODO: rename n_out para algo que faça mais sentido
+    int64_t n_out = 0;
+    for(int64_t t = 1; t <= st; t++){
+        printf("t: %d\n", t);
         starpu_iteration_push(t);
         for(size_t k = 1; k < g_width_in_cubes + 1; k++) // z
         for(size_t j = 1; j < g_width_in_cubes + 1; j++) // y
@@ -625,28 +628,37 @@ int main(int argc, char **argv){
 
         TRY(starpu_task_submit(perturb_task));
 
-        for(size_t k = 1; k < g_width_in_cubes + 1; k++)
-        for(size_t j = 1; j < g_width_in_cubes + 1; j++)
-        for(size_t i = 1; i < g_width_in_cubes + 1; i++){
-            // call the write task
-            dump_block_args_t* dump_args;
-            TRY(make_dump_block_args(&dump_args, i - 1, j - 1, k - 1, t - 1));
+        // only output the block when simulation time overtakes the min time to generate output
+        const FP simulation_time = t * dt;
+        const FP output_time = n_out * dt_output;
+        if(simulation_time >= output_time){ // hand made fst iter to dump
+            printf("n_out: %d\n", n_out);
+            for(size_t k = 1; k < g_width_in_cubes + 1; k++)
+            for(size_t j = 1; j < g_width_in_cubes + 1; j++)
+            for(size_t i = 1; i < g_width_in_cubes + 1; i++){
 
-            struct starpu_task* dump_block_task = starpu_task_create();
-            dump_block_task->name = "write block";
-            dump_block_task->cl = &dump_block_codelet;
-            dump_block_task->cl_arg = dump_args;
-            dump_block_task->cl_arg_size = sizeof(dump_block_args_t);
-            dump_block_task->cl_arg_free = 1;
+                // call the write task
+                dump_block_args_t* dump_args;
+                TRY(make_dump_block_args(&dump_args, i - 1, j - 1, k - 1, n_out));
 
-            dump_block_task->handles[0] = p_wave_iter[2][block_idx(i, j, k)];
+                struct starpu_task* dump_block_task = starpu_task_create();
+                dump_block_task->name = "write block";
+                dump_block_task->cl = &dump_block_codelet;
+                dump_block_task->cl_arg = dump_args;
+                dump_block_task->cl_arg_size = sizeof(dump_block_args_t);
+                dump_block_task->cl_arg_free = 1;
 
-            TRY(starpu_task_submit(dump_block_task));
+                dump_block_task->handles[0] = p_wave_iter[2][block_idx(i, j, k)];
 
-            // only start to unregister when the automatically allocated buffers reaches the t - 2.
-            //unregister all cubes from iteration t - 2
-            //in the inner data_handles
-            if(t >= 2){
+                TRY(starpu_task_submit(dump_block_task));
+            }
+            n_out++;
+        }
+
+        if(t >= 2){
+            for(size_t k = 1; k < g_width_in_cubes + 1; k++)
+            for(size_t j = 1; j < g_width_in_cubes + 1; j++)
+            for(size_t i = 1; i < g_width_in_cubes + 1; i++){
                 starpu_data_unregister_submit(p_wave_iter[2][block_idx(i, j, k)]);
                 starpu_data_unregister_submit(q_wave_iter[2][block_idx(i, j, k)]);
             }
@@ -718,7 +730,7 @@ int main(int argc, char **argv){
     fprintf(rsf_header,"n1=%ld\n", g_volume_width /*sx*/);
     fprintf(rsf_header,"n2=%ld\n", g_volume_width /*sy*/);
     fprintf(rsf_header,"n3=%ld\n", g_volume_width /*sz*/);
-    fprintf(rsf_header,"n4=%ld\n", st - 1); // TODO: validar quantas iterações são realmente salvas
+    fprintf(rsf_header,"n4=%ld\n", n_out); // TODO: validar n_out 
     fprintf(rsf_header,"d1=%f\n",dx);
     fprintf(rsf_header,"d2=%f\n",dy);
     fprintf(rsf_header,"d3=%f\n",dz);
