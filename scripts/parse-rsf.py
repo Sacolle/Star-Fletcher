@@ -45,6 +45,9 @@ def congeal_with_rsf(spec, input_binary_files, final_output_path):
     
     # 3. Process each input file
     header_struct = struct.Struct('QQQQ') # size_t i, j, k, t
+    maxv = -10
+    maxcords = None
+    minv =  10
     
     for bin_file in input_binary_files:
         with open(bin_file, 'rb') as f:
@@ -66,6 +69,15 @@ def congeal_with_rsf(spec, input_binary_files, final_output_path):
                 # Convert to numpy and reshape to a 3D block
                 cube = np.frombuffer(raw_data, dtype=dtype).reshape(sn1, sn2, sn3)
                 # print(cube)
+                cmax = np.max(cube)
+                if cmax > maxv:
+                    maxv = cmax
+                    coords = np.unravel_index(np.argmax(cube), cube.shape)
+                    maxcords = [i, j, k, t, coords, cube[coords]] 
+
+                cmin = np.min(cube)
+                if cmin < minv:
+                    minv = cmin
                 
                 # Place the cube into the master volume using slicing
                 # This automatically handles the "non-contiguous" logic
@@ -74,7 +86,7 @@ def congeal_with_rsf(spec, input_binary_files, final_output_path):
     # Ensure everything is written to disk
     master.flush()
     # print(master)
-    print(f"Successfully congealed into {final_output_path}")
+    print(f"Successfully congealed into {final_output_path}, max val is: {maxv} at {maxcords}")
 
 # Usage
 # congeal_with_rsf("result/out-VTI.rsf", ["part1.bin", "part2.bin"], "final_volume.bin")
