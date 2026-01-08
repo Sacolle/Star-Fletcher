@@ -71,16 +71,16 @@ void fletcher_base_medium_initialize(const enum Form prob, size_t sx, size_t sy,
 void RandomVelocityBoundary(int sx, int sy, int sz,
                             int nx, int ny, int nz,
                             int bord, int absorb,
-                            FP *vpz, FP *vsv)
+                            float *vpz, float *vsv)
 {
 
     int i, ix, iy, iz;
     int distx, disty, distz, dist;
     int ivelx, ively, ivelz;
-    FP bordDist;
-    FP frac, rfac;
+    float bordDist;
+    float frac, rfac;
     int firstIn, bordLen;
-    FP maxP, maxS;
+    float maxP, maxS;
 
     // maximum speed of P and S within bounds
     maxP = 0.0;
@@ -91,15 +91,15 @@ void RandomVelocityBoundary(int sx, int sy, int sz,
         {
             for (i = ind(bord + absorb, iy, iz); i < ind(nx + bord + absorb, iy, iz); i++)
             {
-                maxP = FP_MAX(vpz[i], maxP);
-                maxS = FP_MAX(vsv[i], maxS);
+                maxP = fmaxf(vpz[i], maxP);
+                maxS = fmaxf(vsv[i], maxS);
             }
         }
     }
 
     bordLen = bord + absorb - 1; // last index on low absortion zone
     firstIn = bordLen + 1;       // first index inside input grid
-    frac = 1.0 / (FP)(absorb);
+    frac = 1.0/(float)(absorb);
 
     for (iz = 0; iz < sz; iz++)
     {
@@ -167,8 +167,8 @@ void RandomVelocityBoundary(int sx, int sy, int sz,
                     }
                     dist = (disty > distz) ? disty : distz;
                     dist = (dist > distx) ? dist : distx;
-                    bordDist = (FP)(dist)*frac;
-                    rfac = (FP)rand() / (FP)RAND_MAX;
+                    bordDist = (float)(dist)*frac;
+                    rfac = (float)rand() / (float)RAND_MAX;
 
                     vpz[i] = vpz[ind(ivelx, ively, ivelz)] * (1.0 - bordDist) +
                              maxP * rfac * bordDist;
@@ -198,33 +198,33 @@ void RandomVelocityBoundary(int sx, int sy, int sz,
 #define TWOSQRTPI    3.54490770181103205458
 #define THREESQRTPI  5.31736155271654808184
 
-FP Source(FP dt, int it){
-  FP tf, fc, fct, expo;
+float Source(float dt, int it){
+  float tf, fc, fct, expo;
   tf=TWOSQRTPI/FCUT;
   fc=FCUT/THREESQRTPI;
-  fct=fc*(((FP)it)*dt-tf);
+  fct=fc*(((float)it)*dt-tf);
   expo=PICUBE*fct*fct;
-  return ((FP_LIT(1.0)-FP_LIT(2.0)*expo)*FP_EXP(-expo));
+  return ((1.0f-2.0f*expo)*expf(-expo));
 }
 
 void intermediary_values(
     int sx, int sy , int sz, 
-    FP *restrict vpz, FP *restrict vsv, FP *restrict epsilon,
-    FP *restrict delta, FP *restrict phi, FP *restrict theta,
+    float *restrict vpz, float *restrict vsv, float *restrict epsilon,
+    float *restrict delta, float *restrict phi, float *restrict theta,
 
-    FP* ch1dxx, FP* ch1dyy, FP* ch1dzz, 
-    FP* ch1dxy, FP* ch1dyz, FP* ch1dxz, 
-    FP* v2px, FP* v2pz, FP* v2sz, FP* v2pn
+    float* ch1dxx, float* ch1dyy, float* ch1dzz, 
+    float* ch1dxy, float* ch1dyz, float* ch1dxz, 
+    float* v2px, float* v2pz, float* v2sz, float* v2pn
 ){
 
     // coeficients of derivatives at H1 operator
     for (int i=0; i<sx*sy*sz; i++) {
-        FP sinTheta=FP_SIN(theta[i]);
-        FP cosTheta=FP_COS(theta[i]);
-        FP sin2Theta=FP_SIN(FP_LIT(2.0)*theta[i]);
-        FP sinPhi=FP_SIN(phi[i]);
-        FP cosPhi=FP_COS(phi[i]);
-        FP sin2Phi=FP_SIN(FP_LIT(2.0)*phi[i]);
+        float sinTheta=sin(theta[i]);
+        float cosTheta=cos(theta[i]);
+        float sin2Theta=sin(2.0*theta[i]);
+        float sinPhi=sin(phi[i]);
+        float cosPhi=cos(phi[i]);
+        float sin2Phi=sin(2.0*phi[i]);
         ch1dxx[i]=sinTheta*sinTheta * cosPhi*cosPhi;
         ch1dyy[i]=sinTheta*sinTheta * sinPhi*sinPhi;
         ch1dzz[i]=cosTheta*cosTheta;
@@ -238,8 +238,8 @@ void intermediary_values(
     for (int i=0; i<sx*sy*sz; i++){
         v2sz[i]=vsv[i]*vsv[i];
         v2pz[i]=vpz[i]*vpz[i];
-        v2px[i]=v2pz[i]*(FP_LIT(1.0)+FP_LIT(2.0)*epsilon[i]);
-        v2pn[i]=v2pz[i]*(FP_LIT(1.0)+FP_LIT(2.0)*delta[i]);
+        v2px[i]=v2pz[i]*(1.0+2.0*epsilon[i]);
+        v2pn[i]=v2pz[i]*(1.0+2.0*delta[i]);
     }
 }
 
@@ -253,17 +253,7 @@ void setup_seed(void)
 
 TestSuite(medium, .init = setup_seed);
 
-//usado para os testes se adequarem a compilação
-#if defined(FP_FLOAT)
-    #define CRIT_FP flt
-    #define EPSILON FLT_EPSILON
-#elif defined(FP_LONG_DOUBLE)
-    #define CRIT_FP ldbl
-    #define EPSILON LDBL_EPSILON
-#else
-    #define CRIT_FP dbl
-    #define EPSILON DBL_EPSILON
-#endif
+#define EPSILON FLT_EPSILON
 
 
 size_t g_volume_width;
@@ -301,12 +291,12 @@ Test(medium, proper_initialization){
             vpz_myimpl, vsv_myimpl, epsilon_myimpl, delta_myimpl, phi_myimpl, theta_myimpl);
 
         for(int i = 0; i < size; i++){
-            cr_assert(epsilon_eq(CRIT_FP, vpz_base[i], vpz_myimpl[i], EPSILON));
-            cr_assert(epsilon_eq(CRIT_FP, vsv_base[i], vsv_myimpl[i], EPSILON));
-            cr_assert(epsilon_eq(CRIT_FP, epsilon_base[i], epsilon_myimpl[i], EPSILON));
-            cr_assert(epsilon_eq(CRIT_FP, delta_base[i], delta_myimpl[i], EPSILON));
-            cr_assert(epsilon_eq(CRIT_FP, phi_base[i], phi_myimpl[i], EPSILON));
-            cr_assert(epsilon_eq(CRIT_FP, theta_base[i], theta_myimpl[i], EPSILON));
+            cr_assert(epsilon_eq(flt, vpz_base[i], vpz_myimpl[i], EPSILON));
+            cr_assert(epsilon_eq(flt, vsv_base[i], vsv_myimpl[i], EPSILON));
+            cr_assert(epsilon_eq(flt, epsilon_base[i], epsilon_myimpl[i], EPSILON));
+            cr_assert(epsilon_eq(flt, delta_base[i], delta_myimpl[i], EPSILON));
+            cr_assert(epsilon_eq(flt, phi_base[i], phi_myimpl[i], EPSILON));
+            cr_assert(epsilon_eq(flt, theta_base[i], theta_myimpl[i], EPSILON));
         }
     }
 
@@ -360,8 +350,8 @@ Test(medium, correct_absorb){
         for(int y = 0; y < sy; y++){
             for(int x = 0; x < sx; x++){
                 const size_t i = volume_idx(x, y, z);
-                cr_assert(epsilon_eq(CRIT_FP, vpz_base[i], vpz_myimpl[i], EPSILON), "vpz at (%d, %d, %d)", x, y, z);
-                cr_assert(epsilon_eq(CRIT_FP, vsv_base[i], vsv_myimpl[i], EPSILON), "vsv at (%d, %d, %d)", x, y, z);
+                cr_assert(epsilon_eq(flt, vpz_base[i], vpz_myimpl[i], EPSILON), "vpz at (%d, %d, %d)", x, y, z);
+                cr_assert(epsilon_eq(flt, vsv_base[i], vsv_myimpl[i], EPSILON), "vsv at (%d, %d, %d)", x, y, z);
             }
         }
     }
@@ -505,34 +495,34 @@ Test(medium, correct_intermediary_values){
                             const size_t c_i = cube_idx(x, y, z);
                             const size_t vol_i = volume_idx(x + i * g_cube_width, y + j * g_cube_width, z + k * g_cube_width);
 
-                            cr_expect(epsilon_eq(CRIT_FP, ch1dxx_base[vol_i], ch1dxx_myimpl[b_i][c_i], EPSILON), 
+                            cr_expect(epsilon_eq(flt, ch1dxx_base[vol_i], ch1dxx_myimpl[b_i][c_i], EPSILON), 
                                 "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
 
-                            cr_expect(epsilon_eq(CRIT_FP, ch1dyy_base[vol_i], ch1dyy_myimpl[b_i][c_i], EPSILON), 
+                            cr_expect(epsilon_eq(flt, ch1dyy_base[vol_i], ch1dyy_myimpl[b_i][c_i], EPSILON), 
                                 "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
 
-                            cr_expect(epsilon_eq(CRIT_FP, ch1dzz_base[vol_i], ch1dzz_myimpl[b_i][c_i], EPSILON), 
+                            cr_expect(epsilon_eq(flt, ch1dzz_base[vol_i], ch1dzz_myimpl[b_i][c_i], EPSILON), 
                                 "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
 
-                            cr_expect(epsilon_eq(CRIT_FP, ch1dxy_base[vol_i], ch1dxy_myimpl[b_i][c_i], EPSILON), 
+                            cr_expect(epsilon_eq(flt, ch1dxy_base[vol_i], ch1dxy_myimpl[b_i][c_i], EPSILON), 
                                 "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
 
-                            cr_expect(epsilon_eq(CRIT_FP, ch1dyz_base[vol_i], ch1dyz_myimpl[b_i][c_i], EPSILON), 
+                            cr_expect(epsilon_eq(flt, ch1dyz_base[vol_i], ch1dyz_myimpl[b_i][c_i], EPSILON), 
                                 "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
 
-                            cr_expect(epsilon_eq(CRIT_FP, ch1dxz_base[vol_i], ch1dxz_myimpl[b_i][c_i], EPSILON), 
+                            cr_expect(epsilon_eq(flt, ch1dxz_base[vol_i], ch1dxz_myimpl[b_i][c_i], EPSILON), 
                                 "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
 
-                            cr_expect(epsilon_eq(CRIT_FP, v2px_base[vol_i], v2px_myimpl[b_i][c_i], EPSILON), 
+                            cr_expect(epsilon_eq(flt, v2px_base[vol_i], v2px_myimpl[b_i][c_i], EPSILON), 
                                 "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
 
-                            cr_expect(epsilon_eq(CRIT_FP, v2pz_base[vol_i], v2pz_myimpl[b_i][c_i], EPSILON), 
+                            cr_expect(epsilon_eq(flt, v2pz_base[vol_i], v2pz_myimpl[b_i][c_i], EPSILON), 
                                 "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
 
-                            cr_expect(epsilon_eq(CRIT_FP, v2sz_base[vol_i], v2sz_myimpl[b_i][c_i], EPSILON), 
+                            cr_expect(epsilon_eq(flt, v2sz_base[vol_i], v2sz_myimpl[b_i][c_i], EPSILON), 
                                 "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
 
-                            cr_expect(epsilon_eq(CRIT_FP, v2pn_base[vol_i], v2pn_myimpl[b_i][c_i], EPSILON), 
+                            cr_expect(epsilon_eq(flt, v2pn_base[vol_i], v2pn_myimpl[b_i][c_i], EPSILON), 
                                 "vpz at b(%d, %d, %d), c(%d, %d, %d)",i, j, k, x, y, z);
                         }
                     }
@@ -641,7 +631,7 @@ Test(medium, source_value){
     for(int i = 0; i < 100; i++){
         const FP proper = Source(dt, i + 1);
         const FP mine = medium_source_value(dt, i + 1);
-        cr_expect(epsilon_eq(CRIT_FP, proper, mine, EPSILON), "i: %d", i);
+        cr_expect(epsilon_eq(flt, proper, mine, EPSILON), "i: %d", i);
     }
 }
 
@@ -682,6 +672,6 @@ Test(medium, stability_condition){
 
         const FP my_res = medium_stability_condition(dx, dy, dz, (FP*) vpz, (FP*) epsilon, size);
 
-        cr_expect(epsilon_eq(CRIT_FP, recdt, my_res, EPSILON));
+        cr_expect(epsilon_eq(flt, recdt, my_res, EPSILON));
     }
 }

@@ -21,23 +21,13 @@
 
 #define SEED 42
 
+#define EPSILON FLT_EPSILON
+#define FP_CRIT flt
+
 void setup_seed(void){
     srand(SEED);
 }
 
-double randomdd(){
-    uint64_t r53 = ((uint64_t)(rand()) << 21) ^ (rand() >> 2);
-    return (double)r53 / 9007199254740991.0;
-}
-
-Test(random, random_doubles_in_range){
-    for(int i = 0; i < 10; i++){
-        double rv = randomdd();
-        //cr_log_info("Random is %lf", rv);
-        cr_assert(le(dbl, rv, 1.01));
-        cr_assert(ge(dbl, rv, -0.01));
-    }
-}
 
 Test(random, random_retries){
     const size_t size = 1000;
@@ -55,7 +45,7 @@ Test(random, random_retries){
     }
 
     for(int i = 0; i < size; i++){
-        cr_assert(epsilon_eq(dbl, first_list[i], second_list[i], 0.0001));
+        cr_assert(epsilon_eq(FP_CRIT, first_list[i], second_list[i], 0.0001));
     }
 }
 
@@ -66,7 +56,7 @@ Test(derivative, first_degree_xlin) {
     static FP matrix[100];
 
     for(int i = 0; i < 100; i++){
-        matrix[i] = randomdd();
+        matrix[i] = FP_RAND();
     }
 
     for(int i = 4; i < 96; i++){
@@ -74,7 +64,7 @@ Test(derivative, first_degree_xlin) {
         const FP my_impl = fst_deriv_dir(&matrix[0], NULL, NULL, i, i, 1, 1.0, 100);
         //cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
-        cr_assert(epsilon_eq(dbl, baseline, my_impl, 0.001));
+        cr_expect(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
     }
 }
 
@@ -82,7 +72,7 @@ Test(derivative, first_degree_break_minus) {
     static FP matrix[100];
 
     for(int i = 0; i < 100; i++){
-        matrix[i] = randomdd();
+        matrix[i] = FP_RAND();
     }
 
     const FP baseline = Der1((&matrix[50]), 0, 1, 1.0);
@@ -90,26 +80,26 @@ Test(derivative, first_degree_break_minus) {
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
-    cr_assert(epsilon_eq(dbl, baseline, my_impl, 0.001));
+    cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
 }
 
 Test(derivative, first_degree_break_plus) {
     static FP matrix[100];
     for(int i = 0; i < 100; i++){
-        matrix[i] = randomdd();
+        matrix[i] = FP_RAND();
     }
     const FP baseline = Der1((&matrix[0]), 49, 1, 1.0);
     const FP my_impl = fst_deriv_dir(&matrix[0], NULL, &matrix[50], 49, 49, 1, 1.0, 50);
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
-    cr_assert(epsilon_eq(dbl, baseline, my_impl, 0.001));
+    cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
 }
 
 Test(derivative, second_degree_xlin) {
     static FP matrix[100];
     for(int i = 0; i < 100; i++){
-        matrix[i] = randomdd();
+        matrix[i] = FP_RAND();
     }
 
     for(int i = 4; i < 96; i++){
@@ -118,7 +108,7 @@ Test(derivative, second_degree_xlin) {
         const FP my_impl = snd_deriv_dir(&matrix[0], NULL, NULL, i, i, 1, 1.0, 100);
         //cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
-        cr_assert(epsilon_eq(dbl, baseline, my_impl, 0.001));
+        cr_expect(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
     }
 }
 
@@ -128,7 +118,7 @@ Test(derivative, cross_deriv_xy) {
 
     for(int j = 0; j < SIZE; j++){
         for(int i = 0; i < SIZE; i++){
-            matrix[j * SIZE + i] = randomdd();
+            matrix[j * SIZE + i] = FP_RAND();
         }
     }
     const size_t base_idx = 4 * SIZE + 4;
@@ -143,7 +133,7 @@ Test(derivative, cross_deriv_xy) {
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
-    cr_assert(epsilon_eq(dbl, baseline, my_impl, 0.001));
+    cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
 }
 
 Test(derivative, cross_deriv_yz) {
@@ -153,7 +143,7 @@ Test(derivative, cross_deriv_yz) {
     for(int k = 0; k < SIZE; k++){
         for(int j = 0; j < SIZE; j++){
             for(int i = 0; i < SIZE; i++){
-                matrix[k * SIZE * SIZE + j * SIZE + i] = randomdd();
+                matrix[k * SIZE * SIZE + j * SIZE + i] = FP_RAND();
             }
         }
     }
@@ -171,7 +161,7 @@ Test(derivative, cross_deriv_yz) {
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
-    cr_assert(epsilon_eq(dbl, baseline, my_impl, 0.001));
+    cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
 }
 
 Test(derivative, cross_deriv_xz) {
@@ -181,7 +171,7 @@ Test(derivative, cross_deriv_xz) {
     for(int k = 0; k < SIZE; k++){
         for(int j = 0; j < SIZE; j++){
             for(int i = 0; i < SIZE; i++){
-                matrix[k * SIZE * SIZE + j * SIZE + i] = randomdd();
+                matrix[k * SIZE * SIZE + j * SIZE + i] = FP_RAND();
             }
         }
     }
@@ -199,7 +189,7 @@ Test(derivative, cross_deriv_xz) {
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
-    cr_assert(epsilon_eq(dbl, baseline, my_impl, 0.001));
+    cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
 }
 
 Test(derivative, cross_deriv_zx) {
@@ -209,7 +199,7 @@ Test(derivative, cross_deriv_zx) {
     for(int k = 0; k < SIZE; k++){
         for(int j = 0; j < SIZE; j++){
             for(int i = 0; i < SIZE; i++){
-                matrix[k * SIZE * SIZE + j * SIZE + i] = randomdd();
+                matrix[k * SIZE * SIZE + j * SIZE + i] = FP_RAND();
             }
         }
     }
@@ -227,7 +217,7 @@ Test(derivative, cross_deriv_zx) {
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
-    cr_assert(epsilon_eq(dbl, baseline, my_impl, 0.001));
+    cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
 }
 
 Test(derivative, same_random_values) {
@@ -245,7 +235,7 @@ Test(derivative, same_random_values) {
                 for(int k = 0; k < SIZE; k++){
                     for(int j = 0; j < SIZE; j++){
                         for(int i = 0; i < SIZE; i++){
-                            const FP rand_val = randomdd();
+                            const FP rand_val = FP_RAND();
                             mseg[IDX(dx, dy, dz, SEG)][IDX(i, j, k, SIZE)] = rand_val;
                             mbig[IDX(i + dx * SIZE, j + dy * SIZE, k + dz * SIZE, BIGSIZE)] = rand_val;
                         }
@@ -262,10 +252,10 @@ Test(derivative, same_random_values) {
                     for(int j = 0; j < SIZE; j++){
                         for(int i = 0; i < SIZE; i++){
                             
-                            cr_assert(epsilon_eq(dbl, 
+                            cr_assert(epsilon_eq(FP_CRIT, 
                                 block[IDX(i, j, k, SIZE)], 
                                 mbig[IDX(i + dx * SIZE, j + dy * SIZE, k + dz * SIZE, BIGSIZE)], 
-                                0.001)
+                                EPSILON)
                             );
                         }
                     }
@@ -290,7 +280,7 @@ Test(derivative, match_with_stride) {
                 for(int k = 0; k < SIZE; k++){
                     for(int j = 0; j < SIZE; j++){
                         for(int i = 0; i < SIZE; i++){
-                            const FP rand_val = randomdd();
+                            const FP rand_val = FP_RAND();
                             mseg[IDX(dx, dy, dz, SEG)][IDX(i, j, k, SIZE)] = rand_val;
                             mbig[IDX(i + dx * SIZE, j + dy * SIZE, k + dz * SIZE, BIGSIZE)] = rand_val;
                         }
@@ -309,10 +299,10 @@ Test(derivative, match_with_stride) {
                     for(int j = 0; j < SIZE; j++){
                         size_t si = sj;
                         for(int i = 0; i < SIZE; i++){
-                            cr_assert(epsilon_eq(dbl, 
+                            cr_assert(epsilon_eq(FP_CRIT, 
                                 block[IDX(i, j, k, SIZE)], 
                                 mbig[si], 
-                                0.001)
+                                EPSILON)
                             );
                             si += 1;
                         }
@@ -340,7 +330,7 @@ Test(derivative, corner) {
                 for(int k = 0; k < SIZE; k++){
                     for(int j = 0; j < SIZE; j++){
                         for(int i = 0; i < SIZE; i++){
-                            const FP rand_val = randomdd();
+                            const FP rand_val = FP_RAND();
                             mseg[IDX(dx, dy, dz, SEG)][IDX(i, j, k, SIZE)] = rand_val;
                             mbig[IDX(i + dx * SIZE, j + dy * SIZE, k + dz * SIZE, BIGSIZE)] = rand_val;
                         }
@@ -375,7 +365,7 @@ Test(derivative, corner) {
         SIZE
     );
 
-    cr_assert(epsilon_eq(dbl, baseline, my_impl, 0.001));
+    cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
 
 }
 
@@ -394,7 +384,7 @@ Test(derivative, cross_deriv_with_borders) {
                 for(int k = 0; k < SIZE; k++){
                     for(int j = 0; j < SIZE; j++){
                         for(int i = 0; i < SIZE; i++){
-                            const FP rand_val = randomdd();
+                            const FP rand_val = FP_RAND();
                             mseg[IDX(dx, dy, dz, SEG)][IDX(i, j, k, SIZE)] = rand_val;
                             mbig[IDX(i + dx * SIZE, j + dy * SIZE, k + dz * SIZE, BIGSIZE)] = rand_val;
                         }
@@ -436,7 +426,7 @@ Test(derivative, cross_deriv_with_borders) {
                     SIZE
                 );
 
-                cr_assert(epsilon_eq(dbl, baseline, my_impl, 0.001));
+                cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
 
             }
         }
