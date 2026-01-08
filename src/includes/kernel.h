@@ -26,9 +26,10 @@ int make_rtm_args(rtm_args_t** rtm_args,
 typedef struct perturb_args{
     size_t source_idx;
     FP perturb_value;
+    size_t t;
 } perturb_args_t;
 
-int make_perturb_args(perturb_args_t** perturb_args, const size_t idx, const FP value);
+int make_perturb_args(perturb_args_t** perturb_args, const size_t idx, const FP value, const size_t t);
 
 
 void rtm_kernel(void *descr[], void *cl_args);

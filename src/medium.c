@@ -42,12 +42,12 @@ void medium_initialize(
     case ISO:
     {
         for (size_t i = 0; i < size; i++){
-            vpz[i]     = FP_LIT(3000.0);
-            epsilon[i] = FP_LIT(0.0);
-            delta[i]   = FP_LIT(0.0);
-            phi[i]     = FP_LIT(0.0);
-            theta[i]   = FP_LIT(0.0);
-            vsv[i]     = FP_LIT(0.0);
+            vpz[i]     = 3000.0;
+            epsilon[i] = 0.0;
+            delta[i]   = 0.0;
+            phi[i]     = 0.0;
+            theta[i]   = 0.0;
+            vsv[i]     = 0.0;
         }
     }
     break;
@@ -57,13 +57,13 @@ void medium_initialize(
             //printf("Since sigma (%f) is greater that threshold (%f), sigma is considered infinity and vsv is set to zero\n", SIGMA, MAX_SIGMA);
         }
         for (size_t i = 0; i < size; i++){
-            vpz[i]     = FP_LIT(3000.0);
-            epsilon[i] = FP_LIT(0.24);
-            delta[i]   = FP_LIT(0.1);
-            phi[i]     = FP_LIT(0.0);
-            theta[i]   = FP_LIT(0.0);
+            vpz[i]     = 3000.0;
+            epsilon[i] = 0.24;
+            delta[i]   = 0.1;
+            phi[i]     = 0.0;
+            theta[i]   = 0.0;
             if (SIGMA > MAX_SIGMA){
-                vsv[i] = FP_LIT(0.0);
+                vsv[i] = 0.0;
             }else{
                 vsv[i] = vpz[i] * FP_SQRT(FP_ABS(epsilon[i] - delta[i]) / SIGMA);
             }
@@ -78,13 +78,13 @@ void medium_initialize(
         }
         for (size_t i = 0; i < size; i++){
         {
-            vpz[i]     = FP_LIT(3000.0);
-            epsilon[i] = FP_LIT(0.24);
-            delta[i]   = FP_LIT(0.1);
-            phi[i]     = FP_LIT(1.0); // evitando coeficientes nulos
+            vpz[i]     = 3000.0;
+            epsilon[i] = 0.24;
+            delta[i]   = 0.1;
+            phi[i]     = 1.0; // evitando coeficientes nulos
             theta[i]   = FP_ATAN(1.0);
             if (SIGMA > MAX_SIGMA){
-                vsv[i] = FP_LIT(0.0);
+                vsv[i] = 0.0;
             }else{
                 vsv[i] = vpz[i] * FP_SQRT(FP_ABS(epsilon[i] - delta[i]) / SIGMA);
             }
@@ -210,12 +210,13 @@ void medium_calc_intermediary_values(
                             const size_t c_i = cube_idx(x, y, z);
                             const size_t vol_i = volume_idx(x + i * g_cube_width, y + j * g_cube_width, z + k * g_cube_width);
 
-                            const FP sinTheta = FP_SIN(theta[vol_i]);
-                            const FP cosTheta = FP_COS(theta[vol_i]);
-                            const FP sin2Theta = FP_SIN(FP_LIT(2.0) * theta[vol_i]);
-                            const FP sinPhi = FP_SIN(phi[vol_i]);
-                            const FP cosPhi = FP_COS(phi[vol_i]);
-                            const FP sin2Phi = FP_SIN(FP_LIT(2.0) * phi[vol_i]);
+                            // changing the data type TO be the same as in the original
+                            const FP sinTheta = sin(theta[vol_i]);
+                            const FP cosTheta = cos(theta[vol_i]);
+                            const FP sin2Theta = sin(2.0 * theta[vol_i]);
+                            const FP sinPhi = sin(phi[vol_i]);
+                            const FP cosPhi = cos(phi[vol_i]);
+                            const FP sin2Phi = sin(2.0 * phi[vol_i]);
 
                             ch1dxx[b_i][c_i] = sinTheta * sinTheta * cosPhi * cosPhi;
                             ch1dyy[b_i][c_i] = sinTheta * sinTheta * sinPhi * sinPhi;
@@ -228,8 +229,8 @@ void medium_calc_intermediary_values(
                             const FP l_v2pz = vpz[vol_i] * vpz[vol_i];
                             v2sz[b_i][c_i] = vsv[vol_i] * vsv[vol_i];
                             v2pz[b_i][c_i] = l_v2pz;
-                            v2px[b_i][c_i] = l_v2pz * (FP_LIT(1.0) + FP_LIT(2.0) * epsilon[vol_i]);
-                            v2pn[b_i][c_i] = l_v2pz * (FP_LIT(1.0) + FP_LIT(2.0) * delta[vol_i]);
+                            v2px[b_i][c_i] = l_v2pz * (1.0 + 2.0 * epsilon[vol_i]);
+                            v2pn[b_i][c_i] = l_v2pz * (1.0 + 2.0 * delta[vol_i]);
                         }
                     }
                 }

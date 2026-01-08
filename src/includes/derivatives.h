@@ -26,12 +26,20 @@
 #define L44 FP_LIT(0.00001275510204081632)  // L4*L4
 
 // eight order finite differences coefficients of the second derivative
-
 #define K0 FP_LIT(-2.84722222222222222222) // -205/72
 #define K1 FP_LIT(1.6)                     // 8/5
 #define K2 FP_LIT(-0.2)                    // -1/5
 #define K3 FP_LIT(0.02539682539682539682)  // 8/315
 #define K4 FP_LIT(-0.00178571428571428571) // -1/560
+
+/*
+#define K0 (FP_LIT(-205.0) / FP_LIT(72.0))
+#define K1 (FP_LIT(8.0) / FP_LIT(5.0))
+#define K2 (FP_LIT(-1.0) / FP_LIT(5.0))
+#define K3 (FP_LIT(8.0) / FP_LIT(315.0))
+#define K4 (FP_LIT(-1.0) / FP_LIT(560.0))
+
+*/
 
 FP fst_deriv_dir(
     const FP* block, const FP* block_minus, const FP* block_plus, 

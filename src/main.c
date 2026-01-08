@@ -284,8 +284,14 @@ struct starpu_codelet rtm_codelet = {
 #define DEBUG(...) printf("[debug] " __VA_ARGS__)
 #endif
 
+#ifndef RANDOM_SEED
+#define RANDOM_SEED 0
+#endif
 
 int main(int argc, char **argv){
+
+    srand(RANDOM_SEED);
+
     //need to be toplevel for the try macro
     int program_status = EXIT_SUCCESS;
     vector(void*) starpu_allocations = NULL;
@@ -410,6 +416,8 @@ int main(int argc, char **argv){
     const size_t perturbation_source_pos = volume_to_cube_idx(volume_propagation_idx);
     //insert in this block the propagration source
     const FP starting_source_value = medium_source_value(dt, 0);
+
+    printf("source value: %.9f\n", starting_source_value);
     propagation_block[perturbation_source_pos] = starting_source_value;
 
     // a iteração do bloco t depende dos blocos t - 1 e t - 2.
@@ -480,9 +488,32 @@ int main(int argc, char **argv){
         BLOCK_REGISTER(q_wave_iter[2] + idx, null_block);
     }
     // TODO: rename n_out para algo que faça mais sentido
+
     int64_t n_out = 0;
+    /*
+    for(size_t k = 1; k < g_width_in_cubes + 1; k++)
+    for(size_t j = 1; j < g_width_in_cubes + 1; j++)
+    for(size_t i = 1; i < g_width_in_cubes + 1; i++){
+
+        // call the write task
+        dump_block_args_t* dump_args;
+        TRY(make_dump_block_args(&dump_args, i - 1, j - 1, k - 1, n_out));
+
+        struct starpu_task* dump_block_task = starpu_task_create();
+        dump_block_task->name = "write block";
+        dump_block_task->cl = &dump_block_codelet;
+        dump_block_task->cl_arg = dump_args;
+        dump_block_task->cl_arg_size = sizeof(dump_block_args_t);
+        dump_block_task->cl_arg_free = 1;
+
+        dump_block_task->handles[0] = p_wave_iter[2][block_idx(i, j, k)];
+
+        TRY(starpu_task_submit(dump_block_task));
+    }
+    n_out++;
+    */
     for(int64_t t = 1; t <= st; t++){
-        printf("t: %d\n", t);
+        // printf("t: %d\n", t);
         starpu_iteration_push(t);
         for(size_t k = 1; k < g_width_in_cubes + 1; k++) // z
         for(size_t j = 1; j < g_width_in_cubes + 1; j++) // y
@@ -610,13 +641,15 @@ int main(int argc, char **argv){
 
             TRY(starpu_task_submit(task));
         }
+
+        //starpu_task_wait_for_all(); // Force syncronize
         // task that insert the perturbation on the handle
         struct starpu_task* perturb_task = starpu_task_create();
         perturb_task->name = "wave insertion";
 
         const FP source_value = medium_source_value(dt, t);
         perturb_args_t* perturb_args;
-        TRY(make_perturb_args(&perturb_args, perturbation_source_pos, source_value));
+        TRY(make_perturb_args(&perturb_args, perturbation_source_pos, source_value, t));
 
         perturb_task->cl = &insert_perturbation_codelet;
         perturb_task->cl_arg = perturb_args;
@@ -628,11 +661,13 @@ int main(int argc, char **argv){
 
         TRY(starpu_task_submit(perturb_task));
 
+        //starpu_task_wait_for_all();
+        /*
         // only output the block when simulation time overtakes the min time to generate output
         const FP simulation_time = t * dt;
         const FP output_time = n_out * dt_output;
-        if(simulation_time >= output_time){ // hand made fst iter to dump
-            printf("n_out: %d\n", n_out);
+        //if(simulation_time >= output_time){ // hand made fst iter to dump
+          //  printf("n_out: %d\n", n_out);
             for(size_t k = 1; k < g_width_in_cubes + 1; k++)
             for(size_t j = 1; j < g_width_in_cubes + 1; j++)
             for(size_t i = 1; i < g_width_in_cubes + 1; i++){
@@ -653,7 +688,8 @@ int main(int argc, char **argv){
                 TRY(starpu_task_submit(dump_block_task));
             }
             n_out++;
-        }
+        //}
+        */
 
         if(t >= 2){
             for(size_t k = 1; k < g_width_in_cubes + 1; k++)

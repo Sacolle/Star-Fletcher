@@ -26,13 +26,14 @@ int make_rtm_args(rtm_args_t** rtm_args,
 }
 
 
-int make_perturb_args(perturb_args_t** perturb_args, const size_t idx, const FP value){
+int make_perturb_args(perturb_args_t** perturb_args, const size_t idx, const FP value, const size_t t){
     *perturb_args = (perturb_args_t*) malloc(sizeof(perturb_args_t));
     if(*perturb_args == NULL){
         return 1;
     }
     (*perturb_args)->source_idx = idx;
     (*perturb_args)->perturb_value = value;
+    (*perturb_args)->t = t;
     return 0;
 }
 
@@ -279,6 +280,8 @@ void perturbation_kernel(void *descr[], void *cl_args){
 
     FP *const p_wave_block = (FP *const) STARPU_BLOCK_GET_PTR(descr[0]);
     FP *const q_wave_block = (FP *const) STARPU_BLOCK_GET_PTR(descr[1]);
+
+    printf("%ld: %.9f + %.9f\n", args->t, p_wave_block[idx], value);
 
     p_wave_block[idx] += value;
     q_wave_block[idx] += value;

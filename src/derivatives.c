@@ -37,7 +37,7 @@ static inline size_t flip(const size_t line_idx, const size_t idx, const int str
 // soma ou subtrai dependendo do `sign_for_math`.
 FP deriv_kernel_sum(
     const FP* block, const FP* block_minus, const FP* block_plus, 
-    const int dir, const int sign_for_idx, const int sign_for_math,
+    const int dir, const int sign_for_idx, const FP sign_for_math,
     const size_t base_idx, const int stride, 
     const FP coef[4], const int cube_width
 ) { 
@@ -78,7 +78,7 @@ FP fst_deriv_dir(
     const FP dinv, const int cube_width
 ){
     static const FP fst_deriv_coef[4] = {L1, L2, L3, L4};  
-    FP aggr = 0.0;
+    FP aggr = FP_LIT(0.0);
     for(int sign = -1; sign <= 1; sign += 2){
         aggr += deriv_kernel_sum(
             block, block_minus, block_plus, 
@@ -99,7 +99,17 @@ FP fst_deriv_dir(
     ) * (d2inv))
 
 */
-
+/*
+(
+(
+-2.84722222222222222222*(&matrix[0])[i] + 
+1.6 * ((&matrix[0])[i + 1] + (&matrix[0])[i - 1]) + 
+-0.2 * ((&matrix[0])[i + 2 * 1] + (&matrix[0])[i - 2 * 1]) + 
+0.02539682539682539682 * ((&matrix[0])[i + 3 * 1] + (&matrix[0])[i - 3 * 1]) +
+-0.00178571428571428571 * ((&matrix[0])[i + 4 * 1] + (&matrix[0])[i - 4 * 1])
+) * (1.0)
+)
+ */
 FP snd_deriv_dir(
     const FP* block, const FP* block_minus, const FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 
@@ -114,6 +124,7 @@ FP snd_deriv_dir(
             snd_deriv_coef, cube_width
         );
     }
+    //return (aggr + (K0 * block[base_idx])) * d2inv;
     return aggr * d2inv;
 }
 /*
