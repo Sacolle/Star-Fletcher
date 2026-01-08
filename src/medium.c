@@ -238,12 +238,18 @@ void medium_calc_intermediary_values(
     }
 }
 
-
+/*
 #define FCUT        FP_LIT(40.0)
 #define PICUBE      FP_LIT(31.00627668029982017537)
 #define TWOSQRTPI   FP_LIT(3.54490770181103205458)
 #define THREESQRTPI FP_LIT(5.31736155271654808184)
+*/
 
+// omissão do FP_LIT para obter os mesmos resultados do que o fletcher base
+#define FCUT        40.0
+#define PICUBE      31.00627668029982017537
+#define TWOSQRTPI   3.54490770181103205458
+#define THREESQRTPI 5.31736155271654808184
 
 //#include <stdio.h>
 
