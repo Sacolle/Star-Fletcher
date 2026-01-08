@@ -12,7 +12,7 @@ all: $(ALL_TESTS)
 	$(foreach test, $^, ./$(test).out $(ARGS);)
 	
 deriv-tests: $(CURDIR)/deriv-tests.c $(PARENT_DIR)/src/derivatives.c $(PARENT_DIR)/src/includes/derivatives.h
-	$(CC) -o $@.out $^ $(CRITERION_CFLAGS) $(CRITERION_LDLIBS) -I $(PARENT_DIR)/$(INCLUDEDIR) $(CFLAGS) -DFP_DOUBLE
+	$(CC) -o $@.out $^ $(CRITERION_CFLAGS) $(CRITERION_LDLIBS) -I $(PARENT_DIR)/$(INCLUDEDIR) $(CFLAGS)
 
 
 MEDIUM_TEST_DEP := $(CURDIR)/medium-tests.c $(PARENT_DIR)/src/medium.c $(PARENT_DIR)/src/includes/medium.h 
