@@ -2,7 +2,7 @@
 export STARPU_CFLAGS := $(shell pkg-config --cflags starpu-1.4)
 export STARPU_LDLIBS := $(shell pkg-config --libs starpu-1.4)
 
-CFLAGS := $(STARPU_CFLAGS) -Wall -DFP_FLOAT
+CFLAGS := $(STARPU_CFLAGS) -Wall
 LDLIBS += $(STARPU_LDLIBS) -lm
 
 # if COMPILE_MODE is not define, the makefile will generate a
@@ -44,7 +44,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 run: $(BIN)
 	@mkdir -p result
 	@echo "Runing $(BIN). Out putting at ./result"
-	./$(BIN) TTI 64 64 64 16 12.5 12.5 12.5 0.001 0.5 4
+	./$(BIN) TTI 32 32 32 4 12.5 12.5 12.5 0.001 0.5 4
 	@echo "congealing the data..."
 	python3 ./scripts/parse-rsf.py "./result/out-TTI.rsf"
 #	./scripts/visualize.sh result/out-TTI.rsf
