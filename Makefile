@@ -51,7 +51,7 @@ run: $(BIN)
 
 debug: $(BIN)
 	@mkdir -p result
-	gdb --args ./$(BIN) TTI 16 16 16 4 12.5 12.5 12.5 0.001 0.1 2
+	gdb --args ./$(BIN) TTI 32 32 32 4 12.5 12.5 12.5 0.001 0.5 4
 
 valgrind: $(BIN)
 	@mkdir -p result

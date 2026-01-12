@@ -41,12 +41,6 @@
 
 */
 
-FP fst_deriv_dir(
-    const FP* block, const FP* block_minus, const FP* block_plus, 
-    const int dir, const size_t base_idx, const int stride, 
-    const FP dinv, const int cube_width
-);
-
 FP snd_deriv_dir(
     const FP* block, const FP* block_minus, const FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 

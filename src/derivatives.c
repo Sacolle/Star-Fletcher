@@ -117,7 +117,7 @@ FP snd_deriv_dir_pos(
 ){
     // get how far the dir is 
     const int depth = cube_width - dir - 1;
-    const size_t border_idx = flip(cube_width - 1, base_idx, stride, cube_width);
+    const size_t border_idx = flip(cube_width - 1, base_idx + depth * stride, stride, cube_width);
     switch (depth)
     {
     case 0:
@@ -177,7 +177,7 @@ FP snd_deriv_dir_neg(
 ){
     // get how far the dir is 
     const int depth = dir;
-    const size_t border_idx = flip(0, base_idx, stride, cube_width);
+    const size_t border_idx = flip(0, base_idx - depth * stride, stride, cube_width);
     switch (depth)
     {
     case 0:
