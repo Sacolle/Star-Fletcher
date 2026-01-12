@@ -52,44 +52,28 @@ Test(random, random_retries){
 TestSuite(derivative, .init = setup_seed);
 
 
-Test(derivative, first_degree_xlin) {
+Test(derivative, second_degree_break_minus) {
     static FP matrix[100];
 
     for(int i = 0; i < 100; i++){
         matrix[i] = FP_RAND();
     }
 
-    for(int i = 4; i < 96; i++){
-        const FP baseline = Der1((&matrix[0]), i, 1, 1.0);
-        const FP my_impl = fst_deriv_dir(&matrix[0], NULL, NULL, i, i, 1, 1.0, 100);
-        //cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
-
-        cr_expect(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
-    }
-}
-
-Test(derivative, first_degree_break_minus) {
-    static FP matrix[100];
-
-    for(int i = 0; i < 100; i++){
-        matrix[i] = FP_RAND();
-    }
-
-    const FP baseline = Der1((&matrix[50]), 0, 1, 1.0);
-    const FP my_impl = fst_deriv_dir(&matrix[50], &matrix[0], NULL, 0, 0, 1, 1.0, 50);
+    const FP baseline = Der2((&matrix[50]), 0, 1, 1.0f);
+    const FP my_impl = snd_deriv_dir_neg(&matrix[50], &matrix[0], 0, 0, 1, 1.0f, 50);
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
     cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
 }
 
-Test(derivative, first_degree_break_plus) {
+Test(derivative, second_degree_break_plus) {
     static FP matrix[100];
     for(int i = 0; i < 100; i++){
         matrix[i] = FP_RAND();
     }
-    const FP baseline = Der1((&matrix[0]), 49, 1, 1.0);
-    const FP my_impl = fst_deriv_dir(&matrix[0], NULL, &matrix[50], 49, 49, 1, 1.0, 50);
+    const FP baseline = Der2((&matrix[0]), 49, 1, 1.0);
+    const FP my_impl = snd_deriv_dir_pos(&matrix[0], &matrix[50], 49, 49, 1, 1.0, 50);
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
@@ -105,7 +89,7 @@ Test(derivative, second_degree_xlin) {
     for(int i = 4; i < 96; i++){
         const FP baseline = Der2((&matrix[0]), i, 1, 1.0);
         //const FP baseline = 1.0;
-        const FP my_impl = snd_deriv_dir(&matrix[0], NULL, NULL, i, i, 1, 1.0, 100);
+        const FP my_impl = snd_deriv_dir_pos(&matrix[0], NULL, i, i, 1, 1.0f, 100);
         //cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
         cr_expect(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));

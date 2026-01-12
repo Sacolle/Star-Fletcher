@@ -32,9 +32,14 @@ static inline size_t flip(const size_t line_idx, const size_t idx, const int str
     return (stride * cube_width - stride) - 2 * line_idx * stride + idx;
 }
 
-// `NOTE`: this might do some insane overflow errors
-// Agrega os 4 itens no sentido `sign_for_idx`, na dimensão indicada por `stride`;
-// soma ou subtrai dependendo do `sign_for_math`.
+/*
+    #define Der1(p, i, s, dinv) (
+    L1 * (p[i + s] - p[i - s]) + 
+    L2 * (p[i + 2 * s] - p[i - 2 * s]) + 
+    L3 * (p[i + 3 * s] - p[i - 3 * s]) + 
+    L4 * (p[i + 4 * s] - p[i - 4 * s])
+    ) * (dinv)
+
 FP deriv_kernel_sum(
     const FP* block, const FP* block_minus, const FP* block_plus, 
     const int dir, const int sign_for_idx, const FP sign_for_math,
@@ -64,14 +69,7 @@ FP deriv_kernel_sum(
     }  
     return aggr;  
 }
-/*
-    #define Der1(p, i, s, dinv) (
-    L1 * (p[i + s] - p[i - s]) + 
-    L2 * (p[i + 2 * s] - p[i - 2 * s]) + 
-    L3 * (p[i + 3 * s] - p[i - 3 * s]) + 
-    L4 * (p[i + 4 * s] - p[i - 4 * s])
-    ) * (dinv)
-*/
+
 FP fst_deriv_dir(
     const FP* block, const FP* block_minus, const FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 
@@ -88,6 +86,7 @@ FP fst_deriv_dir(
     }
     return aggr * dinv;
 }
+*/
 
 /*
     #define Der2(p, i, s, d2inv) ((
@@ -110,22 +109,138 @@ FP fst_deriv_dir(
 ) * (1.0)
 )
  */
+
+FP snd_deriv_dir_pos(
+    const FP* block, const FP* block_plus, 
+    const int dir, const size_t base_idx, const int stride, 
+    const FP d2inv, const int cube_width
+){
+    // get how far the dir is 
+    const int depth = cube_width - dir - 1;
+    const size_t border_idx = flip(cube_width - 1, base_idx, stride, cube_width);
+    switch (depth)
+    {
+    case 0:
+        /* right at the border */
+        return (
+            K0 * block[base_idx] + 
+            K1 * (block_plus[border_idx + 0 * stride] + block[base_idx - 1 * stride]) + 
+            K2 * (block_plus[border_idx + 1 * stride] + block[base_idx - 2 * stride]) + 
+            K3 * (block_plus[border_idx + 2 * stride] + block[base_idx - 3 * stride]) + 
+            K4 * (block_plus[border_idx + 3 * stride] + block[base_idx - 4 * stride])
+        ) * (d2inv);
+    case 1:
+        /* right before the border */
+        return (
+            K0 * block[base_idx] + 
+            K1 * (block[base_idx + 1 * stride] + block[base_idx - 1 * stride]) + 
+            K2 * (block_plus[border_idx + 0 * stride] + block[base_idx - 2 * stride]) + 
+            K3 * (block_plus[border_idx + 1 * stride] + block[base_idx - 3 * stride]) + 
+            K4 * (block_plus[border_idx + 2 * stride] + block[base_idx - 4 * stride])
+        ) * (d2inv);
+    case 2:
+        /* 2 before the border */
+        return (
+            K0 * block[base_idx] + 
+            K1 * (block[base_idx + 1 * stride] + block[base_idx - 1 * stride]) + 
+            K2 * (block[base_idx + 2 * stride] + block[base_idx - 2 * stride]) + 
+            K3 * (block_plus[border_idx + 0 * stride] + block[base_idx - 3 * stride]) + 
+            K4 * (block_plus[border_idx + 1 * stride] + block[base_idx - 4 * stride])
+        ) * (d2inv);
+
+    case 3:
+        /* 3 before the border */
+        return (
+            K0 * block[base_idx] + 
+            K1 * (block[base_idx + 1 * stride] + block[base_idx - 1 * stride]) + 
+            K2 * (block[base_idx + 2 * stride] + block[base_idx - 2 * stride]) + 
+            K3 * (block[base_idx + 3 * stride] + block[base_idx - 3 * stride]) + 
+            K4 * (block_plus[border_idx + 0 * stride] + block[base_idx - 4 * stride])
+        ) * (d2inv);
+    
+    default:
+        /* 4 and less before the border */
+        return (
+            K0 * block[base_idx] + 
+            K1 * (block[base_idx + 1 * stride] + block[base_idx - 1 * stride]) + 
+            K2 * (block[base_idx + 2 * stride] + block[base_idx - 2 * stride]) + 
+            K3 * (block[base_idx + 3 * stride] + block[base_idx - 3 * stride]) + 
+            K4 * (block[base_idx + 4 * stride] + block[base_idx - 4 * stride])
+        ) * (d2inv);
+    }
+}
+
+FP snd_deriv_dir_neg(
+    const FP* block, const FP* block_minus, 
+    const int dir, const size_t base_idx, const int stride, 
+    const FP d2inv, const int cube_width
+){
+    // get how far the dir is 
+    const int depth = dir;
+    const size_t border_idx = flip(0, base_idx, stride, cube_width);
+    switch (depth)
+    {
+    case 0:
+        /* right at the border */
+        return (
+            K0 * block[base_idx] + 
+            K1 * (block[base_idx + 1 * stride] + block_minus[border_idx - 0 * stride]) + 
+            K2 * (block[base_idx + 2 * stride] + block_minus[border_idx - 1 * stride]) + 
+            K3 * (block[base_idx + 3 * stride] + block_minus[border_idx - 2 * stride]) + 
+            K4 * (block[base_idx + 4 * stride] + block_minus[border_idx - 3 * stride])
+        ) * (d2inv);
+    case 1:
+        /* right before the border */
+        return (
+            K0 * block[base_idx] + 
+            K1 * (block[base_idx + 1 * stride] + block[base_idx - 1 * stride]) + 
+            K2 * (block[base_idx + 2 * stride] + block_minus[border_idx - 0 * stride]) + 
+            K3 * (block[base_idx + 3 * stride] + block_minus[border_idx - 1 * stride]) + 
+            K4 * (block[base_idx + 4 * stride] + block_minus[border_idx - 2 * stride])
+        ) * (d2inv);
+    case 2:
+        /* 2 before the border */
+        return (
+            K0 * block[base_idx] + 
+            K1 * (block[base_idx + 1 * stride] + block[base_idx - 1 * stride]) + 
+            K2 * (block[base_idx + 2 * stride] + block[base_idx - 2 * stride]) + 
+            K3 * (block[base_idx + 3 * stride] + block_minus[border_idx - 0 * stride]) + 
+            K4 * (block[base_idx + 4 * stride] + block_minus[border_idx - 1 * stride])
+        ) * (d2inv);
+
+    case 3:
+        /* 3 before the border */
+        return (
+            K0 * block[base_idx] + 
+            K1 * (block[base_idx + 1 * stride] + block[base_idx - 1 * stride]) + 
+            K2 * (block[base_idx + 2 * stride] + block[base_idx - 2 * stride]) + 
+            K3 * (block[base_idx + 3 * stride] + block[base_idx - 3 * stride]) + 
+            K4 * (block[base_idx + 4 * stride] + block_minus[border_idx - 0 * stride])
+        ) * (d2inv);
+    
+    default:
+        /* 4 and less before the border */
+        return (
+            K0 * block[base_idx] + 
+            K1 * (block[base_idx + 1 * stride] + block[base_idx - 1 * stride]) + 
+            K2 * (block[base_idx + 2 * stride] + block[base_idx - 2 * stride]) + 
+            K3 * (block[base_idx + 3 * stride] + block[base_idx - 3 * stride]) + 
+            K4 * (block[base_idx + 4 * stride] + block[base_idx - 4 * stride])
+        ) * (d2inv);
+    }
+}
+
 FP snd_deriv_dir(
     const FP* block, const FP* block_minus, const FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 
     const FP d2inv, const int cube_width
 ){
-    static const FP snd_deriv_coef[4] = {K1, K2, K3, K4};  
-    FP aggr = K0 * block[base_idx];
-    for(int sign = -1; sign <= 1; sign += 2){
-        aggr += deriv_kernel_sum(
-            block, block_minus, block_plus, 
-            dir, sign, 1, base_idx, stride, 
-            snd_deriv_coef, cube_width
-        );
+    // neg case
+    if(dir < 4){
+        return snd_deriv_dir_neg(block, block_minus, dir, base_idx, stride, d2inv, cube_width);
+    }else{
+        return snd_deriv_dir_pos(block, block_plus, dir, base_idx, stride, d2inv, cube_width);
     }
-    //return (aggr + (K0 * block[base_idx])) * d2inv;
-    return aggr * d2inv;
 }
 /*
 

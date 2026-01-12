@@ -53,6 +53,18 @@ FP snd_deriv_dir(
     const FP d2inv, const int cube_width 
 );
 
+FP snd_deriv_dir_pos(
+    const FP* block, const FP* block_plus, 
+    const int dir, const size_t base_idx, const int stride, 
+    const FP d2inv, const int cube_width
+);
+
+FP snd_deriv_dir_neg(
+    const FP* block, const FP* block_minus, 
+    const int dir, const size_t base_idx, const int stride, 
+    const FP d2inv, const int cube_width
+);
+
 FP cross_deriv_ddir(
     const FP* block, const size_t base_idx,
     const size_t dir1, const FP* block_minus_d1, const FP* block_plus_d1, const int stride_d1,
