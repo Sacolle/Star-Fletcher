@@ -169,7 +169,6 @@ FP snd_deriv_dir_pos(
         ) * (d2inv);
     }
 }
-
 FP snd_deriv_dir_neg(
     const FP* block, const FP* block_minus, 
     const int dir, const size_t base_idx, const int stride, 
