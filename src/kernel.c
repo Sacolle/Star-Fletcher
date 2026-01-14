@@ -197,22 +197,22 @@ void rtm_kernel(void *descr[], void *cl_args){
             x, pwim1jp0kp0, pwip1jp0kp0, stride_x, 
             y, pwip0jm1kp0, pwip0jp1kp0, stride_y, 
             pwip1jp1kp0, pwip1jm1kp0, pwim1jp1kp0, pwim1jm1kp0,
-            cube_width_x
-        ) * dxyinv;
+            cube_width_x, dxyinv
+        ); 
         const FP pyz = cross_deriv_ddir(
             pwcentralt1, idx, 
             y, pwip0jm1kp0, pwip0jp1kp0, stride_y, 
             z, pwip0jp0km1, pwip0jp0kp1, stride_z, 
             pwip0jp1kp1, pwip0jp1km1, pwip0jm1kp1, pwip0jm1km1,
-            cube_width_y
-        ) * dyzinv;
+            cube_width_y, dyzinv
+        ); 
         const FP pxz = cross_deriv_ddir(
             pwcentralt1, idx, 
             x, pwim1jp0kp0, pwip1jp0kp0, stride_x, 
             z, pwip0jp0km1, pwip0jp0kp1, stride_z, 
             pwip1jp0kp1, pwip1jp0km1, pwim1jp0kp1, pwim1jp0km1,
-            cube_width_x
-        ) * dxzinv;
+            cube_width_x, dxzinv
+        ); 
 
         const FP cpxx = ch1dxx[idx] * pxx;
         const FP cpyy = ch1dyy[idx] * pyy;
@@ -232,22 +232,22 @@ void rtm_kernel(void *descr[], void *cl_args){
             x, qwim1jp0kp0, qwip1jp0kp0, stride_x, 
             y, qwip0jm1kp0, qwip0jp1kp0, stride_y, 
             qwip1jp1kp0, qwip1jm1kp0, qwim1jp1kp0, qwim1jm1kp0,
-            cube_width_x
-        ) * dxyinv;
+            cube_width_x, dxyinv
+        ); 
         const FP qyz = cross_deriv_ddir(
             qwcentralt1, idx, 
             y, qwip0jm1kp0, qwip0jp1kp0, stride_y, 
             z, qwip0jp0km1, qwip0jp0kp1, stride_z, 
             qwip0jp1kp1, qwip0jp1km1, qwip0jm1kp1, qwip0jm1km1,
-            cube_width_y
-        ) * dyzinv;
+            cube_width_y, dyzinv
+        ); 
         const FP qxz = cross_deriv_ddir(
             qwcentralt1, idx, 
             x, qwim1jp0kp0, qwip1jp0kp0, stride_x, 
             z, qwip0jp0km1, qwip0jp0kp1, stride_z, 
             qwip1jp0kp1, qwip1jp0km1, qwim1jp0kp1, qwim1jp0km1,
-            cube_width_x
-        ) * dxzinv;
+            cube_width_x, dxzinv
+        ); 
 
         const FP cqxx = ch1dxx[idx] * qxx;
         const FP cqyy = ch1dyy[idx] * qyy;

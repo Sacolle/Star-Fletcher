@@ -60,7 +60,7 @@ Test(derivative, second_degree_break_minus) {
     }
 
     const FP baseline = Der2((&matrix[50]), 0, 1, 1.0f);
-    const FP my_impl = snd_deriv_dir_neg(&matrix[50], &matrix[0], 0, 0, 1, 1.0f, 50);
+    const FP my_impl = snd_deriv_dir(&matrix[50], &matrix[0], NULL, 0, 0, 1, 1.0f, 50);
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
@@ -73,7 +73,7 @@ Test(derivative, second_degree_break_plus) {
         matrix[i] = FP_RAND();
     }
     const FP baseline = Der2((&matrix[0]), 49, 1, 1.0);
-    const FP my_impl = snd_deriv_dir_pos(&matrix[0], &matrix[50], 49, 49, 1, 1.0, 50);
+    const FP my_impl = snd_deriv_dir(&matrix[0], NULL, &matrix[50], 49, 49, 1, 1.0, 50);
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
@@ -89,7 +89,7 @@ Test(derivative, second_degree_xlin) {
     for(int i = 4; i < 96; i++){
         const FP baseline = Der2((&matrix[0]), i, 1, 1.0);
         //const FP baseline = 1.0;
-        const FP my_impl = snd_deriv_dir_pos(&matrix[0], NULL, i, i, 1, 1.0f, 100);
+        const FP my_impl = snd_deriv_dir(&matrix[0], NULL, NULL,i, i, 1, 1.0f, 100);
         //cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
 
         cr_expect(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
@@ -112,7 +112,7 @@ Test(derivative, cross_deriv_xy) {
         4, NULL, NULL, 1, 
         4, NULL, NULL, SIZE, 
         NULL, NULL, NULL, NULL, 
-        SIZE
+        SIZE, 1.0
     );
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
@@ -140,7 +140,7 @@ Test(derivative, cross_deriv_yz) {
         y, NULL, NULL, SIZE, 
         z, NULL, NULL, SIZE * SIZE, 
         NULL, NULL, NULL, NULL, 
-        SIZE
+        SIZE, 1.0
     );
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
@@ -168,7 +168,7 @@ Test(derivative, cross_deriv_xz) {
         x, NULL, NULL, 1, 
         z, NULL, NULL, SIZE * SIZE, 
         NULL, NULL, NULL, NULL, 
-        SIZE
+        SIZE, 1.0
     );
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
@@ -196,7 +196,7 @@ Test(derivative, cross_deriv_zx) {
         z, NULL, NULL, SIZE * SIZE, 
         x, NULL, NULL, 1, 
         NULL, NULL, NULL, NULL, 
-        SIZE
+        SIZE, 1.0
     );
 
     cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
@@ -346,7 +346,7 @@ Test(derivative, corner) {
         xy_plus_minus, 
         xy_minus_plus, 
         xy_minus_minus, 
-        SIZE
+        SIZE, 1.0
     );
 
     cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
@@ -407,7 +407,7 @@ Test(derivative, cross_deriv_with_borders) {
                     xy_plus_minus, 
                     xy_minus_plus, 
                     xy_minus_minus, 
-                    SIZE
+                    SIZE, 1.0
                 );
 
                 cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));

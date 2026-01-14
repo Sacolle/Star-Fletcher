@@ -25,9 +25,11 @@ BIN = main
 
 SRCDIR = src
 OBJDIR = objs
+SCRIPTDIR = scripts
 export INCLUDEDIR = src/includes
 
-SRCS := $(wildcard $(SRCDIR)/*.c)
+SRCS_ = argparse.c derivatives.c kernel.c main.c medium.c
+SRCS := $(addprefix $(SRCDIR)/, $(SRCS_))
 OBJS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o,$(SRCS))
 
 .PHONY: all clean run print test debug valgrind
@@ -36,6 +38,16 @@ all: $(BIN)
 
 $(BIN): $(OBJS)
 	$(CC) $(CFLAGS) $(LDLIBS) $^ -o $@
+
+# null rule for this guy
+$(OBJDIR)/cross-deriv.gen.o: 
+	@echo none
+
+# rule to specify dependency
+$(OBJDIR)/derivatives.o: $(SRCDIR)/derivatives.c $(SCRIPTDIR)/cross-deriv-gen.py
+	python3 $(SCRIPTDIR)/cross-deriv-gen.py > $(SRCDIR)/cross-deriv.gen.c
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDEDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(OBJDIR)

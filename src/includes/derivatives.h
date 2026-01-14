@@ -32,31 +32,37 @@
 #define K3 FP_LIT(0.02539682539682539682)  // 8/315
 #define K4 FP_LIT(-0.00178571428571428571) // -1/560
 
-/*
-#define K0 (FP_LIT(-205.0) / FP_LIT(72.0))
-#define K1 (FP_LIT(8.0) / FP_LIT(5.0))
-#define K2 (FP_LIT(-1.0) / FP_LIT(5.0))
-#define K3 (FP_LIT(8.0) / FP_LIT(315.0))
-#define K4 (FP_LIT(-1.0) / FP_LIT(560.0))
 
-*/
+#define MAX_ITEM_BITS (32 - __builtin_clz(MAX_MASK_NUM))
+#define BITMASK_PAIR(x, y) (((x) << MAX_ITEM_BITS) | (y))
+
+// espelha no eixo
+// a deirvação baseia-se na fórmula do índice f(x, y, z) = x + Wy + W²z
+// f(W - 1 - x, y, z) é o ponto espelhado no eixo x, então na lista 0, 1, 2, 3, 4. g(4) = 0 e g(1) = 3.
+// subsitituido isso na fórmula do índice, temos: 
+// f(W - 1 - x, y, z) = W - 1 - x + Wy + W²z
+// que pode ser simplificado nas seguintes etapas para
+// f(W - 1 - x, y, z) = W - 1 - x - x + x + Wy + W²z
+// f(W - 1 - x, y, z) = W - 1 - 2x + f(x, y, z)
+// As formulas para Y e Z são derivadas da mesma forma sendo:
+// f(x, W - 1 - y, z) = W² - W - 2Wy + f(x, y, z)
+// f(x, y, W - 1 - z) = W³ - W² - 2W²z + f(x, y, z)
+//
+// Tudo isso pode ser reduzido para:
+// W * stride - stride - 2 * stride * dir + idx
+// pois a cada direção tem seu stride associado (x: 1, y: W, z: W²)
+// Portanto
+// flip no eixo X deve-se passar stride = 1
+// flip no eixo Y deve-se passar stride = cube_width
+// flip no eixo Z deve-se passar stride = cube_width²
+static inline size_t flip(const size_t line_idx, const size_t idx, const int stride, const int cube_width){
+    return (stride * cube_width - stride) - 2 * line_idx * stride + idx;
+}
 
 FP snd_deriv_dir(
     const FP* block, const FP* block_minus, const FP* block_plus, 
     const int dir, const size_t base_idx, const int stride, 
     const FP d2inv, const int cube_width 
-);
-
-FP snd_deriv_dir_pos(
-    const FP* block, const FP* block_plus, 
-    const int dir, const size_t base_idx, const int stride, 
-    const FP d2inv, const int cube_width
-);
-
-FP snd_deriv_dir_neg(
-    const FP* block, const FP* block_minus, 
-    const int dir, const size_t base_idx, const int stride, 
-    const FP d2inv, const int cube_width
 );
 
 FP cross_deriv_ddir(
@@ -65,7 +71,7 @@ FP cross_deriv_ddir(
     const size_t dir2, const FP* block_minus_d2, const FP* block_plus_d2, const int stride_d2,
     const FP* block_diagonal_plus_plus, const FP* block_diagonal_plus_minus, 
     const FP* block_diagonal_minus_plus, const FP* block_diagonal_minus_minus,
-    const int cube_width
+    const int cube_width, const FP dinv
 );
 
 
