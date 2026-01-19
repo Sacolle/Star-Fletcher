@@ -50,6 +50,12 @@ def is_case(val, w):
         case 'center':
             return False
 
+def proper_dir(val1, endval):
+    if val1 < 0:
+        return -endval
+    else:
+        return endval
+
 def compute_case(x, y, depth_x, depth_y, case1, case2):
     dist_x = abs(x) - depth_x
     dist_y = abs(y) - depth_y
@@ -59,11 +65,11 @@ def compute_case(x, y, depth_x, depth_y, case1, case2):
         case (False, False):
             return ('block', 'base_idx', x, y)
         case (True, False):
-            return (f'block_{case1}_center', 'border_idx_1', dist_x - 1, y)
+            return (f'block_{case1}_center', 'border_idx_1', proper_dir(x, dist_x - 1), y)
         case (False, True):
-            return (f'block_center_{case2}', 'border_idx_2', x, dist_y - 1)
+            return (f'block_center_{case2}', 'border_idx_2', x, proper_dir(y, dist_y - 1))
         case (True, True):
-            return (f"block_{case1}_{case2}", 'border_idx_3', dist_x - 1, dist_y - 1)
+            return (f"block_{case1}_{case2}", 'border_idx_3', proper_dir(x, dist_x - 1), proper_dir(y, dist_y - 1))
 
 def function_impl(w1, w2, lamb):
     out = ''
@@ -115,21 +121,69 @@ def build_mat(d1, d2, lamb):
 
 def p(m, x, y):
     block, idx, n_x, n_y = m[y + 4][x + 4]
-    return f"{block}[{idx} + ({n_x} * stride1) + ({n_y} * stride2)]"
+    symbol = lambda x: '-' if x < 0 else '+'
+    return f"{block}[{idx} {symbol(n_x)} ({abs(n_x)} * stride1) {symbol(n_y)} ({abs(n_y)} * stride2)]"
+
+def i(m, x, y):
+    block, idx, n_x, n_y = m[y + 4][x + 4]
+    return f"({idx} + ({n_x} * stride1) + ({n_y} * stride2))"
+
+def debug(mat):
+    return f'''
+printf("Computed indicies:\\n");
+printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, -4, -4)}, {i(mat, -4, -3)}, {i(mat, -4, -2)}, {i(mat, -4, -1)}, {i(mat, -4, +1)}, {i(mat, -4, +2)}, {i(mat, -4, +3)}, {i(mat, -4, +4)});
+printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, -3, -4)}, {i(mat, -3, -3)}, {i(mat, -3, -2)}, {i(mat, -3, -1)}, {i(mat, -3, +1)}, {i(mat, -3, +2)}, {i(mat, -3, +3)}, {i(mat, -3, +4)});
+printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, -2, -4)}, {i(mat, -2, -3)}, {i(mat, -2, -2)}, {i(mat, -2, -1)}, {i(mat, -2, +1)}, {i(mat, -2, +2)}, {i(mat, -2, +3)}, {i(mat, -2, +4)});
+printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, -1, -4)}, {i(mat, -1, -3)}, {i(mat, -1, -2)}, {i(mat, -1, -1)}, {i(mat, -1, +1)}, {i(mat, -1, +2)}, {i(mat, -1, +3)}, {i(mat, -1, +4)});
+printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\\n");
+printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, 1, -4)}, {i(mat, 1, -3)}, {i(mat, 1, -2)}, {i(mat, 1, -1)}, {i(mat, 1, +1)}, {i(mat, 1, +2)}, {i(mat, 1, +3)}, {i(mat, 1, +4)});
+printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, 2, -4)}, {i(mat, 2, -3)}, {i(mat, 2, -2)}, {i(mat, 2, -1)}, {i(mat, 2, +1)}, {i(mat, 2, +2)}, {i(mat, 2, +3)}, {i(mat, 2, +4)});
+printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, 3, -4)}, {i(mat, 3, -3)}, {i(mat, 3, -2)}, {i(mat, 3, -1)}, {i(mat, 3, +1)}, {i(mat, 3, +2)}, {i(mat, 3, +3)}, {i(mat, 3, +4)});
+printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, 4, -4)}, {i(mat, 4, -3)}, {i(mat, 4, -2)}, {i(mat, 4, -1)}, {i(mat, 4, +1)}, {i(mat, 4, +2)}, {i(mat, 4, +3)}, {i(mat, 4, +4)});
+'''
             
 def make_cross_comp(mat):
-    return f'''return (
-    (L11*({p(mat, +1, +1)}-{p(mat, +1, -1)}-{p(mat, -1, +1)}+{p(mat, -1, -1)})+
-    L12*({p(mat, +1, +2)}-{p(mat, +1, -2)}-{p(mat, -1, +2)}+{p(mat, -1, -2)}+{p(mat, +2, +1)}-{p(mat, +2, -1)}-{p(mat, -2, +1)}+{p(mat, -2, -1)})+
-    L13*({p(mat, +1, +3)}-{p(mat, +1, -3)}-{p(mat, -1, +3)}+{p(mat, -1, -3)}+{p(mat, +3, +1)}-{p(mat, +3, -1)}-{p(mat, -3, +1)}+{p(mat, -3, -1)})+
-    L14*({p(mat, +1, +4)}-{p(mat, +1, -4)}-{p(mat, -1, +4)}+{p(mat, -1, -4)}+{p(mat, +4, +1)}-{p(mat, +4, -1)}-{p(mat, -4, +1)}+{p(mat, -4, -1)})+
-    L22*({p(mat, +2, +2)}-{p(mat, +2, -2)}-{p(mat, -2, +2)}+{p(mat, -2, -2)})+
-    L23*({p(mat, +2, +3)}-{p(mat, +2, -3)}-{p(mat, -2, +3)}+{p(mat, -2, -3)}+{p(mat, +3, +2)}-{p(mat, +3, -2)}-{p(mat, -3, +2)}+{p(mat, -3, -2)})+ 
-    L24*({p(mat, +2, +4)}-{p(mat, +2, -4)}-{p(mat, -2, +4)}+{p(mat, -2, -4)}+{p(mat, +4, +2)}-{p(mat, +4, -2)}-{p(mat, -4, +2)}+{p(mat, -4, -2)})+ 
-    L33*({p(mat, +3, +3)}-{p(mat, +3, -3)}-{p(mat, -3, +3)}+{p(mat, -3, -3)})+
-    L34*({p(mat, +3, +4)}-{p(mat, +3, -4)}-{p(mat, -3, +4)}+{p(mat, -3, -4)}+{p(mat, +4, +3)}-{p(mat, +4, -3)}-{p(mat, -4, +3)}+{p(mat, -4, -3)})+
-    L44*({p(mat, +4, +4)}-{p(mat, +4, -4)}-{p(mat, -4, +4)}+{p(mat, -4, -4)}))*(dinv)
-);'''
+    return f'''
+    {debug(mat)}
+return ((
+    L11 * (
+        {p(mat, +1, +1)} - {p(mat, +1, -1)} - {p(mat, -1, +1)} + {p(mat, -1, -1)}
+    ) +
+    L12 * (
+        {p(mat, +1, +2)} - {p(mat, +1, -2)} - {p(mat, -1, +2)} + {p(mat, -1, -2)} + 
+        {p(mat, +2, +1)} - {p(mat, +2, -1)} - {p(mat, -2, +1)} + {p(mat, -2, -1)}
+    ) +
+    L13 * (
+        {p(mat, +1, +3)} - {p(mat, +1, -3)} - {p(mat, -1, +3)} + {p(mat, -1, -3)} +
+        {p(mat, +3, +1)} - {p(mat, +3, -1)} - {p(mat, -3, +1)} + {p(mat, -3, -1)}
+    ) +
+    L14 * (
+        {p(mat, +1, +4)} - {p(mat, +1, -4)} - {p(mat, -1, +4)} + {p(mat, -1, -4)} +
+        {p(mat, +4, +1)} - {p(mat, +4, -1)} - {p(mat, -4, +1)} + {p(mat, -4, -1)}
+    ) +
+    L22 * (
+        {p(mat, +2, +2)} - {p(mat, +2, -2)} - {p(mat, -2, +2)} + {p(mat, -2, -2)}
+    ) +
+    L23 * (
+        {p(mat, +2, +3)} - {p(mat, +2, -3)} - {p(mat, -2, +3)} + {p(mat, -2, -3)} + 
+        {p(mat, +3, +2)} - {p(mat, +3, -2)} - {p(mat, -3, +2)} + {p(mat, -3, -2)}
+	) +        
+    L24 * (
+        {p(mat, +2, +4)} - {p(mat, +2, -4)} - {p(mat, -2, +4)} + {p(mat, -2, -4)} + 
+        {p(mat, +4, +2)} - {p(mat, +4, -2)} - {p(mat, -4, +2)} + {p(mat, -4, -2)}
+	) +      
+    L33 * (
+        {p(mat, +3, +3)} - {p(mat, +3, -3)} - {p(mat, -3, +3)} + {p(mat, -3, -3)}
+
+	) + 
+    L34 * (
+        {p(mat, +3, +4)} - {p(mat, +3, -4)} - {p(mat, -3, +4)} + {p(mat, -3, -4)} + 
+        {p(mat, +4, +3)} - {p(mat, +4, -3)} - {p(mat, -4, +3)} + {p(mat, -4, -3)}
+	) + 
+    L44 * (
+        {p(mat, +4, +4)} - {p(mat, +4, -4)} - {p(mat, -4, +4)} + {p(mat, -4, -4)}
+    )) * dinv);
+'''
 
 
 def main():
@@ -142,6 +196,7 @@ def main():
     entre os nove quadrantes definidos
 */
 #include <assert.h>
+#include <stdio.h>
           
 #ifdef RELEASE        
 #define UNREACHABLE __builtin_unreachable()

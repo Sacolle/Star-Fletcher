@@ -3,6 +3,8 @@
 #include <criterion/new/assert.h>
 #include <criterion/logging.h>
 
+#include "macros.h"
+
 #include "derivatives.h"
 
 //derivadas definidas dentro do fletcher
@@ -96,159 +98,196 @@ Test(derivative, second_degree_xlin) {
     }
 }
 
-Test(derivative, cross_deriv_xy) {
-    #define SIZE 9
-    static FP matrix[SIZE * SIZE];
+size_t g_volume_width;
+size_t g_cube_width;
+size_t g_width_in_cubes;
 
-    for(int j = 0; j < SIZE; j++){
-        for(int i = 0; i < SIZE; i++){
-            matrix[j * SIZE + i] = FP_RAND();
+FP* g_volume_matrix;
+FP** g_segment_matrix;
+
+void build_matricies(){
+    setup_seed();
+
+    // use 3 because it simplifies
+    g_width_in_cubes = 3;
+    
+    //can change to see the effect of diferent values
+    g_cube_width = 16;
+    g_volume_width = g_cube_width * g_width_in_cubes;
+
+    if((g_volume_matrix = malloc(sizeof(FP) * CUBE(g_volume_width))) == NULL){
+        cr_assert(false);
+    }
+
+    if((g_segment_matrix = malloc(sizeof(FP*) * CUBE(g_width_in_cubes))) == NULL){
+        cr_assert(false);
+    }
+    for(size_t l = 0; l < CUBE(g_width_in_cubes); l++){
+        if((g_segment_matrix[l] = malloc(sizeof(FP) * CUBE(g_cube_width))) == NULL){
+            cr_assert(false);
         }
     }
-    const size_t base_idx = 4 * SIZE + 4;
-    const FP baseline = DerCross((&matrix[0]), base_idx, 1, SIZE, 1.0);
-    const FP my_impl = cross_deriv_ddir(
-        &matrix[0], base_idx, 
-        4, NULL, NULL, 1, 
-        4, NULL, NULL, SIZE, 
-        NULL, NULL, NULL, NULL, 
-        SIZE, 1.0
+
+    for(size_t k = 0; k < g_width_in_cubes; k++)
+    for(size_t j = 0; j < g_width_in_cubes; j++)
+    for(size_t i = 0; i < g_width_in_cubes; i++){
+        for(size_t z = 0; z < g_cube_width; z++)
+        for(size_t y = 0; y < g_cube_width; y++)
+        for(size_t x = 0; x < g_cube_width; x++){
+            const FP rand_val = FP_RAND();
+            g_segment_matrix[block_idx(i, j, k)][cube_idx(x, y, z)] = rand_val;
+            g_volume_matrix[block_cube_to_volume_idx(x, y, z, i, j, k)] = rand_val;
+        }
+    }
+}
+
+void teardown_values(){
+    free(g_volume_matrix);
+    for(size_t l = 0; l < CUBE(g_width_in_cubes); l++){
+        free(g_segment_matrix[l]);
+    }
+    free(g_segment_matrix);
+}
+
+TestSuite(cross_derivative, .init = build_matricies, .fini = teardown_values);
+
+Test(cross_derivative, same_random_values) {
+    for(size_t k = 0; k < g_width_in_cubes; k++)
+    for(size_t j = 0; j < g_width_in_cubes; j++)
+    for(size_t i = 0; i < g_width_in_cubes; i++){
+        FP* block = g_segment_matrix[block_idx(i, j, k)];
+        for(size_t z = 0; z < g_cube_width; z++)
+        for(size_t y = 0; y < g_cube_width; y++)
+        for(size_t x = 0; x < g_cube_width; x++){
+            cr_assert(epsilon_eq(FP_CRIT, 
+                block[cube_idx(x,y,z)], 
+                g_volume_matrix[block_cube_to_volume_idx(x, y, z, i, j, k)], 
+                EPSILON)
+            );
+        }
+    }
+}
+
+Test(cross_derivative, cross_derivative_computation) {
+    FP* center = g_segment_matrix[block_idx(1, 1, 1)];
+
+    for(size_t z = 0; z < g_cube_width; z++)
+    for(size_t y = 0; y < g_cube_width; y++)
+    for(size_t x = 0; x < g_cube_width; x++){
+        const FP baseline_xy = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), 1, g_volume_width, 1.0);
+        const FP baseline_yz = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), g_volume_width, SQUARE(g_volume_width), 1.0);
+        const FP baseline_xz = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), 1, SQUARE(g_volume_width), 1.0);
+
+        const FP my_impl_xy = cross_deriv_ddir(
+            center, cube_idx(x, y, z), 
+            x, g_segment_matrix[block_idx(0, 1, 1)], g_segment_matrix[block_idx(2, 1, 1)], 1, 
+            y, g_segment_matrix[block_idx(1, 0, 1)], g_segment_matrix[block_idx(1, 2, 1)], g_cube_width, 
+            g_segment_matrix[block_idx(2, 2, 1)],
+            g_segment_matrix[block_idx(2, 0, 1)],
+            g_segment_matrix[block_idx(0, 2, 1)],
+            g_segment_matrix[block_idx(0, 0, 1)],
+            g_cube_width, 1.0
+        );
+
+        const FP my_impl_yz = cross_deriv_ddir(
+            center, cube_idx(x, y, z), 
+            y, g_segment_matrix[block_idx(1, 0, 1)], g_segment_matrix[block_idx(1, 2, 1)], g_cube_width, 
+            z, g_segment_matrix[block_idx(1, 1, 0)], g_segment_matrix[block_idx(1, 1, 2)], SQUARE(g_cube_width), 
+            g_segment_matrix[block_idx(1, 2, 2)],
+            g_segment_matrix[block_idx(1, 2, 1)],
+            g_segment_matrix[block_idx(1, 0, 2)],
+            g_segment_matrix[block_idx(1, 0, 0)],
+            g_cube_width, 1.0
+        );
+
+        const FP my_impl_xz = cross_deriv_ddir(
+            center, cube_idx(x, y, z), 
+            x, g_segment_matrix[block_idx(0, 1, 1)], g_segment_matrix[block_idx(2, 1, 1)], 1, 
+            z, g_segment_matrix[block_idx(1, 1, 0)], g_segment_matrix[block_idx(1, 1, 2)], SQUARE(g_cube_width), 
+            g_segment_matrix[block_idx(2, 1, 2)],
+            g_segment_matrix[block_idx(2, 1, 0)],
+            g_segment_matrix[block_idx(0, 1, 2)],
+            g_segment_matrix[block_idx(0, 1, 0)],
+            g_cube_width, 1.0
+        );
+
+        cr_assert(epsilon_eq(FP_CRIT, baseline_xy, my_impl_xy, EPSILON), "(%ld, %ld, %ld)", x, y, z);
+        cr_assert(epsilon_eq(FP_CRIT, baseline_yz, my_impl_yz, EPSILON), "(%ld, %ld, %ld)", x, y, z);
+        cr_assert(epsilon_eq(FP_CRIT, baseline_xz, my_impl_xz, EPSILON), "(%ld, %ld, %ld)", x, y, z);
+    }
+}
+
+Test(cross_derivative, cross_derivative_computation_xy_single_center) {
+    FP* center = g_segment_matrix[block_idx(1, 1, 1)];
+
+    size_t z = g_cube_width / 2;
+    size_t y = g_cube_width / 2;
+    size_t x = g_cube_width / 2;
+    const FP baseline_xy = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), 1, g_volume_width, 1.0);
+    //const FP baseline_yz = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), g_volume_width, SQUARE(g_volume_width), 1.0);
+    //const FP baseline_xz = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), 1, SQUARE(g_volume_width), 1.0);
+
+    const FP my_impl_xy = cross_deriv_ddir(
+        center, cube_idx(x, y, z), 
+        x, g_segment_matrix[block_idx(0, 1, 1)], g_segment_matrix[block_idx(2, 1, 1)], 1, 
+        x, g_segment_matrix[block_idx(1, 0, 1)], g_segment_matrix[block_idx(1, 2, 1)], g_cube_width, 
+        g_segment_matrix[block_idx(2, 2, 1)],
+        g_segment_matrix[block_idx(2, 0, 1)],
+        g_segment_matrix[block_idx(0, 2, 1)],
+        g_segment_matrix[block_idx(0, 0, 1)],
+        g_cube_width, 1.0
     );
 
-    cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
-
-    cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
+    cr_assert(epsilon_eq(FP_CRIT, baseline_xy, my_impl_xy, EPSILON), "(%ld, %ld, %ld)", x, y, z);
 }
 
-Test(derivative, cross_deriv_yz) {
-    #define SIZE 9
-    static FP matrix[SIZE * SIZE * SIZE];
+Test(cross_derivative, cross_derivative_computation_xy_single_corner) {
+    FP* center = g_segment_matrix[block_idx(1, 1, 1)];
 
-    for(int k = 0; k < SIZE; k++){
-        for(int j = 0; j < SIZE; j++){
-            for(int i = 0; i < SIZE; i++){
-                matrix[k * SIZE * SIZE + j * SIZE + i] = FP_RAND();
-            }
-        }
-    }
-    const size_t x = 4, y = 4, z = 4;
-    const size_t base_idx = z * SIZE * SIZE + y * SIZE + x;
+    size_t z = 0;
+    size_t y = 0;
+    size_t x = 0;
+    const FP baseline_xy = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), 1, g_volume_width, 1.0);
+    //const FP baseline_yz = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), g_volume_width, SQUARE(g_volume_width), 1.0);
+    //const FP baseline_xz = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), 1, SQUARE(g_volume_width), 1.0);
 
-    const FP baseline = DerCross((&matrix[0]), base_idx, SIZE, SIZE * SIZE, 1.0);
-    const FP my_impl = cross_deriv_ddir(
-        &matrix[0], base_idx, 
-        y, NULL, NULL, SIZE, 
-        z, NULL, NULL, SIZE * SIZE, 
-        NULL, NULL, NULL, NULL, 
-        SIZE, 1.0
+    const FP my_impl_xy = cross_deriv_ddir(
+        center, cube_idx(x, y, z), 
+        x, g_segment_matrix[block_idx(0, 1, 1)], g_segment_matrix[block_idx(2, 1, 1)], 1, 
+        x, g_segment_matrix[block_idx(1, 0, 1)], g_segment_matrix[block_idx(1, 2, 1)], g_cube_width, 
+        g_segment_matrix[block_idx(2, 2, 1)],
+        g_segment_matrix[block_idx(2, 0, 1)],
+        g_segment_matrix[block_idx(0, 2, 1)],
+        g_segment_matrix[block_idx(0, 0, 1)],
+        g_cube_width, 1.0
     );
 
-    cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
-
-    cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
+    cr_assert(epsilon_eq(FP_CRIT, baseline_xy, my_impl_xy, EPSILON), "(%ld, %ld, %ld)", x, y, z);
 }
 
-Test(derivative, cross_deriv_xz) {
-    #define SIZE 9
-    static FP matrix[SIZE * SIZE * SIZE];
+Test(cross_derivative, cross_derivative_ootwo) {
+    FP* center = g_segment_matrix[block_idx(1, 1, 1)];
 
-    for(int k = 0; k < SIZE; k++){
-        for(int j = 0; j < SIZE; j++){
-            for(int i = 0; i < SIZE; i++){
-                matrix[k * SIZE * SIZE + j * SIZE + i] = FP_RAND();
-            }
-        }
-    }
-    const size_t x = 4, y = 4, z = 4;
-    const size_t base_idx = z * SIZE * SIZE + y * SIZE + x;
+    size_t z = 0;
+    size_t y = 0;
+    size_t x = 2;
+    const FP baseline_yz = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), g_volume_width, SQUARE(g_volume_width), 1.0);
 
-    const FP baseline = DerCross((&matrix[0]), base_idx, 1, SIZE * SIZE, 1.0);
-    const FP my_impl = cross_deriv_ddir(
-        &matrix[0], base_idx, 
-        x, NULL, NULL, 1, 
-        z, NULL, NULL, SIZE * SIZE, 
-        NULL, NULL, NULL, NULL, 
-        SIZE, 1.0
+    const FP my_impl_yz = cross_deriv_ddir(
+        center, cube_idx(x, y, z), 
+        y, g_segment_matrix[block_idx(1, 0, 1)], g_segment_matrix[block_idx(1, 2, 1)], g_cube_width, 
+        z, g_segment_matrix[block_idx(1, 1, 0)], g_segment_matrix[block_idx(1, 1, 2)], SQUARE(g_cube_width), 
+        g_segment_matrix[block_idx(1, 2, 2)],
+        g_segment_matrix[block_idx(1, 2, 1)],
+        g_segment_matrix[block_idx(1, 0, 2)],
+        g_segment_matrix[block_idx(1, 0, 0)],
+        g_cube_width, 1.0
     );
 
-    cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
-
-    cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
+    cr_assert(epsilon_eq(FP_CRIT, baseline_yz, my_impl_yz, EPSILON), "(%ld, %ld, %ld)", x, y, z);
 }
 
-Test(derivative, cross_deriv_zx) {
-    #define SIZE 9
-    static FP matrix[SIZE * SIZE * SIZE];
-
-    for(int k = 0; k < SIZE; k++){
-        for(int j = 0; j < SIZE; j++){
-            for(int i = 0; i < SIZE; i++){
-                matrix[k * SIZE * SIZE + j * SIZE + i] = FP_RAND();
-            }
-        }
-    }
-    const size_t x = 4, y = 4, z = 4;
-    const size_t base_idx = z * SIZE * SIZE + y * SIZE + x;
-
-    const FP baseline = DerCross((&matrix[0]), base_idx, SIZE * SIZE, 1, 1.0);
-    const FP my_impl = cross_deriv_ddir(
-        &matrix[0], base_idx, 
-        z, NULL, NULL, SIZE * SIZE, 
-        x, NULL, NULL, 1, 
-        NULL, NULL, NULL, NULL, 
-        SIZE, 1.0
-    );
-
-    cr_log_info("Baseline value is %lf and my impl is %lf", baseline, my_impl);
-
-    cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
-}
-
-Test(derivative, same_random_values) {
-    #define SIZE 9
-    #define SEG 3
-    #define BIGSIZE (SEG * SIZE)
-    #define IDX(i, j, k, size) (i) + ((j) * size) + ((k) * size * size)
-    #define CB(x) ((x) * (x) * (x))
-    static FP mbig[CB(BIGSIZE)];
-    static FP mseg[CB(SEG)][CB(SIZE)];
-
-    for(int dz = 0; dz < SEG; dz++){
-        for(int dy = 0; dy < SEG; dy++){
-            for(int dx = 0; dx < SEG; dx++){
-                for(int k = 0; k < SIZE; k++){
-                    for(int j = 0; j < SIZE; j++){
-                        for(int i = 0; i < SIZE; i++){
-                            const FP rand_val = FP_RAND();
-                            mseg[IDX(dx, dy, dz, SEG)][IDX(i, j, k, SIZE)] = rand_val;
-                            mbig[IDX(i + dx * SIZE, j + dy * SIZE, k + dz * SIZE, BIGSIZE)] = rand_val;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    for(int dz = 0; dz < SEG; dz++){
-        for(int dy = 0; dy < SEG; dy++){
-            for(int dx = 0; dx < SEG; dx++){
-                FP* block = mseg[IDX(dx, dy, dz, SEG)];
-                for(int k = 0; k < SIZE; k++){
-                    for(int j = 0; j < SIZE; j++){
-                        for(int i = 0; i < SIZE; i++){
-                            
-                            cr_assert(epsilon_eq(FP_CRIT, 
-                                block[IDX(i, j, k, SIZE)], 
-                                mbig[IDX(i + dx * SIZE, j + dy * SIZE, k + dz * SIZE, BIGSIZE)], 
-                                EPSILON)
-                            );
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
+/*
 Test(derivative, match_with_stride) {
     #define SIZE 9
     #define SEG 3
@@ -415,4 +454,4 @@ Test(derivative, cross_deriv_with_borders) {
             }
         }
     }
-}
+} */
