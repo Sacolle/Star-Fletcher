@@ -115,33 +115,38 @@ def build_mat(d1, d2, lamb):
         for x in range(-4, 5):
             if x == 0:
                 continue
-            mat[y + 4][x + 4] = lamb(x, y, d1, d2)
+            mat[x + 4][y + 4] = lamb(x, y, d1, d2)
     return mat
         
+symbol = lambda x: '-' if x < 0 else '+'
 
 def p(m, x, y):
     block, idx, n_x, n_y = m[y + 4][x + 4]
-    symbol = lambda x: '-' if x < 0 else '+'
-    return f"{block}[{idx} {symbol(n_x)} ({abs(n_x)} * stride1) {symbol(n_y)} ({abs(n_y)} * stride2)]"
-
-def i(m, x, y):
-    block, idx, n_x, n_y = m[y + 4][x + 4]
-    return f"({idx} + ({n_x} * stride1) + ({n_y} * stride2))"
+    return f"{block}[{idx} {symbol(n_y)} ({abs(n_y)} * stride2) {symbol(n_x)} ({abs(n_x)} * stride1)]"
 
 def debug(mat):
     return f'''
-printf("Computed indicies:\\n");
-printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, -4, -4)}, {i(mat, -4, -3)}, {i(mat, -4, -2)}, {i(mat, -4, -1)}, {i(mat, -4, +1)}, {i(mat, -4, +2)}, {i(mat, -4, +3)}, {i(mat, -4, +4)});
-printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, -3, -4)}, {i(mat, -3, -3)}, {i(mat, -3, -2)}, {i(mat, -3, -1)}, {i(mat, -3, +1)}, {i(mat, -3, +2)}, {i(mat, -3, +3)}, {i(mat, -3, +4)});
-printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, -2, -4)}, {i(mat, -2, -3)}, {i(mat, -2, -2)}, {i(mat, -2, -1)}, {i(mat, -2, +1)}, {i(mat, -2, +2)}, {i(mat, -2, +3)}, {i(mat, -2, +4)});
-printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, -1, -4)}, {i(mat, -1, -3)}, {i(mat, -1, -2)}, {i(mat, -1, -1)}, {i(mat, -1, +1)}, {i(mat, -1, +2)}, {i(mat, -1, +3)}, {i(mat, -1, +4)});
-printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\\n");
-printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, 1, -4)}, {i(mat, 1, -3)}, {i(mat, 1, -2)}, {i(mat, 1, -1)}, {i(mat, 1, +1)}, {i(mat, 1, +2)}, {i(mat, 1, +3)}, {i(mat, 1, +4)});
-printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, 2, -4)}, {i(mat, 2, -3)}, {i(mat, 2, -2)}, {i(mat, 2, -1)}, {i(mat, 2, +1)}, {i(mat, 2, +2)}, {i(mat, 2, +3)}, {i(mat, 2, +4)});
-printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, 3, -4)}, {i(mat, 3, -3)}, {i(mat, 3, -2)}, {i(mat, 3, -1)}, {i(mat, 3, +1)}, {i(mat, 3, +2)}, {i(mat, 3, +3)}, {i(mat, 3, +4)});
-printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\\n", {i(mat, 4, -4)}, {i(mat, 4, -3)}, {i(mat, 4, -2)}, {i(mat, 4, -1)}, {i(mat, 4, +1)}, {i(mat, 4, +2)}, {i(mat, 4, +3)}, {i(mat, 4, +4)});
+printf("Computed operation:\\n %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f\\n    ) +\\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f + \\n        %.9f - %.9f - %.9f + %.9f\\n    ) +\\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f +\\n        %.9f - %.9f - %.9f + %.9f\\n    ) +\\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f +\\n        %.9f - %.9f - %.9f + %.9f\\n    ) +\\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f\\n    ) +\\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f + \\n        %.9f - %.9f - %.9f + %.9f\\n	) +        \\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f + \\n        %.9f - %.9f - %.9f + %.9f\\n	) +      \\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f\\n\\n	) + \\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f + \\n        %.9f - %.9f - %.9f + %.9f\\n	) + \\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f\\n    )) * %.9f\\n", 
+    L11, {p(mat, +1, +1)}, {p(mat, +1, -1)}, {p(mat, -1, +1)}, {p(mat, -1, -1)} ,
+    L12, {p(mat, +1, +2)}, {p(mat, +1, -2)}, {p(mat, -1, +2)}, {p(mat, -1, -2)}, 
+        {p(mat, +2, +1)}, {p(mat, +2, -1)}, {p(mat, -2, +1)}, {p(mat, -2, -1)} ,
+    L13, {p(mat, +1, +3)}, {p(mat, +1, -3)}, {p(mat, -1, +3)}, {p(mat, -1, -3)},
+        {p(mat, +3, +1)}, {p(mat, +3, -1)}, {p(mat, -3, +1)}, {p(mat, -3, -1)} ,
+    L14, {p(mat, +1, +4)}, {p(mat, +1, -4)}, {p(mat, -1, +4)}, {p(mat, -1, -4)},
+        {p(mat, +4, +1)}, {p(mat, +4, -1)}, {p(mat, -4, +1)}, {p(mat, -4, -1)} ,
+    L22, {p(mat, +2, +2)}, {p(mat, +2, -2)}, {p(mat, -2, +2)}, {p(mat, -2, -2)} ,
+    L23, {p(mat, +2, +3)}, {p(mat, +2, -3)}, {p(mat, -2, +3)}, {p(mat, -2, -3)}, 
+        {p(mat, +3, +2)}, {p(mat, +3, -2)}, {p(mat, -3, +2)}, {p(mat, -3, -2)} , 
+    L24, {p(mat, +2, +4)}, {p(mat, +2, -4)}, {p(mat, -2, +4)}, {p(mat, -2, -4)}, 
+        {p(mat, +4, +2)}, {p(mat, +4, -2)}, {p(mat, -4, +2)}, {p(mat, -4, -2)} ,      
+    L33, {p(mat, +3, +3)}, {p(mat, +3, -3)}, {p(mat, -3, +3)}, {p(mat, -3, -3)} , 
+    L34, {p(mat, +3, +4)}, {p(mat, +3, -4)}, {p(mat, -3, +4)}, {p(mat, -3, -4)}, 
+        {p(mat, +4, +3)}, {p(mat, +4, -3)}, {p(mat, -4, +3)}, {p(mat, -4, -3)}, 
+    L44, {p(mat, +4, +4)}, {p(mat, +4, -4)}, {p(mat, -4, +4)}, {p(mat, -4, -4)}, dinv
+    );
 '''
             
+# {debug(mat)}
 def make_cross_comp(mat):
     return f'''
     {debug(mat)}
