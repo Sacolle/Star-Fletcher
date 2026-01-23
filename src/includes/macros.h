@@ -17,12 +17,13 @@ struct coords3d {
 
 // extract the components
 // https://stackoverflow.com/a/11712864
+// stackoverflow misturou o x com o z no meu contexto, pois o x é o eixo menor
 static inline struct coords3d unindex(size_t index, size_t size){
     struct coords3d c;
 
-    c.x = index / (size * size);
+    c.x = index % size;
     c.y = (index / size) % size;
-    c.z = index % size;
+    c.z = index / (size * size);
 
     return c;
 }
