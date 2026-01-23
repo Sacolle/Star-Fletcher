@@ -7,6 +7,8 @@
 
 #include "derivatives.h"
 
+#include <stdio.h>
+
 //derivadas definidas dentro do fletcher
 #define Der1(p, i, s, dinv) (L1*(p[i+s]-p[i-s])+ L2*(p[i+2*s]-p[i-2*s]) + L3*(p[i+3*s]-p[i-3*s]) + L4*(p[i+4*s]-p[i-4*s]))*(dinv)
 #define Der2(p, i, s, d2inv) ((K0*p[i]+ K1*(p[i+s]+p[i-s])+ K2*(p[i+2*s]+p[i-2*s]) + K3*(p[i+3*s]+p[i-3*s]) + K4*(p[i+4*s]+p[i-4*s]))*(d2inv))
@@ -20,6 +22,19 @@
        L33*(p[i+(3*s21)+(3*s11)]-p[i+(3*s21)-(3*s11)]-p[i-(3*s21)+(3*s11)]+p[i-(3*s21)-(3*s11)])+                                                                                      \
        L34*(p[i+(3*s21)+(4*s11)]-p[i+(3*s21)-(4*s11)]-p[i-(3*s21)+(4*s11)]+p[i-(3*s21)-(4*s11)]+p[i+(4*s21)+(3*s11)]-p[i+(4*s21)-(3*s11)]-p[i-(4*s21)+(3*s11)]+p[i-(4*s21)-(3*s11)])+  \
        L44*(p[i+(4*s21)+(4*s11)]-p[i+(4*s21)-(4*s11)]-p[i-(4*s21)+(4*s11)]+p[i-(4*s21)-(4*s11)]))*(dinv))
+
+#define DerCrossPrint(block, i, s11, s21, dinv) \
+	printf("Computed operation Macro:\n %.9f *  (\n        %.9f - %.9f - %.9f + %.9f\n    ) +\n    %.9f *  (\n        %.9f - %.9f - %.9f + %.9f + \n        %.9f - %.9f - %.9f + %.9f\n    ) +\n    %.9f *  (\n        %.9f - %.9f - %.9f + %.9f +\n        %.9f - %.9f - %.9f + %.9f\n    ) +\n    %.9f *  (\n        %.9f - %.9f - %.9f + %.9f +\n        %.9f - %.9f - %.9f + %.9f\n    ) +\n    %.9f *  (\n        %.9f - %.9f - %.9f + %.9f\n    ) +\n    %.9f *  (\n        %.9f - %.9f - %.9f + %.9f + \n        %.9f - %.9f - %.9f + %.9f\n	) +        \n    %.9f *  (\n        %.9f - %.9f - %.9f + %.9f + \n        %.9f - %.9f - %.9f + %.9f\n	) +      \n    %.9f *  (\n        %.9f - %.9f - %.9f + %.9f\n\n	) + \n    %.9f *  (\n        %.9f - %.9f - %.9f + %.9f + \n        %.9f - %.9f - %.9f + %.9f\n	) + \n    %.9f *  (\n        %.9f - %.9f - %.9f + %.9f\n    )) * %.9f\n", \
+       L11, block[i+s21+s11], block[i+s21-s11], block[i-s21+s11], block[i-s21-s11],                                                                                    \
+       L12, block[i+s21+(2*s11)], block[i+s21-(2*s11)], block[i-s21+(2*s11)], block[i-s21-(2*s11)], block[i+(2*s21)+s11], block[i+(2*s21)-s11], block[i-(2*s21)+s11], block[i-(2*s21)-s11],                                  \
+       L13, block[i+s21+(3*s11)], block[i+s21-(3*s11)], block[i-s21+(3*s11)], block[i-s21-(3*s11)], block[i+(3*s21)+s11], block[i+(3*s21)-s11], block[i-(3*s21)+s11], block[i-(3*s21)-s11],                                  \
+       L14, block[i+s21+(4*s11)], block[i+s21-(4*s11)], block[i-s21+(4*s11)], block[i-s21-(4*s11)], block[i+(4*s21)+s11], block[i+(4*s21)-s11], block[i-(4*s21)+s11], block[i-(4*s21)-s11],                                  \
+       L22, block[i+(2*s21)+(2*s11)], block[i+(2*s21)-(2*s11)], block[i-(2*s21)+(2*s11)], block[i-(2*s21)-(2*s11)],                                                                                      \
+       L23, block[i+(2*s21)+(3*s11)], block[i+(2*s21)-(3*s11)], block[i-(2*s21)+(3*s11)], block[i-(2*s21)-(3*s11)], block[i+(3*s21)+(2*s11)], block[i+(3*s21)-(2*s11)], block[i-(3*s21)+(2*s11)], block[i-(3*s21)-(2*s11)],  \
+       L24, block[i+(2*s21)+(4*s11)], block[i+(2*s21)-(4*s11)], block[i-(2*s21)+(4*s11)], block[i-(2*s21)-(4*s11)], block[i+(4*s21)+(2*s11)], block[i+(4*s21)-(2*s11)], block[i-(4*s21)+(2*s11)], block[i-(4*s21)-(2*s11)],  \
+       L33, block[i+(3*s21)+(3*s11)], block[i+(3*s21)-(3*s11)], block[i-(3*s21)+(3*s11)], block[i-(3*s21)-(3*s11)],                                                                                      \
+       L34, block[i+(3*s21)+(4*s11)], block[i+(3*s21)-(4*s11)], block[i-(3*s21)+(4*s11)], block[i-(3*s21)-(4*s11)], block[i+(4*s21)+(3*s11)], block[i+(4*s21)-(3*s11)], block[i-(4*s21)+(3*s11)], block[i-(4*s21)-(3*s11)],  \
+       L44, block[i+(4*s21)+(4*s11)], block[i+(4*s21)-(4*s11)], block[i-(4*s21)+(4*s11)], block[i-(4*s21)-(4*s11)], dinv)
 
 #define SEED 42
 
@@ -194,7 +209,7 @@ Test(cross_derivative, cross_derivative_computation) {
             y, g_segment_matrix[block_idx(1, 0, 1)], g_segment_matrix[block_idx(1, 2, 1)], g_cube_width, 
             z, g_segment_matrix[block_idx(1, 1, 0)], g_segment_matrix[block_idx(1, 1, 2)], SQUARE(g_cube_width), 
             g_segment_matrix[block_idx(1, 2, 2)],
-            g_segment_matrix[block_idx(1, 2, 1)],
+            g_segment_matrix[block_idx(1, 2, 0)],
             g_segment_matrix[block_idx(1, 0, 2)],
             g_segment_matrix[block_idx(1, 0, 0)],
             g_cube_width, 1.0
@@ -273,185 +288,66 @@ Test(cross_derivative, cross_derivative_ootwo) {
     size_t x = 2;
     const FP baseline_yz = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), g_volume_width, SQUARE(g_volume_width), 1.0);
 
+    // DerCrossPrint(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), g_volume_width, SQUARE(g_volume_width), 1.0);
+
     const FP my_impl_yz = cross_deriv_ddir(
         center, cube_idx(x, y, z), 
         y, g_segment_matrix[block_idx(1, 0, 1)], g_segment_matrix[block_idx(1, 2, 1)], g_cube_width, 
         z, g_segment_matrix[block_idx(1, 1, 0)], g_segment_matrix[block_idx(1, 1, 2)], SQUARE(g_cube_width), 
         g_segment_matrix[block_idx(1, 2, 2)],
-        g_segment_matrix[block_idx(1, 2, 1)],
+        g_segment_matrix[block_idx(1, 2, 0)],
         g_segment_matrix[block_idx(1, 0, 2)],
         g_segment_matrix[block_idx(1, 0, 0)],
         g_cube_width, 1.0
     );
-
+    fflush(stdout);
     cr_assert(epsilon_eq(FP_CRIT, baseline_yz, my_impl_yz, EPSILON), "(%ld, %ld, %ld)", x, y, z);
 }
 
-/*
-Test(derivative, match_with_stride) {
-    #define SIZE 9
-    #define SEG 3
-    #define BIGSIZE (SEG * SIZE)
-    #define IDX(i, j, k, size) (i) + ((j) * size) + ((k) * size * size)
-    #define CB(x) ((x) * (x) * (x))
-    static FP mbig[CB(BIGSIZE)];
-    static FP mseg[CB(SEG)][CB(SIZE)];
+Test(cross_derivative, cross_derivative_otwelveo_yz) {
+    FP* center = g_segment_matrix[block_idx(1, 1, 1)];
 
-    for(int dz = 0; dz < SEG; dz++){
-        for(int dy = 0; dy < SEG; dy++){
-            for(int dx = 0; dx < SEG; dx++){
-                for(int k = 0; k < SIZE; k++){
-                    for(int j = 0; j < SIZE; j++){
-                        for(int i = 0; i < SIZE; i++){
-                            const FP rand_val = FP_RAND();
-                            mseg[IDX(dx, dy, dz, SEG)][IDX(i, j, k, SIZE)] = rand_val;
-                            mbig[IDX(i + dx * SIZE, j + dy * SIZE, k + dz * SIZE, BIGSIZE)] = rand_val;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    for(int dz = 0; dz < SEG; dz++){
-        for(int dy = 0; dy < SEG; dy++){
-            for(int dx = 0; dx < SEG; dx++){
-                FP* block = mseg[IDX(dx, dy, dz, SEG)];
-                size_t sk = IDX(dx * SIZE, dy * SIZE, dz * SIZE, BIGSIZE);
-                for(int k = 0; k < SIZE; k++){
-                    size_t sj = sk;
-                    for(int j = 0; j < SIZE; j++){
-                        size_t si = sj;
-                        for(int i = 0; i < SIZE; i++){
-                            cr_assert(epsilon_eq(FP_CRIT, 
-                                block[IDX(i, j, k, SIZE)], 
-                                mbig[si], 
-                                EPSILON)
-                            );
-                            si += 1;
-                        }
-                        sj += BIGSIZE;
-                    }
-                    sk += BIGSIZE * BIGSIZE;
-                }
-            }
-        }
-    }
-}
+    size_t z = 0;
+    size_t y = 12;
+    size_t x = 0;
+    const FP baseline_yz = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), g_volume_width, SQUARE(g_volume_width), 1.0);
 
-Test(derivative, corner) {
-    #define SIZE 9
-    #define SEG 3
-    #define BIGSIZE (SEG * SIZE)
-    #define IDX(i, j, k, size) (i) + ((j) * size) + ((k) * size * size)
-    #define CB(x) ((x) * (x) * (x))
-    static FP mbig[CB(BIGSIZE)];
-    static FP mseg[CB(SEG)][CB(SIZE)];
+    //DerCrossPrint(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), g_volume_width, SQUARE(g_volume_width), 1.0);
 
-    for(int dz = 0; dz < SEG; dz++){
-        for(int dy = 0; dy < SEG; dy++){
-            for(int dx = 0; dx < SEG; dx++){
-                for(int k = 0; k < SIZE; k++){
-                    for(int j = 0; j < SIZE; j++){
-                        for(int i = 0; i < SIZE; i++){
-                            const FP rand_val = FP_RAND();
-                            mseg[IDX(dx, dy, dz, SEG)][IDX(i, j, k, SIZE)] = rand_val;
-                            mbig[IDX(i + dx * SIZE, j + dy * SIZE, k + dz * SIZE, BIGSIZE)] = rand_val;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    FP* x_minus = mseg[IDX(0,1,1,SEG)];
-    FP* x_plus = mseg[IDX(2,1,1,SEG)];
-
-    FP* y_minus = mseg[IDX(1,0,1,SEG)];
-    FP* y_plus = mseg[IDX(1,2,1,SEG)];
-
-    FP* xy_minus_minus = mseg[IDX(0,0,1,SEG)];
-    FP* xy_plus_minus  = mseg[IDX(2,0,1,SEG)];
-
-    FP* xy_minus_plus = mseg[IDX(0,2,1,SEG)];
-    FP* xy_plus_plus  = mseg[IDX(2,2,1,SEG)];
-
-
-    const FP baseline = DerCross((&mbig[0]), IDX(SIZE, SIZE, SIZE, BIGSIZE), 1, BIGSIZE, 1.0);
-
-    const FP my_impl = cross_deriv_ddir(
-        mseg[IDX(1, 1, 1, SEG)], 0, 
-        0, x_minus, x_plus, 1, 
-        0, y_minus, y_plus, SIZE, 
-        xy_plus_plus, 
-        xy_plus_minus, 
-        xy_minus_plus, 
-        xy_minus_minus, 
-        SIZE, 1.0
+    const FP my_impl_yz = cross_deriv_ddir(
+        center, cube_idx(x, y, z), 
+        y, g_segment_matrix[block_idx(1, 0, 1)], g_segment_matrix[block_idx(1, 2, 1)], g_cube_width, 
+        z, g_segment_matrix[block_idx(1, 1, 0)], g_segment_matrix[block_idx(1, 1, 2)], SQUARE(g_cube_width), 
+        g_segment_matrix[block_idx(1, 2, 2)],
+        g_segment_matrix[block_idx(1, 2, 0)],
+        g_segment_matrix[block_idx(1, 0, 2)],
+        g_segment_matrix[block_idx(1, 0, 0)],
+        g_cube_width, 1.0
     );
-
-    cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
-
+    fflush(stdout);
+    cr_assert(epsilon_eq(FP_CRIT, baseline_yz, my_impl_yz, EPSILON), "(%ld, %ld, %ld)", x, y, z);
 }
 
-Test(derivative, cross_deriv_with_borders) {
-    #define SIZE 9
-    #define SEG 3
-    #define BIGSIZE (SEG * SIZE)
-    #define IDX(i, j, k, size) (i) + ((j) * size) + ((k) * size * size)
-    #define CB(x) ((x) * (x) * (x))
-    static FP mbig[CB(BIGSIZE)];
-    static FP mseg[CB(SEG)][CB(SIZE)];
+Test(cross_derivative, cross_derivative_otwelveo) {
+    FP* center = g_segment_matrix[block_idx(1, 1, 1)];
 
-    for(int dz = 0; dz < SEG; dz++){
-        for(int dy = 0; dy < SEG; dy++){
-            for(int dx = 0; dx < SEG; dx++){
-                for(int k = 0; k < SIZE; k++){
-                    for(int j = 0; j < SIZE; j++){
-                        for(int i = 0; i < SIZE; i++){
-                            const FP rand_val = FP_RAND();
-                            mseg[IDX(dx, dy, dz, SEG)][IDX(i, j, k, SIZE)] = rand_val;
-                            mbig[IDX(i + dx * SIZE, j + dy * SIZE, k + dz * SIZE, BIGSIZE)] = rand_val;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    //start of the central cube
-    const size_t x = SIZE, y =  SIZE, z = SIZE;
-    const size_t base_idx = IDX(x,y,z, BIGSIZE);
+    size_t z = 0;
+    size_t y = 12;
+    size_t x = 0;
+    const FP baseline_xz = DerCross(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), 1, SQUARE(g_volume_width), 1.0);
 
-    FP* x_minus = mseg[IDX(0,1,1,SEG)];
-    FP* x_plus = mseg[IDX(2,1,1,SEG)];
+    //DerCrossPrint(g_volume_matrix, block_cube_to_volume_idx(x, y, z, 1, 1, 1), 1, SQUARE(g_volume_width), 1.0);
 
-    FP* y_minus = mseg[IDX(1,0,1,SEG)];
-    FP* y_plus = mseg[IDX(1,2,1,SEG)];
-
-    FP* xy_minus_minus = mseg[IDX(0,0,1,SEG)];
-    FP* xy_plus_minus  = mseg[IDX(2,0,1,SEG)];
-
-    FP* xy_minus_plus = mseg[IDX(0,2,1,SEG)];
-    FP* xy_plus_plus  = mseg[IDX(2,2,1,SEG)];
-
-
-    for(int k = 0; k < SIZE; k++){
-        for(int j = 0; j < SIZE; j++){
-            for(int i = 0; i < SIZE; i++){
-                const FP baseline = DerCross((&mbig[0]), IDX(i + SIZE, j + SIZE, k + SIZE, BIGSIZE), 1, BIGSIZE, 1.0);
-
-                const FP my_impl = cross_deriv_ddir(
-                    mseg[IDX(1, 1, 1, SEG)], IDX(i,j,k, SIZE), 
-                    i, x_minus, x_plus, 1, 
-                    j, y_minus, y_plus, SIZE, 
-                    xy_plus_plus, 
-                    xy_plus_minus, 
-                    xy_minus_plus, 
-                    xy_minus_minus, 
-                    SIZE, 1.0
-                );
-
-                cr_assert(epsilon_eq(FP_CRIT, baseline, my_impl, EPSILON));
-
-            }
-        }
-    }
-} */
+    const FP my_impl_xz = cross_deriv_ddir(
+        center, cube_idx(x, y, z), 
+        x, g_segment_matrix[block_idx(0, 1, 1)], g_segment_matrix[block_idx(2, 1, 1)], 1, 
+        z, g_segment_matrix[block_idx(1, 1, 0)], g_segment_matrix[block_idx(1, 1, 2)], SQUARE(g_cube_width), 
+        g_segment_matrix[block_idx(2, 1, 2)],
+        g_segment_matrix[block_idx(2, 1, 0)],
+        g_segment_matrix[block_idx(0, 1, 2)],
+        g_segment_matrix[block_idx(0, 1, 0)],
+        g_cube_width, 1.0
+    );
+    fflush(stdout);
+    cr_assert(epsilon_eq(FP_CRIT, baseline_xz, my_impl_xz, EPSILON), "(%ld, %ld, %ld)", x, y, z);
+}

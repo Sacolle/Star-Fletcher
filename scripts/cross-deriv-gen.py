@@ -1,5 +1,7 @@
 from functools import partial
 
+import os
+
 def tab(text, amount):
     return '\n'.join([('\t' * amount) + t for t in text.splitlines()])
 
@@ -55,8 +57,8 @@ def proper_dir(val1, endval):
         return -endval
     else:
         return endval
-
-def compute_case(x, y, depth_x, depth_y, case1, case2):
+# por algum motivo essa é a ordem certa, y,x 
+def compute_case(y, x, depth_x, depth_y, case1, case2):
     dist_x = abs(x) - depth_x
     dist_y = abs(y) - depth_y
     change_x = is_case(x, case1) and dist_x > 0 # nums go from -4 to 4
@@ -75,13 +77,13 @@ def function_impl(w1, w2, lamb):
     out = ''
     if w1 == 'center':
         if w2 == 'center':
-            out += tab(make_cross_comp(build_mat(4, 4, lamb)), 1)
+            out += tab(make_cross_comp(4, 4, lamb), 1)
         else:
             out += 'switch (depth2){'
             for d2 in range(0, 4):
                 out += f'''
     case {d2}:
-{tab(make_cross_comp(build_mat(4, d2, lamb)), 2)}'''
+{tab(make_cross_comp(4, d2, lamb), 2)}'''
             out += '\n\tdefault: UNREACHABLE;\n\t}'
     else:
         if w2 == 'center':
@@ -89,7 +91,7 @@ def function_impl(w1, w2, lamb):
             for d1 in range(0, 4):
                 out += f'''
     case {d1}:
-{tab(make_cross_comp(build_mat(d1, 4, lamb)),2)}'''
+{tab(make_cross_comp(d1, 4, lamb),2)}'''
             out += '\n\tdefault: UNREACHABLE;\n\t}'
         else:
             out += function_impl_full(lamb)
@@ -103,90 +105,80 @@ def function_impl_full(lamb):
         for d2 in range(0, 4):
             out += f'''
     case BITMASK_PAIR({d1}, {d2}):
-{tab(make_cross_comp(build_mat(d1, d2, lamb)), 2)}'''
+{tab(make_cross_comp(d1, d2, lamb), 2)}'''
     out += '\n\tdefault: UNREACHABLE; \n\t}'
     return out
-
-def build_mat(d1, d2, lamb):
-    mat = [[None] * 9 for _ in range(9)]
-    for y in range(-4, 5):
-        if y == 0:
-            continue
-        for x in range(-4, 5):
-            if x == 0:
-                continue
-            mat[x + 4][y + 4] = lamb(x, y, d1, d2)
-    return mat
         
 symbol = lambda x: '-' if x < 0 else '+'
 
-def p(m, x, y):
-    block, idx, n_x, n_y = m[y + 4][x + 4]
-    return f"{block}[{idx} {symbol(n_y)} ({abs(n_y)} * stride2) {symbol(n_x)} ({abs(n_x)} * stride1)]"
+def assignment(x, y, d1, d2, lamb):
+    block, idx, n_x, n_y = lamb(x, y, d1, d2)
+    return f"{block}[{idx} + ({n_y} * stride2) + ({n_x} * stride1)]"
 
-def debug(mat):
+def debug(p):
     return f'''
 printf("Computed operation:\\n %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f\\n    ) +\\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f + \\n        %.9f - %.9f - %.9f + %.9f\\n    ) +\\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f +\\n        %.9f - %.9f - %.9f + %.9f\\n    ) +\\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f +\\n        %.9f - %.9f - %.9f + %.9f\\n    ) +\\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f\\n    ) +\\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f + \\n        %.9f - %.9f - %.9f + %.9f\\n	) +        \\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f + \\n        %.9f - %.9f - %.9f + %.9f\\n	) +      \\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f\\n\\n	) + \\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f + \\n        %.9f - %.9f - %.9f + %.9f\\n	) + \\n    %.9f *  (\\n        %.9f - %.9f - %.9f + %.9f\\n    )) * %.9f\\n", 
-    L11, {p(mat, +1, +1)}, {p(mat, +1, -1)}, {p(mat, -1, +1)}, {p(mat, -1, -1)} ,
-    L12, {p(mat, +1, +2)}, {p(mat, +1, -2)}, {p(mat, -1, +2)}, {p(mat, -1, -2)}, 
-        {p(mat, +2, +1)}, {p(mat, +2, -1)}, {p(mat, -2, +1)}, {p(mat, -2, -1)} ,
-    L13, {p(mat, +1, +3)}, {p(mat, +1, -3)}, {p(mat, -1, +3)}, {p(mat, -1, -3)},
-        {p(mat, +3, +1)}, {p(mat, +3, -1)}, {p(mat, -3, +1)}, {p(mat, -3, -1)} ,
-    L14, {p(mat, +1, +4)}, {p(mat, +1, -4)}, {p(mat, -1, +4)}, {p(mat, -1, -4)},
-        {p(mat, +4, +1)}, {p(mat, +4, -1)}, {p(mat, -4, +1)}, {p(mat, -4, -1)} ,
-    L22, {p(mat, +2, +2)}, {p(mat, +2, -2)}, {p(mat, -2, +2)}, {p(mat, -2, -2)} ,
-    L23, {p(mat, +2, +3)}, {p(mat, +2, -3)}, {p(mat, -2, +3)}, {p(mat, -2, -3)}, 
-        {p(mat, +3, +2)}, {p(mat, +3, -2)}, {p(mat, -3, +2)}, {p(mat, -3, -2)} , 
-    L24, {p(mat, +2, +4)}, {p(mat, +2, -4)}, {p(mat, -2, +4)}, {p(mat, -2, -4)}, 
-        {p(mat, +4, +2)}, {p(mat, +4, -2)}, {p(mat, -4, +2)}, {p(mat, -4, -2)} ,      
-    L33, {p(mat, +3, +3)}, {p(mat, +3, -3)}, {p(mat, -3, +3)}, {p(mat, -3, -3)} , 
-    L34, {p(mat, +3, +4)}, {p(mat, +3, -4)}, {p(mat, -3, +4)}, {p(mat, -3, -4)}, 
-        {p(mat, +4, +3)}, {p(mat, +4, -3)}, {p(mat, -4, +3)}, {p(mat, -4, -3)}, 
-    L44, {p(mat, +4, +4)}, {p(mat, +4, -4)}, {p(mat, -4, +4)}, {p(mat, -4, -4)}, dinv
+    L11, {p(+1, +1)}, {p(+1, -1)}, {p(-1, +1)}, {p(-1, -1)} ,
+    L12, {p(+1, +2)}, {p(+1, -2)}, {p(-1, +2)}, {p(-1, -2)}, 
+        {p(+2, +1)}, {p(+2, -1)}, {p(-2, +1)}, {p(-2, -1)} ,
+    L13, {p(+1, +3)}, {p(+1, -3)}, {p(-1, +3)}, {p(-1, -3)},
+        {p(+3, +1)}, {p(+3, -1)}, {p(-3, +1)}, {p(-3, -1)} ,
+    L14, {p(+1, +4)}, {p(+1, -4)}, {p(-1, +4)}, {p(-1, -4)},
+        {p(+4, +1)}, {p(+4, -1)}, {p(-4, +1)}, {p(-4, -1)} ,
+    L22, {p(+2, +2)}, {p(+2, -2)}, {p(-2, +2)}, {p(-2, -2)} ,
+    L23, {p(+2, +3)}, {p(+2, -3)}, {p(-2, +3)}, {p(-2, -3)}, 
+        {p(+3, +2)}, {p(+3, -2)}, {p(-3, +2)}, {p(-3, -2)} , 
+    L24, {p(+2, +4)}, {p(+2, -4)}, {p(-2, +4)}, {p(-2, -4)}, 
+        {p(+4, +2)}, {p(+4, -2)}, {p(-4, +2)}, {p(-4, -2)} ,      
+    L33, {p(+3, +3)}, {p(+3, -3)}, {p(-3, +3)}, {p(-3, -3)} , 
+    L34, {p(+3, +4)}, {p(+3, -4)}, {p(-3, +4)}, {p(-3, -4)}, 
+        {p(+4, +3)}, {p(+4, -3)}, {p(-4, +3)}, {p(-4, -3)}, 
+    L44, {p(+4, +4)}, {p(+4, -4)}, {p(-4, +4)}, {p(-4, -4)}, dinv
     );
 '''
             
-# {debug(mat)}
-def make_cross_comp(mat):
+# {debug(p)}
+def make_cross_comp(d1, d2, lamb):
+    p = partial(assignment, d1 = d1, d2 = d2, lamb= lamb)
     return f'''
-    {debug(mat)}
+{debug(p) if os.environ.get('PRINTOUT') is not None else ""}
 return ((
     L11 * (
-        {p(mat, +1, +1)} - {p(mat, +1, -1)} - {p(mat, -1, +1)} + {p(mat, -1, -1)}
+        {p(+1, +1)} - {p(+1, -1)} - {p(-1, +1)} + {p(-1, -1)}
     ) +
     L12 * (
-        {p(mat, +1, +2)} - {p(mat, +1, -2)} - {p(mat, -1, +2)} + {p(mat, -1, -2)} + 
-        {p(mat, +2, +1)} - {p(mat, +2, -1)} - {p(mat, -2, +1)} + {p(mat, -2, -1)}
+        {p(+1, +2)} - {p(+1, -2)} - {p(-1, +2)} + {p(-1, -2)} + 
+        {p(+2, +1)} - {p(+2, -1)} - {p(-2, +1)} + {p(-2, -1)}
     ) +
     L13 * (
-        {p(mat, +1, +3)} - {p(mat, +1, -3)} - {p(mat, -1, +3)} + {p(mat, -1, -3)} +
-        {p(mat, +3, +1)} - {p(mat, +3, -1)} - {p(mat, -3, +1)} + {p(mat, -3, -1)}
+        {p(+1, +3)} - {p(+1, -3)} - {p(-1, +3)} + {p(-1, -3)} +
+        {p(+3, +1)} - {p(+3, -1)} - {p(-3, +1)} + {p(-3, -1)}
     ) +
     L14 * (
-        {p(mat, +1, +4)} - {p(mat, +1, -4)} - {p(mat, -1, +4)} + {p(mat, -1, -4)} +
-        {p(mat, +4, +1)} - {p(mat, +4, -1)} - {p(mat, -4, +1)} + {p(mat, -4, -1)}
+        {p(+1, +4)} - {p(+1, -4)} - {p(-1, +4)} + {p(-1, -4)} +
+        {p(+4, +1)} - {p(+4, -1)} - {p(-4, +1)} + {p(-4, -1)}
     ) +
     L22 * (
-        {p(mat, +2, +2)} - {p(mat, +2, -2)} - {p(mat, -2, +2)} + {p(mat, -2, -2)}
+        {p(+2, +2)} - {p(+2, -2)} - {p(-2, +2)} + {p(-2, -2)}
     ) +
     L23 * (
-        {p(mat, +2, +3)} - {p(mat, +2, -3)} - {p(mat, -2, +3)} + {p(mat, -2, -3)} + 
-        {p(mat, +3, +2)} - {p(mat, +3, -2)} - {p(mat, -3, +2)} + {p(mat, -3, -2)}
+        {p(+2, +3)} - {p(+2, -3)} - {p(-2, +3)} + {p(-2, -3)} + 
+        {p(+3, +2)} - {p(+3, -2)} - {p(-3, +2)} + {p(-3, -2)}
 	) +        
     L24 * (
-        {p(mat, +2, +4)} - {p(mat, +2, -4)} - {p(mat, -2, +4)} + {p(mat, -2, -4)} + 
-        {p(mat, +4, +2)} - {p(mat, +4, -2)} - {p(mat, -4, +2)} + {p(mat, -4, -2)}
+        {p(+2, +4)} - {p(+2, -4)} - {p(-2, +4)} + {p(-2, -4)} + 
+        {p(+4, +2)} - {p(+4, -2)} - {p(-4, +2)} + {p(-4, -2)}
 	) +      
     L33 * (
-        {p(mat, +3, +3)} - {p(mat, +3, -3)} - {p(mat, -3, +3)} + {p(mat, -3, -3)}
+        {p(+3, +3)} - {p(+3, -3)} - {p(-3, +3)} + {p(-3, -3)}
 
 	) + 
     L34 * (
-        {p(mat, +3, +4)} - {p(mat, +3, -4)} - {p(mat, -3, +4)} + {p(mat, -3, -4)} + 
-        {p(mat, +4, +3)} - {p(mat, +4, -3)} - {p(mat, -4, +3)} + {p(mat, -4, -3)}
+        {p(+3, +4)} - {p(+3, -4)} - {p(-3, +4)} + {p(-3, -4)} + 
+        {p(+4, +3)} - {p(+4, -3)} - {p(-4, +3)} + {p(-4, -3)}
 	) + 
     L44 * (
-        {p(mat, +4, +4)} - {p(mat, +4, -4)} - {p(mat, -4, +4)} + {p(mat, -4, -4)}
+        {p(+4, +4)} - {p(+4, -4)} - {p(-4, +4)} + {p(-4, -4)}
     )) * dinv);
 '''
 
@@ -214,7 +206,7 @@ def main():
           
 #define MAX_MASK_NUM 4
 ''')
-    # default_case = make_cross_comp(build_mat('center', 'center', partial(compute_case, case1='center', case2='center')))
+    # default_case = make_cross_comp('center', 'center', partial(compute_case, case1='center', case2='center'))
     for w1 in ['neg', 'pos', 'center']:
         for w2 in ['neg', 'pos', 'center']:
             curr_lambda = partial(compute_case, case1=w1, case2=w2)

@@ -4,14 +4,15 @@ CRITERION_LDLIBS = $(shell pkg-config --libs criterion)
 
 ALL_TESTS := $(patsubst $(CURDIR)/%.c, %,$(wildcard $(CURDIR)/*.c))
 
-CFLAGS = -g -O0 -Wno-cpp -lm
+CFLAGS = -g3 -O0 -Wno-cpp -lm
 
 # se o criterion não largar a porta depois de ser finalizado, roda:
 # fuser -k 1234/tcp
 all: $(ALL_TESTS)
 	$(foreach test, $^, ./$(test).out $(ARGS);)
 	
-deriv-tests: $(CURDIR)/deriv-tests.c $(PARENT_DIR)/src/derivatives.c $(PARENT_DIR)/src/includes/derivatives.h
+deriv-tests: $(CURDIR)/deriv-tests.c $(PARENT_DIR)/src/derivatives.c $(PARENT_DIR)/src/includes/derivatives.h $(PARENT_DIR)/scripts/scripts/cross-deriv-gen.py
+	python3 $(PARENT_DIR)/scripts/cross-deriv-gen.py > src/cross-deriv.gen.c
 	$(CC) -o $@.out $^ $(CRITERION_CFLAGS) $(CRITERION_LDLIBS) -I $(PARENT_DIR)/$(INCLUDEDIR) $(CFLAGS)
 
 

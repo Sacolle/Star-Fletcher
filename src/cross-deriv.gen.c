@@ -39,835 +39,659 @@ FP cross_deriv_neg_neg(
     switch (BITMASK_PAIR(depth1, depth2)){
     case BITMASK_PAIR(0, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-3 * stride1) + (-3 * stride2)), (border_idx_3 + (-3 * stride1) + (-2 * stride2)), (border_idx_3 + (-3 * stride1) + (-1 * stride2)), (border_idx_3 + (-3 * stride1) + (0 * stride2)), (border_idx_1 + (-3 * stride1) + (1 * stride2)), (border_idx_1 + (-3 * stride1) + (2 * stride2)), (border_idx_1 + (-3 * stride1) + (3 * stride2)), (border_idx_1 + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-2 * stride1) + (-3 * stride2)), (border_idx_3 + (-2 * stride1) + (-2 * stride2)), (border_idx_3 + (-2 * stride1) + (-1 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_1 + (-2 * stride1) + (3 * stride2)), (border_idx_1 + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-1 * stride1) + (-3 * stride2)), (border_idx_3 + (-1 * stride1) + (-2 * stride2)), (border_idx_3 + (-1 * stride1) + (-1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-3 * stride2)), (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-3 * stride2)), (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-3 * stride2)), (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-3 * stride2)), (border_idx_2 + (3 * stride1) + (-2 * stride2)), (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-3 * stride2)), (border_idx_2 + (4 * stride1) + (-2 * stride2)), (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-2 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (3 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (1 * stride2)] + block_neg_neg[border_idx_3 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (1 * stride1)] + block_neg_neg[border_idx_3 + (-3 * stride2) + (0 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (-1 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (-3 * stride2) + (-1 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (-2 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-3 * stride2) + (-2 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (3 * stride1) - (3 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-3 * stride2) + (-3 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(0, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-3 * stride1) + (-2 * stride2)), (border_idx_3 + (-3 * stride1) + (-1 * stride2)), (border_idx_3 + (-3 * stride1) + (0 * stride2)), (border_idx_1 + (-3 * stride1) + (-1 * stride2)), (border_idx_1 + (-3 * stride1) + (1 * stride2)), (border_idx_1 + (-3 * stride1) + (2 * stride2)), (border_idx_1 + (-3 * stride1) + (3 * stride2)), (border_idx_1 + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-2 * stride1) + (-2 * stride2)), (border_idx_3 + (-2 * stride1) + (-1 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_1 + (-2 * stride1) + (3 * stride2)), (border_idx_1 + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-1 * stride1) + (-2 * stride2)), (border_idx_3 + (-1 * stride1) + (-1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-2 * stride2)), (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-2 * stride2)), (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-1 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (-1 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-2 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (-2 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (-3 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(0, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-3 * stride1) + (-1 * stride2)), (border_idx_3 + (-3 * stride1) + (0 * stride2)), (border_idx_1 + (-3 * stride1) + (-2 * stride2)), (border_idx_1 + (-3 * stride1) + (-1 * stride2)), (border_idx_1 + (-3 * stride1) + (1 * stride2)), (border_idx_1 + (-3 * stride1) + (2 * stride2)), (border_idx_1 + (-3 * stride1) + (3 * stride2)), (border_idx_1 + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-2 * stride1) + (-1 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_1 + (-2 * stride1) + (3 * stride2)), (border_idx_1 + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-1 * stride1) + (-1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-1 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-1 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-2 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-2 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-3 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(0, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-3 * stride1) + (0 * stride2)), (border_idx_1 + (-3 * stride1) + (-3 * stride2)), (border_idx_1 + (-3 * stride1) + (-2 * stride2)), (border_idx_1 + (-3 * stride1) + (-1 * stride2)), (border_idx_1 + (-3 * stride1) + (1 * stride2)), (border_idx_1 + (-3 * stride1) + (2 * stride2)), (border_idx_1 + (-3 * stride1) + (3 * stride2)), (border_idx_1 + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_1 + (-2 * stride1) + (-3 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_1 + (-2 * stride1) + (3 * stride2)), (border_idx_1 + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-1 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-2 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-2 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-3 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-2 * stride1) + (-3 * stride2)), (border_idx_3 + (-2 * stride1) + (-2 * stride2)), (border_idx_3 + (-2 * stride1) + (-1 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_1 + (-2 * stride1) + (3 * stride2)), (border_idx_1 + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-1 * stride1) + (-3 * stride2)), (border_idx_3 + (-1 * stride1) + (-2 * stride2)), (border_idx_3 + (-1 * stride1) + (-1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-3 * stride2)), (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-3 * stride2)), (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-3 * stride2)), (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-3 * stride2)), (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-3 * stride2)), (border_idx_2 + (3 * stride1) + (-2 * stride2)), (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-3 * stride2)), (border_idx_2 + (4 * stride1) + (-2 * stride2)), (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-1 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-2 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (-3 * stride2) + (0 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (-1 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-3 * stride2) + (-1 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) - (3 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-3 * stride2) + (-2 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-2 * stride1) + (-2 * stride2)), (border_idx_3 + (-2 * stride1) + (-1 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_1 + (-2 * stride1) + (3 * stride2)), (border_idx_1 + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-1 * stride1) + (-2 * stride2)), (border_idx_3 + (-1 * stride1) + (-1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-2 * stride2)), (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-2 * stride2)), (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-1 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (-1 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (-2 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-2 * stride1) + (-1 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_1 + (-2 * stride1) + (3 * stride2)), (border_idx_1 + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-1 * stride1) + (-1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-1 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-1 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-2 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_1 + (-2 * stride1) + (-3 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_1 + (-2 * stride1) + (3 * stride2)), (border_idx_1 + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-1 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-2 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-1 * stride1) + (-3 * stride2)), (border_idx_3 + (-1 * stride1) + (-2 * stride2)), (border_idx_3 + (-1 * stride1) + (-1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-3 * stride2)), (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-3 * stride2)), (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-3 * stride2)), (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-3 * stride2)), (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-3 * stride2)), (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-3 * stride2)), (border_idx_2 + (3 * stride1) + (-2 * stride2)), (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-3 * stride2)), (border_idx_2 + (4 * stride1) + (-2 * stride2)), (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-1 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-3 * stride2) + (0 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (3 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-3 * stride2) + (-1 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-1 * stride1) + (-2 * stride2)), (border_idx_3 + (-1 * stride1) + (-1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-2 * stride2)), (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-2 * stride2)), (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (-1 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-1 * stride1) + (-1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (-1 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (-1 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-3 * stride2)), (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-3 * stride2)), (border_idx_2 + (-3 * stride1) + (-2 * stride2)), (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-3 * stride2)), (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-3 * stride2)), (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-3 * stride2)), (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-3 * stride2)), (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-3 * stride2)), (border_idx_2 + (3 * stride1) + (-2 * stride2)), (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-3 * stride2)), (border_idx_2 + (4 * stride1) + (-2 * stride2)), (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (3 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-3 * stride2) + (0 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-2 * stride2)), (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-2 * stride2)), (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-2 * stride2)), (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_neg[border_idx_3 + (0 * stride1) + (0 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_neg_neg[border_idx_3 + (0 * stride2) + (0 * stride1)]
 		    )) * dinv);
 	default: UNREACHABLE; 
 	}
@@ -891,835 +715,659 @@ FP cross_deriv_neg_pos(
     switch (BITMASK_PAIR(depth1, depth2)){
     case BITMASK_PAIR(0, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-3 * stride1) + (-4 * stride2)), (border_idx_1 + (-3 * stride1) + (-3 * stride2)), (border_idx_1 + (-3 * stride1) + (-2 * stride2)), (border_idx_1 + (-3 * stride1) + (-1 * stride2)), (border_idx_3 + (-3 * stride1) + (0 * stride2)), (border_idx_3 + (-3 * stride1) + (1 * stride2)), (border_idx_3 + (-3 * stride1) + (2 * stride2)), (border_idx_3 + (-3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-2 * stride1) + (-4 * stride2)), (border_idx_1 + (-2 * stride1) + (-3 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_3 + (-2 * stride1) + (1 * stride2)), (border_idx_3 + (-2 * stride1) + (2 * stride2)), (border_idx_3 + (-2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_3 + (-1 * stride1) + (1 * stride2)), (border_idx_3 + (-1 * stride1) + (2 * stride2)), (border_idx_3 + (-1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (3 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (2 * stride2)), (border_idx_2 + (3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (2 * stride2)), (border_idx_2 + (4 * stride1) + (3 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)] + 
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)] +
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] +
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_pos[border_idx_3 - (3 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (3 * stride2) + (1 * stride1)] - block_neg_pos[border_idx_3 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)] + 
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 - (3 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-2 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (3 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-2 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (3 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (3 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-3 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(0, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-3 * stride1) + (-4 * stride2)), (border_idx_1 + (-3 * stride1) + (-3 * stride2)), (border_idx_1 + (-3 * stride1) + (-2 * stride2)), (border_idx_1 + (-3 * stride1) + (-1 * stride2)), (border_idx_1 + (-3 * stride1) + (1 * stride2)), (border_idx_3 + (-3 * stride1) + (0 * stride2)), (border_idx_3 + (-3 * stride1) + (1 * stride2)), (border_idx_3 + (-3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-2 * stride1) + (-4 * stride2)), (border_idx_1 + (-2 * stride1) + (-3 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_3 + (-2 * stride1) + (1 * stride2)), (border_idx_3 + (-2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_3 + (-1 * stride1) + (1 * stride2)), (border_idx_3 + (-1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (2 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)] + 
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 - (3 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-2 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (3 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-2 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (3 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-3 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(0, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-3 * stride1) + (-4 * stride2)), (border_idx_1 + (-3 * stride1) + (-3 * stride2)), (border_idx_1 + (-3 * stride1) + (-2 * stride2)), (border_idx_1 + (-3 * stride1) + (-1 * stride2)), (border_idx_1 + (-3 * stride1) + (1 * stride2)), (border_idx_1 + (-3 * stride1) + (2 * stride2)), (border_idx_3 + (-3 * stride1) + (0 * stride2)), (border_idx_3 + (-3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-2 * stride1) + (-4 * stride2)), (border_idx_1 + (-2 * stride1) + (-3 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_3 + (-2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_3 + (-1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-2 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (3 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-2 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (3 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-3 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(0, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-3 * stride1) + (-4 * stride2)), (border_idx_1 + (-3 * stride1) + (-3 * stride2)), (border_idx_1 + (-3 * stride1) + (-2 * stride2)), (border_idx_1 + (-3 * stride1) + (-1 * stride2)), (border_idx_1 + (-3 * stride1) + (1 * stride2)), (border_idx_1 + (-3 * stride1) + (2 * stride2)), (border_idx_1 + (-3 * stride1) + (3 * stride2)), (border_idx_3 + (-3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-2 * stride1) + (-4 * stride2)), (border_idx_1 + (-2 * stride1) + (-3 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_1 + (-2 * stride1) + (3 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-2 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-2 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (3 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-3 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-2 * stride1) + (-4 * stride2)), (border_idx_1 + (-2 * stride1) + (-3 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_3 + (-2 * stride1) + (1 * stride2)), (border_idx_3 + (-2 * stride1) + (2 * stride2)), (border_idx_3 + (-2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_3 + (-1 * stride1) + (1 * stride2)), (border_idx_3 + (-1 * stride1) + (2 * stride2)), (border_idx_3 + (-1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (3 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (2 * stride2)), (border_idx_2 + (3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (2 * stride2)), (border_idx_2 + (4 * stride1) + (3 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block_center_pos[border_idx_2 + (3 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)] + 
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (3 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-2 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-2 * stride1) + (-4 * stride2)), (border_idx_1 + (-2 * stride1) + (-3 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_3 + (-2 * stride1) + (1 * stride2)), (border_idx_3 + (-2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_3 + (-1 * stride1) + (1 * stride2)), (border_idx_3 + (-1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (2 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)] + 
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-2 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-2 * stride1) + (-4 * stride2)), (border_idx_1 + (-2 * stride1) + (-3 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)), (border_idx_3 + (-2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_3 + (-1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-2 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-2 * stride1) + (-4 * stride2)), (border_idx_1 + (-2 * stride1) + (-3 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_1 + (-2 * stride1) + (3 * stride2)), (border_idx_3 + (-2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (2 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-2 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_3 + (-1 * stride1) + (1 * stride2)), (border_idx_3 + (-1 * stride1) + (2 * stride2)), (border_idx_3 + (-1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (3 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (2 * stride2)), (border_idx_2 + (3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (2 * stride2)), (border_idx_2 + (4 * stride1) + (3 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block_center_pos[border_idx_2 + (3 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (3 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_3 + (-1 * stride1) + (1 * stride2)), (border_idx_3 + (-1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (2 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)), (border_idx_3 + (-1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_3 + (-1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 - (1 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (2 * stride2)), (border_idx_2 + (-3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (3 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (2 * stride2)), (border_idx_2 + (3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (2 * stride2)), (border_idx_2 + (4 * stride1) + (3 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block_center_pos[border_idx_2 + (3 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (3 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (2 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_neg_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 		    )) * dinv);
 	default: UNREACHABLE; 
 	}
@@ -1738,211 +1386,167 @@ FP cross_deriv_neg_center(
     switch (depth1){
     case 0:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-3 * stride1) + (-4 * stride2)), (border_idx_1 + (-3 * stride1) + (-3 * stride2)), (border_idx_1 + (-3 * stride1) + (-2 * stride2)), (border_idx_1 + (-3 * stride1) + (-1 * stride2)), (border_idx_1 + (-3 * stride1) + (1 * stride2)), (border_idx_1 + (-3 * stride1) + (2 * stride2)), (border_idx_1 + (-3 * stride1) + (3 * stride2)), (border_idx_1 + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-2 * stride1) + (-4 * stride2)), (border_idx_1 + (-2 * stride1) + (-3 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_1 + (-2 * stride1) + (3 * stride2)), (border_idx_1 + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-2 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (4 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-2 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_center[border_idx_1 - (3 * stride1) + (4 * stride2)] + block_neg_center[border_idx_1 - (3 * stride1) - (4 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-3 * stride1)]
 		    )) * dinv);
     case 1:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-2 * stride1) + (-4 * stride2)), (border_idx_1 + (-2 * stride1) + (-3 * stride2)), (border_idx_1 + (-2 * stride1) + (-2 * stride2)), (border_idx_1 + (-2 * stride1) + (-1 * stride2)), (border_idx_1 + (-2 * stride1) + (1 * stride2)), (border_idx_1 + (-2 * stride1) + (2 * stride2)), (border_idx_1 + (-2 * stride1) + (3 * stride2)), (border_idx_1 + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-2 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_center[border_idx_1 - (2 * stride1) + (4 * stride2)] + block_neg_center[border_idx_1 - (2 * stride1) - (4 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-2 * stride1)]
 		    )) * dinv);
     case 2:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (-1 * stride1) + (-4 * stride2)), (border_idx_1 + (-1 * stride1) + (-3 * stride2)), (border_idx_1 + (-1 * stride1) + (-2 * stride2)), (border_idx_1 + (-1 * stride1) + (-1 * stride2)), (border_idx_1 + (-1 * stride1) + (1 * stride2)), (border_idx_1 + (-1 * stride1) + (2 * stride2)), (border_idx_1 + (-1 * stride1) + (3 * stride2)), (border_idx_1 + (-1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (-1 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (-1 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_center[border_idx_1 - (1 * stride1) + (4 * stride2)] + block_neg_center[border_idx_1 - (1 * stride1) - (4 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (-1 * stride1)]
 		    )) * dinv);
     case 3:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (1 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (2 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (3 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_neg_center[border_idx_1 + (0 * stride1) + (4 * stride2)] + block_neg_center[border_idx_1 + (0 * stride1) - (4 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block_neg_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block_neg_center[border_idx_1 + (-4 * stride2) + (0 * stride1)]
 		    )) * dinv);
 	default: UNREACHABLE;
 	}
@@ -1966,835 +1570,659 @@ FP cross_deriv_pos_neg(
     switch (BITMASK_PAIR(depth1, depth2)){
     case BITMASK_PAIR(0, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-3 * stride2)), (border_idx_2 + (-4 * stride1) + (-2 * stride2)), (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-3 * stride2)), (border_idx_2 + (-3 * stride1) + (-2 * stride2)), (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-3 * stride2)), (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-3 * stride2)), (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-3 * stride2)), (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (1 * stride1) + (-3 * stride2)), (border_idx_3 + (1 * stride1) + (-2 * stride2)), (border_idx_3 + (1 * stride1) + (-1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (2 * stride1) + (-3 * stride2)), (border_idx_3 + (2 * stride1) + (-2 * stride2)), (border_idx_3 + (2 * stride1) + (-1 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_1 + (2 * stride1) + (3 * stride2)), (border_idx_1 + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (3 * stride1) + (-3 * stride2)), (border_idx_3 + (3 * stride1) + (-2 * stride2)), (border_idx_3 + (3 * stride1) + (-1 * stride2)), (border_idx_3 + (3 * stride1) + (0 * stride2)), (border_idx_1 + (3 * stride1) + (1 * stride2)), (border_idx_1 + (3 * stride1) + (2 * stride2)), (border_idx_1 + (3 * stride1) + (3 * stride2)), (border_idx_1 + (3 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)] + 
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)] +
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (3 * stride1) + (1 * stride2)] - block_pos_neg[border_idx_3 + (3 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] +
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_pos_neg[border_idx_3 + (-3 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)] + 
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (3 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (-3 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (3 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-3 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (3 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (3 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-3 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(0, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-2 * stride2)), (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-2 * stride2)), (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (1 * stride1) + (-2 * stride2)), (border_idx_3 + (1 * stride1) + (-1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (2 * stride1) + (-2 * stride2)), (border_idx_3 + (2 * stride1) + (-1 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_1 + (2 * stride1) + (3 * stride2)), (border_idx_1 + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (3 * stride1) + (-2 * stride2)), (border_idx_3 + (3 * stride1) + (-1 * stride2)), (border_idx_3 + (3 * stride1) + (0 * stride2)), (border_idx_1 + (3 * stride1) + (-1 * stride2)), (border_idx_1 + (3 * stride1) + (1 * stride2)), (border_idx_1 + (3 * stride1) + (2 * stride2)), (border_idx_1 + (3 * stride1) + (3 * stride2)), (border_idx_1 + (3 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block_pos_center[border_idx_1 + (3 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)] + 
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (3 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (3 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (3 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (3 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(0, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (1 * stride1) + (-1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (2 * stride1) + (-1 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_1 + (2 * stride1) + (3 * stride2)), (border_idx_1 + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (3 * stride1) + (-1 * stride2)), (border_idx_3 + (3 * stride1) + (0 * stride2)), (border_idx_1 + (3 * stride1) + (-2 * stride2)), (border_idx_1 + (3 * stride1) + (-1 * stride2)), (border_idx_1 + (3 * stride1) + (1 * stride2)), (border_idx_1 + (3 * stride1) + (2 * stride2)), (border_idx_1 + (3 * stride1) + (3 * stride2)), (border_idx_1 + (3 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block_pos_center[border_idx_1 + (3 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (3 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (3 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (3 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(0, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_1 + (2 * stride1) + (-3 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_1 + (2 * stride1) + (3 * stride2)), (border_idx_1 + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (3 * stride1) + (0 * stride2)), (border_idx_1 + (3 * stride1) + (-3 * stride2)), (border_idx_1 + (3 * stride1) + (-2 * stride2)), (border_idx_1 + (3 * stride1) + (-1 * stride2)), (border_idx_1 + (3 * stride1) + (1 * stride2)), (border_idx_1 + (3 * stride1) + (2 * stride2)), (border_idx_1 + (3 * stride1) + (3 * stride2)), (border_idx_1 + (3 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block_pos_center[border_idx_1 + (3 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (3 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (3 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-3 * stride2)), (border_idx_2 + (-4 * stride1) + (-2 * stride2)), (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-3 * stride2)), (border_idx_2 + (-3 * stride1) + (-2 * stride2)), (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-3 * stride2)), (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-3 * stride2)), (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-3 * stride2)), (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-3 * stride2)), (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (1 * stride1) + (-3 * stride2)), (border_idx_3 + (1 * stride1) + (-2 * stride2)), (border_idx_3 + (1 * stride1) + (-1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (2 * stride1) + (-3 * stride2)), (border_idx_3 + (2 * stride1) + (-2 * stride2)), (border_idx_3 + (2 * stride1) + (-1 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_1 + (2 * stride1) + (3 * stride2)), (border_idx_1 + (2 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)] + 
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (-3 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-3 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-3 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-2 * stride2)), (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-2 * stride2)), (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (1 * stride1) + (-2 * stride2)), (border_idx_3 + (1 * stride1) + (-1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (2 * stride1) + (-2 * stride2)), (border_idx_3 + (2 * stride1) + (-1 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_1 + (2 * stride1) + (3 * stride2)), (border_idx_1 + (2 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)] + 
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (1 * stride1) + (-1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (2 * stride1) + (-1 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_1 + (2 * stride1) + (3 * stride2)), (border_idx_1 + (2 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_1 + (2 * stride1) + (-3 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_1 + (2 * stride1) + (3 * stride2)), (border_idx_1 + (2 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (2 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-3 * stride2)), (border_idx_2 + (-4 * stride1) + (-2 * stride2)), (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-3 * stride2)), (border_idx_2 + (-3 * stride1) + (-2 * stride2)), (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-3 * stride2)), (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-3 * stride2)), (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-3 * stride2)), (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-3 * stride2)), (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-3 * stride2)), (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (1 * stride1) + (-3 * stride2)), (border_idx_3 + (1 * stride1) + (-2 * stride2)), (border_idx_3 + (1 * stride1) + (-1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-3 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-3 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-2 * stride2)), (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-2 * stride2)), (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (1 * stride1) + (-2 * stride2)), (border_idx_3 + (1 * stride1) + (-1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (1 * stride1) + (-1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (1 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-3 * stride2)), (border_idx_2 + (-4 * stride1) + (-2 * stride2)), (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-3 * stride2)), (border_idx_2 + (-3 * stride1) + (-2 * stride2)), (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-3 * stride2)), (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-3 * stride2)), (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-3 * stride2)), (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-3 * stride2)), (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-3 * stride2)), (border_idx_2 + (3 * stride1) + (-2 * stride2)), (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-3 * stride2)), (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-3 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-2 * stride2)), (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-2 * stride2)), (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-2 * stride2)), (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-2 * stride2)), (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-2 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (-1 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_neg[border_idx_3 + (0 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_neg[border_idx_3 + (0 * stride2) + (0 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)]
 		    )) * dinv);
 	default: UNREACHABLE; 
 	}
@@ -2818,835 +2246,659 @@ FP cross_deriv_pos_pos(
     switch (BITMASK_PAIR(depth1, depth2)){
     case BITMASK_PAIR(0, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (2 * stride2)), (border_idx_2 + (-4 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (2 * stride2)), (border_idx_2 + (-3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (3 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_3 + (1 * stride1) + (1 * stride2)), (border_idx_3 + (1 * stride1) + (2 * stride2)), (border_idx_3 + (1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (2 * stride1) + (-4 * stride2)), (border_idx_1 + (2 * stride1) + (-3 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_3 + (2 * stride1) + (1 * stride2)), (border_idx_3 + (2 * stride1) + (2 * stride2)), (border_idx_3 + (2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (3 * stride1) + (-4 * stride2)), (border_idx_1 + (3 * stride1) + (-3 * stride2)), (border_idx_1 + (3 * stride1) + (-2 * stride2)), (border_idx_1 + (3 * stride1) + (-1 * stride2)), (border_idx_3 + (3 * stride1) + (0 * stride2)), (border_idx_3 + (3 * stride1) + (1 * stride2)), (border_idx_3 + (3 * stride1) + (2 * stride2)), (border_idx_3 + (3 * stride1) + (3 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_pos[border_idx_3 + (3 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_pos_pos[border_idx_3 + (3 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (3 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (3 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (3 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (3 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (3 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (3 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(0, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_3 + (1 * stride1) + (1 * stride2)), (border_idx_3 + (1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (2 * stride1) + (-4 * stride2)), (border_idx_1 + (2 * stride1) + (-3 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_3 + (2 * stride1) + (1 * stride2)), (border_idx_3 + (2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (3 * stride1) + (-4 * stride2)), (border_idx_1 + (3 * stride1) + (-3 * stride2)), (border_idx_1 + (3 * stride1) + (-2 * stride2)), (border_idx_1 + (3 * stride1) + (-1 * stride2)), (border_idx_1 + (3 * stride1) + (1 * stride2)), (border_idx_3 + (3 * stride1) + (0 * stride2)), (border_idx_3 + (3 * stride1) + (1 * stride2)), (border_idx_3 + (3 * stride1) + (2 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (3 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (3 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (3 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (3 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(0, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_3 + (1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (2 * stride1) + (-4 * stride2)), (border_idx_1 + (2 * stride1) + (-3 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_3 + (2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (3 * stride1) + (-4 * stride2)), (border_idx_1 + (3 * stride1) + (-3 * stride2)), (border_idx_1 + (3 * stride1) + (-2 * stride2)), (border_idx_1 + (3 * stride1) + (-1 * stride2)), (border_idx_1 + (3 * stride1) + (1 * stride2)), (border_idx_1 + (3 * stride1) + (2 * stride2)), (border_idx_3 + (3 * stride1) + (0 * stride2)), (border_idx_3 + (3 * stride1) + (1 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (3 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (3 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (3 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(0, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (2 * stride1) + (-4 * stride2)), (border_idx_1 + (2 * stride1) + (-3 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_1 + (2 * stride1) + (3 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (3 * stride1) + (-4 * stride2)), (border_idx_1 + (3 * stride1) + (-3 * stride2)), (border_idx_1 + (3 * stride1) + (-2 * stride2)), (border_idx_1 + (3 * stride1) + (-1 * stride2)), (border_idx_1 + (3 * stride1) + (1 * stride2)), (border_idx_1 + (3 * stride1) + (2 * stride2)), (border_idx_1 + (3 * stride1) + (3 * stride2)), (border_idx_3 + (3 * stride1) + (0 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (3 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (3 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (2 * stride2)), (border_idx_2 + (-4 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (2 * stride2)), (border_idx_2 + (-3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (3 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_3 + (1 * stride1) + (1 * stride2)), (border_idx_3 + (1 * stride1) + (2 * stride2)), (border_idx_3 + (1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (2 * stride1) + (-4 * stride2)), (border_idx_1 + (2 * stride1) + (-3 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_3 + (2 * stride1) + (1 * stride2)), (border_idx_3 + (2 * stride1) + (2 * stride2)), (border_idx_3 + (2 * stride1) + (3 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (3 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (3 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (3 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (3 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_3 + (1 * stride1) + (1 * stride2)), (border_idx_3 + (1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (2 * stride1) + (-4 * stride2)), (border_idx_1 + (2 * stride1) + (-3 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_3 + (2 * stride1) + (1 * stride2)), (border_idx_3 + (2 * stride1) + (2 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_3 + (1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (2 * stride1) + (-4 * stride2)), (border_idx_1 + (2 * stride1) + (-3 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)), (border_idx_3 + (2 * stride1) + (1 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(1, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (2 * stride1) + (-4 * stride2)), (border_idx_1 + (2 * stride1) + (-3 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_1 + (2 * stride1) + (3 * stride2)), (border_idx_3 + (2 * stride1) + (0 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (2 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (2 * stride2)), (border_idx_2 + (-4 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (2 * stride2)), (border_idx_2 + (-3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (3 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_3 + (1 * stride1) + (1 * stride2)), (border_idx_3 + (1 * stride1) + (2 * stride2)), (border_idx_3 + (1 * stride1) + (3 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (3 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (3 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (3 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_3 + (1 * stride1) + (1 * stride2)), (border_idx_3 + (1 * stride1) + (2 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)), (border_idx_3 + (1 * stride1) + (1 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(2, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_3 + (1 * stride1) + (0 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (1 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 0):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (2 * stride2)), (border_idx_2 + (-4 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (2 * stride2)), (border_idx_2 + (-3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (3 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (2 * stride2)), (border_idx_2 + (3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (3 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (3 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (3 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 1):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)), (border_idx_3 + (0 * stride1) + (2 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (2 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 2):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)), (border_idx_3 + (0 * stride1) + (1 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (1 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case BITMASK_PAIR(3, 3):
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_3 + (0 * stride1) + (0 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_pos[border_idx_3 + (0 * stride1) + (0 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_pos[border_idx_3 + (0 * stride2) + (0 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
 	default: UNREACHABLE; 
 	}
@@ -3665,211 +2917,167 @@ FP cross_deriv_pos_center(
     switch (depth1){
     case 0:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (2 * stride1) + (-4 * stride2)), (border_idx_1 + (2 * stride1) + (-3 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_1 + (2 * stride1) + (3 * stride2)), (border_idx_1 + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (3 * stride1) + (-4 * stride2)), (border_idx_1 + (3 * stride1) + (-3 * stride2)), (border_idx_1 + (3 * stride1) + (-2 * stride2)), (border_idx_1 + (3 * stride1) + (-1 * stride2)), (border_idx_1 + (3 * stride1) + (1 * stride2)), (border_idx_1 + (3 * stride1) + (2 * stride2)), (border_idx_1 + (3 * stride1) + (3 * stride2)), (border_idx_1 + (3 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (3 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (4 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (4 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (3 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (3 * stride1) + (4 * stride2)] - block_pos_center[border_idx_1 + (3 * stride1) - (4 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case 1:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (2 * stride1) + (-4 * stride2)), (border_idx_1 + (2 * stride1) + (-3 * stride2)), (border_idx_1 + (2 * stride1) + (-2 * stride2)), (border_idx_1 + (2 * stride1) + (-1 * stride2)), (border_idx_1 + (2 * stride1) + (1 * stride2)), (border_idx_1 + (2 * stride1) + (2 * stride2)), (border_idx_1 + (2 * stride1) + (3 * stride2)), (border_idx_1 + (2 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (2 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (2 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (2 * stride1) + (4 * stride2)] - block_pos_center[border_idx_1 + (2 * stride1) - (4 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case 2:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (1 * stride1) + (-4 * stride2)), (border_idx_1 + (1 * stride1) + (-3 * stride2)), (border_idx_1 + (1 * stride1) + (-2 * stride2)), (border_idx_1 + (1 * stride1) + (-1 * stride2)), (border_idx_1 + (1 * stride1) + (1 * stride2)), (border_idx_1 + (1 * stride1) + (2 * stride2)), (border_idx_1 + (1 * stride1) + (3 * stride2)), (border_idx_1 + (1 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (1 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (1 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (1 * stride1) + (4 * stride2)] - block_pos_center[border_idx_1 + (1 * stride1) - (4 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case 3:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_1 + (0 * stride1) + (-4 * stride2)), (border_idx_1 + (0 * stride1) + (-3 * stride2)), (border_idx_1 + (0 * stride1) + (-2 * stride2)), (border_idx_1 + (0 * stride1) + (-1 * stride2)), (border_idx_1 + (0 * stride1) + (1 * stride2)), (border_idx_1 + (0 * stride1) + (2 * stride2)), (border_idx_1 + (0 * stride1) + (3 * stride2)), (border_idx_1 + (0 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_pos_center[border_idx_1 + (0 * stride1) + (1 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_pos_center[border_idx_1 + (1 * stride2) + (0 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-1 * stride2) + (0 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (2 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_pos_center[border_idx_1 + (2 * stride2) + (0 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-2 * stride2) + (0 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_pos_center[border_idx_1 + (0 * stride1) + (3 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_pos_center[border_idx_1 + (3 * stride2) + (0 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-3 * stride2) + (0 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_pos_center[border_idx_1 + (0 * stride1) + (4 * stride2)] - block_pos_center[border_idx_1 + (0 * stride1) - (4 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_pos_center[border_idx_1 + (4 * stride2) + (0 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_pos_center[border_idx_1 + (-4 * stride2) + (0 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
 	default: UNREACHABLE;
 	}
@@ -3888,211 +3096,167 @@ FP cross_deriv_center_neg(
     switch (depth2){
     case 0:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-3 * stride2)), (border_idx_2 + (-4 * stride1) + (-2 * stride2)), (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-3 * stride2)), (border_idx_2 + (-3 * stride1) + (-2 * stride2)), (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-3 * stride2)), (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-3 * stride2)), (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-3 * stride2)), (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-3 * stride2)), (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-3 * stride2)), (border_idx_2 + (3 * stride1) + (-2 * stride2)), (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-3 * stride2)), (border_idx_2 + (4 * stride1) + (-2 * stride2)), (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (2 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (4 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (3 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_center_neg[border_idx_2 + (-3 * stride2) + (4 * stride1)] + block_center_neg[border_idx_2 + (-3 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case 1:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-2 * stride2)), (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-2 * stride2)), (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-2 * stride2)), (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-2 * stride2)), (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-2 * stride2)), (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-2 * stride2)), (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-2 * stride2)), (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-2 * stride2)), (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (2 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (2 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_center_neg[border_idx_2 + (-2 * stride2) + (4 * stride1)] + block_center_neg[border_idx_2 + (-2 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case 2:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) - (1 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) - (1 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) - (1 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_center_neg[border_idx_2 + (-1 * stride2) + (4 * stride1)] + block_center_neg[border_idx_2 + (-1 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case 3:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-4 * stride1) + (0 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-3 * stride1) + (0 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-2 * stride1) + (0 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (-1 * stride1) + (0 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (1 * stride1) + (0 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (2 * stride1) + (0 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (3 * stride1) + (0 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (border_idx_2 + (4 * stride1) + (0 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block[base_idx + (1 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (1 * stride1) + (0 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (1 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block[base_idx + (2 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (2 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (2 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block[base_idx + (3 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (3 * stride1) + (0 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (3 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block[base_idx + (4 * stride1) + (4 * stride2)] - block_center_neg[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block_center_neg[border_idx_2 - (4 * stride1) + (0 * stride2)]
+		        block[base_idx + (4 * stride2) + (4 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block_center_neg[border_idx_2 + (0 * stride2) + (4 * stride1)] + block_center_neg[border_idx_2 + (0 * stride2) + (-4 * stride1)]
 		    )) * dinv);
 	default: UNREACHABLE;
 	}
@@ -4111,211 +3275,167 @@ FP cross_deriv_center_pos(
     switch (depth2){
     case 0:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (2 * stride2)), (border_idx_2 + (-4 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (2 * stride2)), (border_idx_2 + (-3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (3 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (2 * stride2)), (border_idx_2 + (3 * stride1) + (3 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (2 * stride2)), (border_idx_2 + (4 * stride1) + (3 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (3 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (4 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-4 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (3 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (3 * stride2) + (4 * stride1)] - block_center_pos[border_idx_2 + (3 * stride2) + (-4 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case 1:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)), (border_idx_2 + (-4 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)), (border_idx_2 + (-3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)), (border_idx_2 + (-2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)), (border_idx_2 + (-1 * stride1) + (2 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)), (border_idx_2 + (1 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)), (border_idx_2 + (2 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)), (border_idx_2 + (3 * stride1) + (2 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)), (border_idx_2 + (4 * stride1) + (2 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (2 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (2 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (2 * stride2) + (4 * stride1)] - block_center_pos[border_idx_2 + (2 * stride2) + (-4 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case 2:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)), (border_idx_2 + (-4 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)), (border_idx_2 + (-3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)), (border_idx_2 + (-2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)), (border_idx_2 + (-1 * stride1) + (1 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)), (border_idx_2 + (1 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)), (border_idx_2 + (2 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)), (border_idx_2 + (3 * stride1) + (1 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)), (border_idx_2 + (4 * stride1) + (1 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (1 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (1 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (1 * stride2) + (4 * stride1)] - block_center_pos[border_idx_2 + (1 * stride2) + (-4 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
     case 3:
 		
-		    
-		printf("Computed indicies:\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (border_idx_2 + (-4 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (border_idx_2 + (-3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (border_idx_2 + (-2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (border_idx_2 + (-1 * stride1) + (0 * stride2)));
-		printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (border_idx_2 + (1 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (border_idx_2 + (2 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (border_idx_2 + (3 * stride1) + (0 * stride2)));
-		printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (border_idx_2 + (4 * stride1) + (0 * stride2)));
 		
 		return ((
 		    L11 * (
-		        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 		    ) +
 		    L12 * (
-		        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-		        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+		        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 		    ) +
 		    L13 * (
-		        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-		        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+		        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 		    ) +
 		    L14 * (
-		        block_center_pos[border_idx_2 + (1 * stride1) + (0 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (1 * stride1) + (0 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-		        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+		        block[base_idx + (1 * stride2) + (4 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+		        block_center_pos[border_idx_2 + (0 * stride2) + (1 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 		    ) +
 		    L22 * (
-		        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 		    ) +
 		    L23 * (
-		        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-		        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+		        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 			) +        
 		    L24 * (
-		        block_center_pos[border_idx_2 + (2 * stride1) + (0 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (2 * stride1) + (0 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+		        block[base_idx + (2 * stride2) + (4 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (2 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 			) +      
 		    L33 * (
-		        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 		
 			) + 
 		    L34 * (
-		        block_center_pos[border_idx_2 + (3 * stride1) + (0 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (3 * stride1) + (0 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-		        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+		        block[base_idx + (3 * stride2) + (4 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+		        block_center_pos[border_idx_2 + (0 * stride2) + (3 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 			) + 
 		    L44 * (
-		        block_center_pos[border_idx_2 + (4 * stride1) + (0 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block_center_pos[border_idx_2 - (4 * stride1) + (0 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+		        block_center_pos[border_idx_2 + (0 * stride2) + (4 * stride1)] - block_center_pos[border_idx_2 + (0 * stride2) + (-4 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 		    )) * dinv);
 	default: UNREACHABLE;
 	}
@@ -4330,55 +3450,44 @@ FP cross_deriv_center_center(
     const int cube_width, const FP dinv
 ){
     	
-	    
-	printf("Computed indicies:\n");
-	printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-4 * stride1) + (-4 * stride2)), (base_idx + (-4 * stride1) + (-3 * stride2)), (base_idx + (-4 * stride1) + (-2 * stride2)), (base_idx + (-4 * stride1) + (-1 * stride2)), (base_idx + (-4 * stride1) + (1 * stride2)), (base_idx + (-4 * stride1) + (2 * stride2)), (base_idx + (-4 * stride1) + (3 * stride2)), (base_idx + (-4 * stride1) + (4 * stride2)));
-	printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-3 * stride1) + (-4 * stride2)), (base_idx + (-3 * stride1) + (-3 * stride2)), (base_idx + (-3 * stride1) + (-2 * stride2)), (base_idx + (-3 * stride1) + (-1 * stride2)), (base_idx + (-3 * stride1) + (1 * stride2)), (base_idx + (-3 * stride1) + (2 * stride2)), (base_idx + (-3 * stride1) + (3 * stride2)), (base_idx + (-3 * stride1) + (4 * stride2)));
-	printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-2 * stride1) + (-4 * stride2)), (base_idx + (-2 * stride1) + (-3 * stride2)), (base_idx + (-2 * stride1) + (-2 * stride2)), (base_idx + (-2 * stride1) + (-1 * stride2)), (base_idx + (-2 * stride1) + (1 * stride2)), (base_idx + (-2 * stride1) + (2 * stride2)), (base_idx + (-2 * stride1) + (3 * stride2)), (base_idx + (-2 * stride1) + (4 * stride2)));
-	printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (-1 * stride1) + (-4 * stride2)), (base_idx + (-1 * stride1) + (-3 * stride2)), (base_idx + (-1 * stride1) + (-2 * stride2)), (base_idx + (-1 * stride1) + (-1 * stride2)), (base_idx + (-1 * stride1) + (1 * stride2)), (base_idx + (-1 * stride1) + (2 * stride2)), (base_idx + (-1 * stride1) + (3 * stride2)), (base_idx + (-1 * stride1) + (4 * stride2)));
-	printf("[0, 0, 0, 0, 0, 0, 0, 0, 0]\n");
-	printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (1 * stride1) + (-4 * stride2)), (base_idx + (1 * stride1) + (-3 * stride2)), (base_idx + (1 * stride1) + (-2 * stride2)), (base_idx + (1 * stride1) + (-1 * stride2)), (base_idx + (1 * stride1) + (1 * stride2)), (base_idx + (1 * stride1) + (2 * stride2)), (base_idx + (1 * stride1) + (3 * stride2)), (base_idx + (1 * stride1) + (4 * stride2)));
-	printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (2 * stride1) + (-4 * stride2)), (base_idx + (2 * stride1) + (-3 * stride2)), (base_idx + (2 * stride1) + (-2 * stride2)), (base_idx + (2 * stride1) + (-1 * stride2)), (base_idx + (2 * stride1) + (1 * stride2)), (base_idx + (2 * stride1) + (2 * stride2)), (base_idx + (2 * stride1) + (3 * stride2)), (base_idx + (2 * stride1) + (4 * stride2)));
-	printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (3 * stride1) + (-4 * stride2)), (base_idx + (3 * stride1) + (-3 * stride2)), (base_idx + (3 * stride1) + (-2 * stride2)), (base_idx + (3 * stride1) + (-1 * stride2)), (base_idx + (3 * stride1) + (1 * stride2)), (base_idx + (3 * stride1) + (2 * stride2)), (base_idx + (3 * stride1) + (3 * stride2)), (base_idx + (3 * stride1) + (4 * stride2)));
-	printf("[%ld, %ld, %ld, %ld, 0, %ld, %ld, %ld, %ld]\n", (base_idx + (4 * stride1) + (-4 * stride2)), (base_idx + (4 * stride1) + (-3 * stride2)), (base_idx + (4 * stride1) + (-2 * stride2)), (base_idx + (4 * stride1) + (-1 * stride2)), (base_idx + (4 * stride1) + (1 * stride2)), (base_idx + (4 * stride1) + (2 * stride2)), (base_idx + (4 * stride1) + (3 * stride2)), (base_idx + (4 * stride1) + (4 * stride2)));
 	
 	return ((
 	    L11 * (
-	        block[base_idx + (1 * stride1) + (1 * stride2)] - block[base_idx + (1 * stride1) - (1 * stride2)] - block[base_idx - (1 * stride1) + (1 * stride2)] + block[base_idx - (1 * stride1) - (1 * stride2)]
+	        block[base_idx + (1 * stride2) + (1 * stride1)] - block[base_idx + (1 * stride2) + (-1 * stride1)] - block[base_idx + (-1 * stride2) + (1 * stride1)] + block[base_idx + (-1 * stride2) + (-1 * stride1)]
 	    ) +
 	    L12 * (
-	        block[base_idx + (1 * stride1) + (2 * stride2)] - block[base_idx + (1 * stride1) - (2 * stride2)] - block[base_idx - (1 * stride1) + (2 * stride2)] + block[base_idx - (1 * stride1) - (2 * stride2)] + 
-	        block[base_idx + (2 * stride1) + (1 * stride2)] - block[base_idx + (2 * stride1) - (1 * stride2)] - block[base_idx - (2 * stride1) + (1 * stride2)] + block[base_idx - (2 * stride1) - (1 * stride2)]
+	        block[base_idx + (1 * stride2) + (2 * stride1)] - block[base_idx + (1 * stride2) + (-2 * stride1)] - block[base_idx + (-1 * stride2) + (2 * stride1)] + block[base_idx + (-1 * stride2) + (-2 * stride1)] + 
+	        block[base_idx + (2 * stride2) + (1 * stride1)] - block[base_idx + (2 * stride2) + (-1 * stride1)] - block[base_idx + (-2 * stride2) + (1 * stride1)] + block[base_idx + (-2 * stride2) + (-1 * stride1)]
 	    ) +
 	    L13 * (
-	        block[base_idx + (1 * stride1) + (3 * stride2)] - block[base_idx + (1 * stride1) - (3 * stride2)] - block[base_idx - (1 * stride1) + (3 * stride2)] + block[base_idx - (1 * stride1) - (3 * stride2)] +
-	        block[base_idx + (3 * stride1) + (1 * stride2)] - block[base_idx + (3 * stride1) - (1 * stride2)] - block[base_idx - (3 * stride1) + (1 * stride2)] + block[base_idx - (3 * stride1) - (1 * stride2)]
+	        block[base_idx + (1 * stride2) + (3 * stride1)] - block[base_idx + (1 * stride2) + (-3 * stride1)] - block[base_idx + (-1 * stride2) + (3 * stride1)] + block[base_idx + (-1 * stride2) + (-3 * stride1)] +
+	        block[base_idx + (3 * stride2) + (1 * stride1)] - block[base_idx + (3 * stride2) + (-1 * stride1)] - block[base_idx + (-3 * stride2) + (1 * stride1)] + block[base_idx + (-3 * stride2) + (-1 * stride1)]
 	    ) +
 	    L14 * (
-	        block[base_idx + (1 * stride1) + (4 * stride2)] - block[base_idx + (1 * stride1) - (4 * stride2)] - block[base_idx - (1 * stride1) + (4 * stride2)] + block[base_idx - (1 * stride1) - (4 * stride2)] +
-	        block[base_idx + (4 * stride1) + (1 * stride2)] - block[base_idx + (4 * stride1) - (1 * stride2)] - block[base_idx - (4 * stride1) + (1 * stride2)] + block[base_idx - (4 * stride1) - (1 * stride2)]
+	        block[base_idx + (1 * stride2) + (4 * stride1)] - block[base_idx + (1 * stride2) + (-4 * stride1)] - block[base_idx + (-1 * stride2) + (4 * stride1)] + block[base_idx + (-1 * stride2) + (-4 * stride1)] +
+	        block[base_idx + (4 * stride2) + (1 * stride1)] - block[base_idx + (4 * stride2) + (-1 * stride1)] - block[base_idx + (-4 * stride2) + (1 * stride1)] + block[base_idx + (-4 * stride2) + (-1 * stride1)]
 	    ) +
 	    L22 * (
-	        block[base_idx + (2 * stride1) + (2 * stride2)] - block[base_idx + (2 * stride1) - (2 * stride2)] - block[base_idx - (2 * stride1) + (2 * stride2)] + block[base_idx - (2 * stride1) - (2 * stride2)]
+	        block[base_idx + (2 * stride2) + (2 * stride1)] - block[base_idx + (2 * stride2) + (-2 * stride1)] - block[base_idx + (-2 * stride2) + (2 * stride1)] + block[base_idx + (-2 * stride2) + (-2 * stride1)]
 	    ) +
 	    L23 * (
-	        block[base_idx + (2 * stride1) + (3 * stride2)] - block[base_idx + (2 * stride1) - (3 * stride2)] - block[base_idx - (2 * stride1) + (3 * stride2)] + block[base_idx - (2 * stride1) - (3 * stride2)] + 
-	        block[base_idx + (3 * stride1) + (2 * stride2)] - block[base_idx + (3 * stride1) - (2 * stride2)] - block[base_idx - (3 * stride1) + (2 * stride2)] + block[base_idx - (3 * stride1) - (2 * stride2)]
+	        block[base_idx + (2 * stride2) + (3 * stride1)] - block[base_idx + (2 * stride2) + (-3 * stride1)] - block[base_idx + (-2 * stride2) + (3 * stride1)] + block[base_idx + (-2 * stride2) + (-3 * stride1)] + 
+	        block[base_idx + (3 * stride2) + (2 * stride1)] - block[base_idx + (3 * stride2) + (-2 * stride1)] - block[base_idx + (-3 * stride2) + (2 * stride1)] + block[base_idx + (-3 * stride2) + (-2 * stride1)]
 		) +        
 	    L24 * (
-	        block[base_idx + (2 * stride1) + (4 * stride2)] - block[base_idx + (2 * stride1) - (4 * stride2)] - block[base_idx - (2 * stride1) + (4 * stride2)] + block[base_idx - (2 * stride1) - (4 * stride2)] + 
-	        block[base_idx + (4 * stride1) + (2 * stride2)] - block[base_idx + (4 * stride1) - (2 * stride2)] - block[base_idx - (4 * stride1) + (2 * stride2)] + block[base_idx - (4 * stride1) - (2 * stride2)]
+	        block[base_idx + (2 * stride2) + (4 * stride1)] - block[base_idx + (2 * stride2) + (-4 * stride1)] - block[base_idx + (-2 * stride2) + (4 * stride1)] + block[base_idx + (-2 * stride2) + (-4 * stride1)] + 
+	        block[base_idx + (4 * stride2) + (2 * stride1)] - block[base_idx + (4 * stride2) + (-2 * stride1)] - block[base_idx + (-4 * stride2) + (2 * stride1)] + block[base_idx + (-4 * stride2) + (-2 * stride1)]
 		) +      
 	    L33 * (
-	        block[base_idx + (3 * stride1) + (3 * stride2)] - block[base_idx + (3 * stride1) - (3 * stride2)] - block[base_idx - (3 * stride1) + (3 * stride2)] + block[base_idx - (3 * stride1) - (3 * stride2)]
+	        block[base_idx + (3 * stride2) + (3 * stride1)] - block[base_idx + (3 * stride2) + (-3 * stride1)] - block[base_idx + (-3 * stride2) + (3 * stride1)] + block[base_idx + (-3 * stride2) + (-3 * stride1)]
 	
 		) + 
 	    L34 * (
-	        block[base_idx + (3 * stride1) + (4 * stride2)] - block[base_idx + (3 * stride1) - (4 * stride2)] - block[base_idx - (3 * stride1) + (4 * stride2)] + block[base_idx - (3 * stride1) - (4 * stride2)] + 
-	        block[base_idx + (4 * stride1) + (3 * stride2)] - block[base_idx + (4 * stride1) - (3 * stride2)] - block[base_idx - (4 * stride1) + (3 * stride2)] + block[base_idx - (4 * stride1) - (3 * stride2)]
+	        block[base_idx + (3 * stride2) + (4 * stride1)] - block[base_idx + (3 * stride2) + (-4 * stride1)] - block[base_idx + (-3 * stride2) + (4 * stride1)] + block[base_idx + (-3 * stride2) + (-4 * stride1)] + 
+	        block[base_idx + (4 * stride2) + (3 * stride1)] - block[base_idx + (4 * stride2) + (-3 * stride1)] - block[base_idx + (-4 * stride2) + (3 * stride1)] + block[base_idx + (-4 * stride2) + (-3 * stride1)]
 		) + 
 	    L44 * (
-	        block[base_idx + (4 * stride1) + (4 * stride2)] - block[base_idx + (4 * stride1) - (4 * stride2)] - block[base_idx - (4 * stride1) + (4 * stride2)] + block[base_idx - (4 * stride1) - (4 * stride2)]
+	        block[base_idx + (4 * stride2) + (4 * stride1)] - block[base_idx + (4 * stride2) + (-4 * stride1)] - block[base_idx + (-4 * stride2) + (4 * stride1)] + block[base_idx + (-4 * stride2) + (-4 * stride1)]
 	    )) * dinv);
 }
 #undef MAX_MASK_NUM

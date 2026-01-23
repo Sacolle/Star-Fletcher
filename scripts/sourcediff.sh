@@ -1,3 +1,5 @@
+# testa a diferença entre o fletcher base e a minha computação usando o ponto de inserção da fonte
+
 cmp=~/fletcher-base/original/sources.txt
 file=./sources.txt
 

@@ -490,7 +490,7 @@ int main(int argc, char **argv){
     // TODO: rename n_out para algo que faça mais sentido
 
     int64_t n_out = 0;
-    /*
+    
     for(size_t k = 1; k < g_width_in_cubes + 1; k++)
     for(size_t j = 1; j < g_width_in_cubes + 1; j++)
     for(size_t i = 1; i < g_width_in_cubes + 1; i++){
@@ -511,7 +511,7 @@ int main(int argc, char **argv){
         TRY(starpu_task_submit(dump_block_task));
     }
     n_out++;
-    */
+
     for(int64_t t = 1; t <= st; t++){
         // printf("t: %d\n", t);
         starpu_iteration_push(t);
@@ -662,7 +662,6 @@ int main(int argc, char **argv){
         TRY(starpu_task_submit(perturb_task));
 
         //starpu_task_wait_for_all();
-        /*
         // only output the block when simulation time overtakes the min time to generate output
         const FP simulation_time = t * dt;
         const FP output_time = n_out * dt_output;
@@ -689,7 +688,6 @@ int main(int argc, char **argv){
             }
             n_out++;
         //}
-        */
 
         if(t >= 2){
             for(size_t k = 1; k < g_width_in_cubes + 1; k++)
