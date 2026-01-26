@@ -399,27 +399,6 @@ int main(int argc, char **argv){
     //at this point the values for the medium will not be used again
     vector_free_all(medium_allocs, free);
 
-    // alocate the initial values for the waves pp, pc, qp, qc.
-    // the null_block holds all zeros, which all blocks in pp and qp are
-    // the propagation_block holds the point in which the propagation is set
-    // therefore all data handles set are referêncing the null_block or the progration_block
-    // which is only referênced once.
-    FP *null_block, *propagation_block; 
-
-    TRY(allocate_starpu(starpu_allocations, (void**) &null_block, CUBE_SIZE * sizeof(FP)));
-    TRY(allocate_starpu(starpu_allocations, (void**) &propagation_block, CUBE_SIZE * sizeof(FP)));
-
-    for(size_t b_i = 0; b_i < CUBE_SIZE; b_i++){
-        null_block[b_i] = propagation_block[b_i] = FP_LIT(0.0);
-    }
-    // iSource in the cube
-    const size_t perturbation_source_pos = volume_to_cube_idx(volume_propagation_idx);
-    //insert in this block the propagration source
-    const FP starting_source_value = medium_source_value(dt, 0);
-
-    printf("source value: %.9f\n", starting_source_value);
-    propagation_block[perturbation_source_pos] = starting_source_value;
-
     // a iteração do bloco t depende dos blocos t - 1 e t - 2.
     // aloca-se mais data_handles que necessário, compreendendo 0..g_width_in_cubes + 2
     // isso evita checks de bounds, pois os cubos internos tem uma borda que evita acessar fora deles no limite do volume
@@ -467,6 +446,27 @@ int main(int argc, char **argv){
         BLOCK_REGISTER(hdl_v2pn + idx, v2pn[idx]);
     }
     
+    // alocate the initial values for the waves pp, pc, qp, qc.
+    // the null_block holds all zeros, which all blocks in pp and qp are
+    // the propagation_block holds the point in which the propagation is set
+    // therefore all data handles set are referêncing the null_block or the progration_block
+    // which is only referênced once.
+    FP *null_block, *propagation_block; 
+
+    TRY(allocate_starpu(starpu_allocations, (void**) &null_block, CUBE_SIZE * sizeof(FP)));
+    TRY(allocate_starpu(starpu_allocations, (void**) &propagation_block, CUBE_SIZE * sizeof(FP)));
+
+    for(size_t b_i = 0; b_i < CUBE_SIZE; b_i++){
+        null_block[b_i] = propagation_block[b_i] = FP_LIT(0.0);
+    }
+    // iSource in the cube
+    const size_t perturbation_source_pos = volume_to_cube_idx(volume_propagation_idx);
+    //insert in this block the propagration source
+    //const FP starting_source_value = medium_source_value(dt, 0);
+
+    //printf("source value: %.9f\n", starting_source_value);
+    //propagation_block[perturbation_source_pos] = starting_source_value;
+
     // because it added a padding to every side of the block collection, 
     // we need to move the perturbation_source cube by one in every direction
     //block_idx((g_width_in_cubes + 2) / 2, (g_width_in_cubes + 2) / 2, (g_width_in_cubes + 2) / 2);
@@ -490,7 +490,7 @@ int main(int argc, char **argv){
     // TODO: rename n_out para algo que faça mais sentido
 
     int64_t n_out = 0;
-    
+    // salva o primeiro bloco (nulo)
     for(size_t k = 1; k < g_width_in_cubes + 1; k++)
     for(size_t j = 1; j < g_width_in_cubes + 1; j++)
     for(size_t i = 1; i < g_width_in_cubes + 1; i++){
@@ -505,8 +505,9 @@ int main(int argc, char **argv){
         dump_block_task->cl_arg = dump_args;
         dump_block_task->cl_arg_size = sizeof(dump_block_args_t);
         dump_block_task->cl_arg_free = 1;
-
-        dump_block_task->handles[0] = p_wave_iter[2][block_idx(i, j, k)];
+        //NOTE: mudado para p_wave_iter[0] para se adequar melhor com o trace do fletcher base
+        //      no caso não importa pois write(t = 0) é só zeros no original
+        dump_block_task->handles[0] = p_wave_iter[0][block_idx(i, j, k)];
 
         TRY(starpu_task_submit(dump_block_task));
     }
@@ -515,6 +516,29 @@ int main(int argc, char **argv){
     for(int64_t t = 1; t <= st; t++){
         // printf("t: %d\n", t);
         starpu_iteration_push(t);
+
+        //mover para aqui a inserção da fonte
+
+        // task that insert the perturbation on the handle
+        struct starpu_task* perturb_task = starpu_task_create();
+        perturb_task->name = "wave insertion";
+
+        const FP source_value = medium_source_value(dt, t - 1);
+        perturb_args_t* perturb_args;
+        TRY(make_perturb_args(&perturb_args, perturbation_source_pos, source_value, t));
+
+        perturb_task->cl = &insert_perturbation_codelet;
+        perturb_task->cl_arg = perturb_args;
+        perturb_task->cl_arg_size = sizeof(perturb_args_t);
+        perturb_task->cl_arg_free = 1; // free the args after use
+
+        // insert in the $A_{t-1}$ wave that will be used for computing the A_t
+        perturb_task->handles[0] = p_wave_iter[1][perturbation_source_cube];
+        perturb_task->handles[1] = q_wave_iter[1][perturbation_source_cube];
+
+        TRY(starpu_task_submit(perturb_task));
+
+
         for(size_t k = 1; k < g_width_in_cubes + 1; k++) // z
         for(size_t j = 1; j < g_width_in_cubes + 1; j++) // y
         for(size_t i = 1; i < g_width_in_cubes + 1; i++){// x
@@ -643,23 +667,6 @@ int main(int argc, char **argv){
         }
 
         //starpu_task_wait_for_all(); // Force syncronize
-        // task that insert the perturbation on the handle
-        struct starpu_task* perturb_task = starpu_task_create();
-        perturb_task->name = "wave insertion";
-
-        const FP source_value = medium_source_value(dt, t);
-        perturb_args_t* perturb_args;
-        TRY(make_perturb_args(&perturb_args, perturbation_source_pos, source_value, t));
-
-        perturb_task->cl = &insert_perturbation_codelet;
-        perturb_task->cl_arg = perturb_args;
-        perturb_task->cl_arg_size = sizeof(perturb_args_t);
-        perturb_task->cl_arg_free = 1; // free the args after use
-
-        perturb_task->handles[0] = p_wave_iter[0][perturbation_source_cube];
-        perturb_task->handles[1] = q_wave_iter[0][perturbation_source_cube];
-
-        TRY(starpu_task_submit(perturb_task));
 
         //starpu_task_wait_for_all();
         // only output the block when simulation time overtakes the min time to generate output
@@ -682,7 +689,7 @@ int main(int argc, char **argv){
                 dump_block_task->cl_arg_size = sizeof(dump_block_args_t);
                 dump_block_task->cl_arg_free = 1;
 
-                dump_block_task->handles[0] = p_wave_iter[2][block_idx(i, j, k)];
+                dump_block_task->handles[0] = p_wave_iter[0][block_idx(i, j, k)];
 
                 TRY(starpu_task_submit(dump_block_task));
             }
