@@ -21,29 +21,29 @@ void fletcher_base_medium_initialize(const enum Form prob, size_t sx, size_t sy,
     case ISO:
         for (i = 0; i < sx * sy * sz; i++)
         {
-            vpz[i]     = FP_LIT(3000.0);
-            epsilon[i] = FP_LIT(0.0);
-            delta[i]   = FP_LIT(0.0);
-            phi[i]     = FP_LIT(0.0);
-            theta[i]   = FP_LIT(0.0);
-            vsv[i]     = FP_LIT(0.0);
+            vpz[i]     = 3000.0;
+            epsilon[i] = 0.0;
+            delta[i]   = 0.0;
+            phi[i]     = 0.0;
+            theta[i]   = 0.0;
+            vsv[i]     = 0.0;
         }
         break;
     case VTI:
         for (i = 0; i < sx * sy * sz; i++)
         {
-            vpz[i]     = FP_LIT(3000.0);
-            epsilon[i] = FP_LIT(0.24);
-            delta[i]   = FP_LIT(0.1);
-            phi[i]     = FP_LIT(0.0);
-            theta[i]   = FP_LIT(0.0);
+            vpz[i]     = 3000.0;
+            epsilon[i] = 0.24;
+            delta[i]   = 0.1;
+            phi[i]     = 0.0;
+            theta[i]   = 0.0;
             if (SIGMA > MAX_SIGMA)
             {
-                vsv[i] = FP_LIT(0.0);
+                vsv[i] = 0.0;
             }
             else
             {
-                vsv[i] = vpz[i] * FP_SQRT(FP_ABS(epsilon[i] - delta[i]) / SIGMA);
+                vsv[i] = vpz[i] * sqrtf(fabsf(epsilon[i] - delta[i]) / SIGMA);
             }
         }
         break;
@@ -51,18 +51,18 @@ void fletcher_base_medium_initialize(const enum Form prob, size_t sx, size_t sy,
     case TTI:
         for (i = 0; i < sx * sy * sz; i++)
         {
-            vpz[i]     = FP_LIT(3000.0);
-            epsilon[i] = FP_LIT(0.24);
-            delta[i]   = FP_LIT(0.1);
-            phi[i]     = FP_LIT(1.0); 
-            theta[i] = FP_ATAN(1.0);
+            vpz[i]     = 3000.0;
+            epsilon[i] = 0.24;
+            delta[i]   = 0.1;
+            phi[i]     = 1.0; 
+            theta[i] = atanf(1.0);
             if (SIGMA > MAX_SIGMA)
             {
-                vsv[i] = FP_LIT(0.0);
+                vsv[i] = 0.0;
             }
             else
             {
-                vsv[i] = vpz[i] * FP_SQRT(FP_ABS(epsilon[i] - delta[i]) / SIGMA);
+                vsv[i] = vpz[i] * sqrtf(fabsf(epsilon[i] - delta[i]) / SIGMA);
             }
         }
     }

@@ -282,8 +282,7 @@ void perturbation_kernel(void *descr[], void *cl_args){
     FP *const q_wave_block = (FP *const) STARPU_BLOCK_GET_PTR(descr[1]);
 
     //print usado no teste sourcediff.sh
-    //printf("%ld: %.9f + %.9f\n", args->t, p_wave_block[idx], value);
-
+    printf("%ld: %.9f + %.9f\n", args->t, p_wave_block[idx], value);
     p_wave_block[idx] += value;
     q_wave_block[idx] += value;
 }

@@ -11,8 +11,7 @@ CFLAGS = -g3 -O0 -Wno-cpp -lm
 all: $(ALL_TESTS)
 	$(foreach test, $^, ./$(test).out $(ARGS);)
 	
-deriv-tests: $(CURDIR)/deriv-tests.c $(PARENT_DIR)/src/derivatives.c $(PARENT_DIR)/src/includes/derivatives.h $(PARENT_DIR)/scripts/scripts/cross-deriv-gen.py
-	python3 $(PARENT_DIR)/scripts/cross-deriv-gen.py > src/cross-deriv.gen.c
+deriv-tests: $(CURDIR)/deriv-tests.c $(PARENT_DIR)/src/derivatives.c $(PARENT_DIR)/src/includes/derivatives.h 
 	$(CC) -o $@.out $^ $(CRITERION_CFLAGS) $(CRITERION_LDLIBS) -I $(PARENT_DIR)/$(INCLUDEDIR) $(CFLAGS)
 
 
@@ -21,4 +20,8 @@ MEDIUM_TEST_DEP += $(PARENT_DIR)/src/argparse.c $(PARENT_DIR)/src/includes/argpa
 MEDIUM_TEST_DEP += $(PARENT_DIR)/src/includes/macros.h $(PARENT_DIR)/src/includes/floatingpoint.h
 
 medium-tests: $(MEDIUM_TEST_DEP)
+	$(CC) -o $@.out $^ $(CRITERION_CFLAGS) $(CRITERION_LDLIBS) -I $(PARENT_DIR)/$(INCLUDEDIR) $(CFLAGS)
+
+
+kernel-tests: $(CURDIR)/kernel-tests.c $(PARENT_DIR)/src/derivatives.c $(PARENT_DIR)/src/includes/derivatives.h 	
 	$(CC) -o $@.out $^ $(CRITERION_CFLAGS) $(CRITERION_LDLIBS) -I $(PARENT_DIR)/$(INCLUDEDIR) $(CFLAGS)

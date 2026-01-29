@@ -39,13 +39,9 @@ all: $(BIN)
 $(BIN): $(OBJS)
 	$(CC) $(CFLAGS) $(LDLIBS) $^ -o $@
 
-# null rule for this guy
-$(OBJDIR)/cross-deriv.gen.o: 
-	@echo none
-
 # rule to specify dependency
 $(OBJDIR)/derivatives.o: $(SRCDIR)/derivatives.c $(SCRIPTDIR)/cross-deriv-gen.py
-	python3 $(SCRIPTDIR)/cross-deriv-gen.py > $(SRCDIR)/cross-deriv.gen.c
+	python3 $(SCRIPTDIR)/cross-deriv-gen.py > $(INCLUDEDIR)/cross-deriv.gen.c
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDEDIR)
 
@@ -75,6 +71,7 @@ print:
 
 # need to pass the commands directly inline
 test:
+	python3 $(SCRIPTDIR)/cross-deriv-gen.py > $(INCLUDEDIR)/cross-deriv.gen.c
 	$(MAKE) -C tests 
 
 clean:
