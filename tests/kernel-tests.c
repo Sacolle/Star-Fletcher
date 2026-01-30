@@ -256,16 +256,85 @@ Test(fletcher_kernel, compute_one_step) {
     //compute one propagation from both
     //compare
 
-    #define ASBLK(ptr) (struct starpu_block_interface) { \
+    #define ASBLK(ptr) ((struct starpu_block_interface) { \
         .id = STARPU_BLOCK_INTERFACE_ID, .ptr = ptr, \
         .nx = g_cube_width, .ny = g_cube_width, .nz = g_cube_width, \
-        .ldy = g_cube_width, .ldz = g_cube_width * g_cube_width, .elemsize = sizeof(FP)}
+        .ldy = g_cube_width, .ldz = g_cube_width * g_cube_width, .elemsize = sizeof(FP)})
 
     for(size_t k = 1; k < g_width_in_cubes + 1; k++)
     for(size_t j = 1; j < g_width_in_cubes + 1; j++)
     for(size_t i = 1; i < g_width_in_cubes + 1; i++){
 
         //TODO:
+        const 
+
+        const size_t precomp_idx = block_idx(i - 1, j - 1, k - 1);
+        task->handles[0] = hdl_ch1dxx[precomp_idx];
+        task->handles[1] = hdl_ch1dyy[precomp_idx];
+        task->handles[2] = hdl_ch1dzz[precomp_idx];
+        task->handles[3] = hdl_ch1dxy[precomp_idx];
+        task->handles[4] = hdl_ch1dyz[precomp_idx];
+        task->handles[5] = hdl_ch1dxz[precomp_idx];
+        task->handles[6] = hdl_v2px[precomp_idx];
+        task->handles[7] = hdl_v2pz[precomp_idx];
+        task->handles[8] = hdl_v2sz[precomp_idx];
+        task->handles[9] = hdl_v2pn[precomp_idx];
+
+        // p wave blocks
+        task->handles[10] = p_wave_iter[0][idx]; // write block
+
+        task->handles[11] = p_wave_iter[1][idx]; //central block when t - 1
+
+        task->handles[12] = p_wave_iter[1][block_idx(i + 0, j + 0, k - 1)];
+        task->handles[13] = p_wave_iter[1][block_idx(i + 0, j - 1, k - 1)];
+        task->handles[14] = p_wave_iter[1][block_idx(i - 1, j + 0, k - 1)];
+        task->handles[15] = p_wave_iter[1][block_idx(i + 1, j + 0, k - 1)];
+        task->handles[16] = p_wave_iter[1][block_idx(i + 0, j + 1, k - 1)];
+
+        task->handles[17] = p_wave_iter[1][block_idx(i - 1, j - 1, k + 0)];
+        task->handles[18] = p_wave_iter[1][block_idx(i + 0, j - 1, k + 0)];
+        task->handles[19] = p_wave_iter[1][block_idx(i + 1, j - 1, k + 0)];
+        task->handles[20] = p_wave_iter[1][block_idx(i - 1, j + 0, k + 0)];
+        task->handles[21] = p_wave_iter[1][block_idx(i + 1, j + 0, k + 0)];
+        task->handles[22] = p_wave_iter[1][block_idx(i - 1, j + 1, k + 0)];
+        task->handles[23] = p_wave_iter[1][block_idx(i + 0, j + 1, k + 0)];
+        task->handles[24] = p_wave_iter[1][block_idx(i + 1, j + 1, k + 0)];
+
+        task->handles[25] = p_wave_iter[1][block_idx(i + 0, j + 0, k + 1)];
+        task->handles[26] = p_wave_iter[1][block_idx(i + 0, j - 1, k + 1)];
+        task->handles[27] = p_wave_iter[1][block_idx(i - 1, j + 0, k + 1)];
+        task->handles[28] = p_wave_iter[1][block_idx(i + 1, j + 0, k + 1)];
+        task->handles[29] = p_wave_iter[1][block_idx(i + 0, j + 1, k + 1)];
+
+        task->handles[30] = p_wave_iter[2][idx]; //central block when t - 2
+
+        // q wave blocks
+        task->handles[31] = q_wave_iter[0][idx]; // write block
+
+        task->handles[32] = q_wave_iter[1][idx]; //central block when t - 1
+
+        task->handles[33] = q_wave_iter[1][block_idx(i + 0, j + 0, k - 1)];
+        task->handles[34] = q_wave_iter[1][block_idx(i + 0, j - 1, k - 1)];
+        task->handles[35] = q_wave_iter[1][block_idx(i - 1, j + 0, k - 1)];
+        task->handles[36] = q_wave_iter[1][block_idx(i + 1, j + 0, k - 1)];
+        task->handles[37] = q_wave_iter[1][block_idx(i + 0, j + 1, k - 1)];
+
+        task->handles[38] = q_wave_iter[1][block_idx(i - 1, j - 1, k + 0)];
+        task->handles[39] = q_wave_iter[1][block_idx(i + 0, j - 1, k + 0)];
+        task->handles[40] = q_wave_iter[1][block_idx(i + 1, j - 1, k + 0)];
+        task->handles[41] = q_wave_iter[1][block_idx(i - 1, j + 0, k + 0)];
+        task->handles[42] = q_wave_iter[1][block_idx(i + 1, j + 0, k + 0)];
+        task->handles[43] = q_wave_iter[1][block_idx(i - 1, j + 1, k + 0)];
+        task->handles[44] = q_wave_iter[1][block_idx(i + 0, j + 1, k + 0)];
+        task->handles[45] = q_wave_iter[1][block_idx(i + 1, j + 1, k + 0)];
+
+        task->handles[46] = q_wave_iter[1][block_idx(i + 0, j + 0, k + 1)];
+        task->handles[47] = q_wave_iter[1][block_idx(i + 0, j - 1, k + 1)];
+        task->handles[48] = q_wave_iter[1][block_idx(i - 1, j + 0, k + 1)];
+        task->handles[49] = q_wave_iter[1][block_idx(i + 1, j + 0, k + 1)];
+        task->handles[50] = q_wave_iter[1][block_idx(i + 0, j + 1, k + 1)];
+
+        task->handles[51] = q_wave_iter[2][idx]; //central block when t - 2
 
         for(size_t z = 0; z < g_cube_width; z++)
         for(size_t y = 0; y < g_cube_width; y++)
