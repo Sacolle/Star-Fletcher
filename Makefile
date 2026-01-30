@@ -28,7 +28,7 @@ OBJDIR = objs
 SCRIPTDIR = scripts
 export INCLUDEDIR = src/includes
 
-SRCS_ = argparse.c derivatives.c kernel.c main.c medium.c
+SRCS_ = argparse.c derivatives.c kernel.c main.c medium.c mem.c vector.c
 SRCS := $(addprefix $(SRCDIR)/, $(SRCS_))
 OBJS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o,$(SRCS))
 

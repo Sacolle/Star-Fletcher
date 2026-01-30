@@ -13,7 +13,6 @@
 
 #include "vector.h"
 
-
 // width for the volume of the whole sistem
 size_t g_volume_width = 0;
 // amount of segments in a dimension. 
@@ -193,6 +192,7 @@ struct starpu_codelet rtm_codelet = {
 };
 
 int write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
+    /*
     // salva o primeiro bloco (nulo)
     for(size_t k = 1; k < g_width_in_cubes + 1; k++)
     for(size_t j = 1; j < g_width_in_cubes + 1; j++)
@@ -219,6 +219,7 @@ int write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
         };
     }
     (*n_out)++;
+    */
     return 0;
 }
 

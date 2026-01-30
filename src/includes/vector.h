@@ -24,30 +24,6 @@ void layec_vector_maybe_expand(void** vector_ref, long long element_size, long l
 #define vector_free(V) do { if (V) { memset(V, 0, (unsigned long long)vector_count(V) * (sizeof *(V))); free(vector_get_header(V)); (V) = NULL; } } while (0)
 #define vector_free_all(V, F) do { if (V) { for (long long vector_index = 0; vector_index < vector_count(V); vector_index++) F((V)[vector_index]); memset(V, 0, (unsigned long long)vector_count(V) * (sizeof *(V))); free(vector_get_header(V)); (V) = NULL; } } while (0)
 
-void layec_vector_maybe_expand(void** vector_ref, long long element_size, long long required_count)
-{
-    if (required_count <= 0) return;
-    
-    struct allocations_header* header = vector_get_header(*vector_ref);
-    if (!*vector_ref)
-    {
-        long long initial_capacity = 32;
-        void* new_data = malloc((sizeof *header) + (unsigned long long)(initial_capacity * element_size));
-        header = (struct allocations_header*) new_data;
-
-        header->capacity = initial_capacity;
-        header->count = 0;
-
-    }
-    else if (required_count > header->capacity)
-    {
-        while (required_count > header->capacity)
-            header->capacity *= 2;
-        header = (struct allocations_header*) realloc(header, (sizeof *header) + (unsigned long long)(header->capacity * element_size));
-    }
-    
-    *vector_ref = (void*)(header + 1);
-}
 
 
 #endif
