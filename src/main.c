@@ -35,12 +35,12 @@ FILE* g_worker_files[MAXFILES];
 #define TOTAL_CUBES (g_width_in_cubes * g_width_in_cubes * g_width_in_cubes)
 
 #ifndef OUTPUT_FOLDER
-#define OUTPUT_FOLDER result
+#define OUTPUT_FOLDER "result"
 #endif
 
 #define STR(x) # x
 
-const char* out_folder = STR(OUTPUT_FOLDER);
+const char* out_folder = OUTPUT_FOLDER;
 
 const FP dt_output = FP_LIT(0.01);
 
@@ -199,7 +199,6 @@ struct starpu_codelet rtm_codelet = {
 };
 
 int write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
-    /*
     // salva o primeiro bloco (nulo)
     for(size_t k = 1; k < g_width_in_cubes + 1; k++)
     for(size_t j = 1; j < g_width_in_cubes + 1; j++)
@@ -226,7 +225,6 @@ int write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
         };
     }
     (*n_out)++;
-    */
     return 0;
 }
 

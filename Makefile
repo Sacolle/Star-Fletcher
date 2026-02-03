@@ -13,7 +13,7 @@ echo $(error, compile mode not defined)
 endif
 
 ifdef SCRATCH
-CFLAGS += -DOUTPUT_FOLDER="$$SCRATCH"
+CFLAGS += -DOUTPUT_FOLDER='"$(SCRATCH)"'
 endif
 
 ifeq ($(COMPILE_MODE), release)
