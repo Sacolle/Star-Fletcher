@@ -2,7 +2,7 @@
 export STARPU_CFLAGS := $(shell pkg-config --cflags starpu-1.4)
 export STARPU_LDLIBS := $(shell pkg-config --libs starpu-1.4)
 
-CFLAGS := $(STARPU_CFLAGS) -Wall
+CFLAGS := $(STARPU_CFLAGS) -Wall 
 LDLIBS += $(STARPU_LDLIBS) -lm
 
 # if COMPILE_MODE is not define, the makefile will generate a
@@ -12,6 +12,9 @@ ifndef COMPILE_MODE
 echo $(error, compile mode not defined)
 endif
 
+ifdef SCRATCH
+CFLAGS += -DOUTPUT_FOLDER="$$SCRATCH"
+endif
 
 ifeq ($(COMPILE_MODE), release)
 CFLAGS += -O3

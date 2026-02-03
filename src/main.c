@@ -34,7 +34,14 @@ FILE* g_worker_files[MAXFILES];
 #define CUBE_SIZE (g_cube_width * g_cube_width * g_cube_width)
 #define TOTAL_CUBES (g_width_in_cubes * g_width_in_cubes * g_width_in_cubes)
 
-const char* out_folder = "result";
+#ifndef OUTPUT_FOLDER
+#define OUTPUT_FOLDER result
+#endif
+
+#define STR(x) # x
+
+const char* out_folder = STR(OUTPUT_FOLDER);
+
 const FP dt_output = FP_LIT(0.01);
 
 
