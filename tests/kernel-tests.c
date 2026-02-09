@@ -241,6 +241,89 @@ void teardown_values(){
 
 TestSuite(fletcher_kernel, .init = build_matricies, .fini = teardown_values);
 
+#define ASBLK(_ptr) ((struct starpu_block_interface) { \
+    .id = STARPU_BLOCK_INTERFACE_ID, .ptr = (uintptr_t) _ptr, \
+    .nx = g_cube_width, .ny = g_cube_width, .nz = g_cube_width, \
+    .ldy = g_cube_width, .ldz = g_cube_width * g_cube_width, .elemsize = sizeof(FP)})
+
+void build_handles(struct starpu_block_interface handles[52], size_t i, size_t j, size_t k){
+    const size_t idx = block_idx(i, j, k);
+
+    const size_t precomp_idx = block_idx(i - 1, j - 1, k - 1);
+    handles[0] = ASBLK(g_ch1dxx[precomp_idx]);
+    handles[1] = ASBLK(g_ch1dyy[precomp_idx]);
+    handles[2] = ASBLK(g_ch1dzz[precomp_idx]);
+    handles[3] = ASBLK(g_ch1dxy[precomp_idx]);
+    handles[4] = ASBLK(g_ch1dyz[precomp_idx]);
+    handles[5] = ASBLK(g_ch1dxz[precomp_idx]);
+    handles[6] = ASBLK(g_v2px[precomp_idx]);
+    handles[7] = ASBLK(g_v2pz[precomp_idx]);
+    handles[8] = ASBLK(g_v2sz[precomp_idx]);
+    handles[9] = ASBLK(g_v2pn[precomp_idx]);
+
+    // p wave blocks
+    handles[10] = ASBLK(g_segment_matrix_p[0][idx]); // write block
+
+    handles[11] = ASBLK(g_segment_matrix_p[1][idx]); //central block when t - 1
+
+    handles[12] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j + 0, k - 1)]);
+    handles[13] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j - 1, k - 1)]);
+    handles[14] = ASBLK(g_segment_matrix_p[1][block_idx(i - 1, j + 0, k - 1)]);
+    handles[15] = ASBLK(g_segment_matrix_p[1][block_idx(i + 1, j + 0, k - 1)]);
+    handles[16] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j + 1, k - 1)]);
+
+    handles[17] = ASBLK(g_segment_matrix_p[1][block_idx(i - 1, j - 1, k + 0)]);
+    handles[18] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j - 1, k + 0)]);
+    handles[19] = ASBLK(g_segment_matrix_p[1][block_idx(i + 1, j - 1, k + 0)]);
+    handles[20] = ASBLK(g_segment_matrix_p[1][block_idx(i - 1, j + 0, k + 0)]);
+    handles[21] = ASBLK(g_segment_matrix_p[1][block_idx(i + 1, j + 0, k + 0)]);
+    handles[22] = ASBLK(g_segment_matrix_p[1][block_idx(i - 1, j + 1, k + 0)]);
+    handles[23] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j + 1, k + 0)]);
+    handles[24] = ASBLK(g_segment_matrix_p[1][block_idx(i + 1, j + 1, k + 0)]);
+
+    handles[25] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j + 0, k + 1)]);
+    handles[26] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j - 1, k + 1)]);
+    handles[27] = ASBLK(g_segment_matrix_p[1][block_idx(i - 1, j + 0, k + 1)]);
+    handles[28] = ASBLK(g_segment_matrix_p[1][block_idx(i + 1, j + 0, k + 1)]);
+    handles[29] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j + 1, k + 1)]);
+
+    handles[30] = ASBLK(g_segment_matrix_p[2][idx]); //central block when t - 2
+
+    // q wave blocks
+    handles[31] = ASBLK(g_segment_matrix_q[0][idx]); // write block
+
+    handles[32] = ASBLK(g_segment_matrix_q[1][idx]); //central block when t - 1
+
+    handles[33] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j + 0, k - 1)]);
+    handles[34] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j - 1, k - 1)]);
+    handles[35] = ASBLK(g_segment_matrix_q[1][block_idx(i - 1, j + 0, k - 1)]);
+    handles[36] = ASBLK(g_segment_matrix_q[1][block_idx(i + 1, j + 0, k - 1)]);
+    handles[37] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j + 1, k - 1)]);
+
+    handles[38] = ASBLK(g_segment_matrix_q[1][block_idx(i - 1, j - 1, k + 0)]);
+    handles[39] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j - 1, k + 0)]);
+    handles[40] = ASBLK(g_segment_matrix_q[1][block_idx(i + 1, j - 1, k + 0)]);
+    handles[41] = ASBLK(g_segment_matrix_q[1][block_idx(i - 1, j + 0, k + 0)]);
+    handles[42] = ASBLK(g_segment_matrix_q[1][block_idx(i + 1, j + 0, k + 0)]);
+    handles[43] = ASBLK(g_segment_matrix_q[1][block_idx(i - 1, j + 1, k + 0)]);
+    handles[44] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j + 1, k + 0)]);
+    handles[45] = ASBLK(g_segment_matrix_q[1][block_idx(i + 1, j + 1, k + 0)]);
+
+    handles[46] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j + 0, k + 1)]);
+    handles[47] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j - 1, k + 1)]);
+    handles[48] = ASBLK(g_segment_matrix_q[1][block_idx(i - 1, j + 0, k + 1)]);
+    handles[49] = ASBLK(g_segment_matrix_q[1][block_idx(i + 1, j + 0, k + 1)]);
+    handles[50] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j + 1, k + 1)]);
+
+    handles[51] = ASBLK(g_segment_matrix_q[2][idx]); //central block when t - 2
+}
+// the kernel requires a `struct starpu_block_interface*`, então salva os blocos localemente 
+// e gera um vetor "virtual" que aponto para esses blocos locais salvos.
+void virtualize_handles(struct starpu_block_interface* handles, struct starpu_block_interface** v_handles, size_t amount){
+    for(size_t vi = 0; vi < amount; vi++){
+        v_handles[vi] = &handles[vi];
+    }
+}
 
 Test(fletcher_kernel, compute_one_step) {
     //insert source
@@ -256,97 +339,27 @@ Test(fletcher_kernel, compute_one_step) {
     
     g_volume_matrix_pc[volume_center_idx] += source;
     g_volume_matrix_qc[volume_center_idx] += source;
-    g_segment_matrix_p[1][center_cube_idx][source_local_cube_idx] += source;
-    g_segment_matrix_q[1][center_cube_idx][source_local_cube_idx] += source;
 
-    //compute one propagation from both
-    //compare
+    struct starpu_block_interface source_handles[2];
+    struct starpu_block_interface* v_source_handles[2];
+    source_handles[0] = ASBLK(g_segment_matrix_p[1][center_cube_idx]);
+    source_handles[1] = ASBLK(g_segment_matrix_q[1][center_cube_idx]);
+    virtualize_handles(source_handles, v_source_handles, 2);
 
-    #define ASBLK(_ptr) ((struct starpu_block_interface) { \
-        .id = STARPU_BLOCK_INTERFACE_ID, .ptr = (uintptr_t) _ptr, \
-        .nx = g_cube_width, .ny = g_cube_width, .nz = g_cube_width, \
-        .ldy = g_cube_width, .ldz = g_cube_width * g_cube_width, .elemsize = sizeof(FP)})
-
+    //use the source kernel
+    struct perturb_args* p_args;
+    cr_assert(not(make_perturb_args(&p_args, source_local_cube_idx, source, 0)));
+    perturbation_kernel((void**) v_source_handles, p_args);
+    free(p_args);
+    
     for(size_t k = 1; k < g_width_in_cubes + 1; k++)
     for(size_t j = 1; j < g_width_in_cubes + 1; j++)
     for(size_t i = 1; i < g_width_in_cubes + 1; i++){
 
-        //TODO:
-        const size_t idx = block_idx(i, j, k);
         struct starpu_block_interface handles[52];
-
-        const size_t precomp_idx = block_idx(i - 1, j - 1, k - 1);
-        handles[0] = ASBLK(g_ch1dxx[precomp_idx]);
-        handles[1] = ASBLK(g_ch1dyy[precomp_idx]);
-        handles[2] = ASBLK(g_ch1dzz[precomp_idx]);
-        handles[3] = ASBLK(g_ch1dxy[precomp_idx]);
-        handles[4] = ASBLK(g_ch1dyz[precomp_idx]);
-        handles[5] = ASBLK(g_ch1dxz[precomp_idx]);
-        handles[6] = ASBLK(g_v2px[precomp_idx]);
-        handles[7] = ASBLK(g_v2pz[precomp_idx]);
-        handles[8] = ASBLK(g_v2sz[precomp_idx]);
-        handles[9] = ASBLK(g_v2pn[precomp_idx]);
-
-        // p wave blocks
-        handles[10] = ASBLK(g_segment_matrix_p[0][idx]); // write block
-
-        handles[11] = ASBLK(g_segment_matrix_p[1][idx]); //central block when t - 1
-
-        handles[12] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j + 0, k - 1)]);
-        handles[13] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j - 1, k - 1)]);
-        handles[14] = ASBLK(g_segment_matrix_p[1][block_idx(i - 1, j + 0, k - 1)]);
-        handles[15] = ASBLK(g_segment_matrix_p[1][block_idx(i + 1, j + 0, k - 1)]);
-        handles[16] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j + 1, k - 1)]);
-
-        handles[17] = ASBLK(g_segment_matrix_p[1][block_idx(i - 1, j - 1, k + 0)]);
-        handles[18] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j - 1, k + 0)]);
-        handles[19] = ASBLK(g_segment_matrix_p[1][block_idx(i + 1, j - 1, k + 0)]);
-        handles[20] = ASBLK(g_segment_matrix_p[1][block_idx(i - 1, j + 0, k + 0)]);
-        handles[21] = ASBLK(g_segment_matrix_p[1][block_idx(i + 1, j + 0, k + 0)]);
-        handles[22] = ASBLK(g_segment_matrix_p[1][block_idx(i - 1, j + 1, k + 0)]);
-        handles[23] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j + 1, k + 0)]);
-        handles[24] = ASBLK(g_segment_matrix_p[1][block_idx(i + 1, j + 1, k + 0)]);
-
-        handles[25] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j + 0, k + 1)]);
-        handles[26] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j - 1, k + 1)]);
-        handles[27] = ASBLK(g_segment_matrix_p[1][block_idx(i - 1, j + 0, k + 1)]);
-        handles[28] = ASBLK(g_segment_matrix_p[1][block_idx(i + 1, j + 0, k + 1)]);
-        handles[29] = ASBLK(g_segment_matrix_p[1][block_idx(i + 0, j + 1, k + 1)]);
-
-        handles[30] = ASBLK(g_segment_matrix_p[2][idx]); //central block when t - 2
-
-        // q wave blocks
-        handles[31] = ASBLK(g_segment_matrix_q[0][idx]); // write block
-
-        handles[32] = ASBLK(g_segment_matrix_q[1][idx]); //central block when t - 1
-
-        handles[33] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j + 0, k - 1)]);
-        handles[34] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j - 1, k - 1)]);
-        handles[35] = ASBLK(g_segment_matrix_q[1][block_idx(i - 1, j + 0, k - 1)]);
-        handles[36] = ASBLK(g_segment_matrix_q[1][block_idx(i + 1, j + 0, k - 1)]);
-        handles[37] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j + 1, k - 1)]);
-
-        handles[38] = ASBLK(g_segment_matrix_q[1][block_idx(i - 1, j - 1, k + 0)]);
-        handles[39] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j - 1, k + 0)]);
-        handles[40] = ASBLK(g_segment_matrix_q[1][block_idx(i + 1, j - 1, k + 0)]);
-        handles[41] = ASBLK(g_segment_matrix_q[1][block_idx(i - 1, j + 0, k + 0)]);
-        handles[42] = ASBLK(g_segment_matrix_q[1][block_idx(i + 1, j + 0, k + 0)]);
-        handles[43] = ASBLK(g_segment_matrix_q[1][block_idx(i - 1, j + 1, k + 0)]);
-        handles[44] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j + 1, k + 0)]);
-        handles[45] = ASBLK(g_segment_matrix_q[1][block_idx(i + 1, j + 1, k + 0)]);
-
-        handles[46] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j + 0, k + 1)]);
-        handles[47] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j - 1, k + 1)]);
-        handles[48] = ASBLK(g_segment_matrix_q[1][block_idx(i - 1, j + 0, k + 1)]);
-        handles[49] = ASBLK(g_segment_matrix_q[1][block_idx(i + 1, j + 0, k + 1)]);
-        handles[50] = ASBLK(g_segment_matrix_q[1][block_idx(i + 0, j + 1, k + 1)]);
-
-        handles[51] = ASBLK(g_segment_matrix_q[2][idx]); //central block when t - 2
-
         struct starpu_block_interface* virtual_handles[52];
-        for(size_t vi = 0; vi < 52; vi++){
-            virtual_handles[vi] = &handles[vi];
-        }
+        build_handles(handles, i, j, k);
+        virtualize_handles(handles, virtual_handles, 52);
 
         const size_t start_z = k == 1 ? BORDER_WIDTH : 0;
         const size_t end_z = g_cube_width - (k == g_width_in_cubes ? BORDER_WIDTH : 0);
@@ -369,15 +382,14 @@ Test(fletcher_kernel, compute_one_step) {
         for(size_t y = 0; y < g_cube_width; y++)
         for(size_t x = 0; x < g_cube_width; x++){
 
-            if(
-                (z < start_z || z >= end_z) || 
-                (y < start_y || y >= end_y) || 
-                (x < start_x || x >= end_x)
-            ){
+            if((z < start_z || z >= end_z) || 
+               (y < start_y || y >= end_y) || 
+               (x < start_x || x >= end_x)){
                 continue;
             }
             const size_t vol_i = block_cube_to_volume_idx(x, y, z, i - 1, j - 1, k - 1);
             const size_t block_i = block_idx(i - 1, j - 1, k - 1);
+            const size_t block_with_offset_i = block_idx(i, j, k);
             const size_t cube_i = cube_idx(x, y, z);
 
             base_computation_implementation(dt, dx, dy, dz, 
@@ -385,35 +397,114 @@ Test(fletcher_kernel, compute_one_step) {
                 g_volume_matrix_pc, g_volume_matrix_pp, g_volume_matrix_qc, g_volume_matrix_qp
             );
 
-            cr_expect(epsilon_eq(flt, g_volume_matrix_pp[vol_i], g_segment_matrix_p[0][block_i][cube_i], EPSILON), 
-            "diff at (i: %ld, j: %ld, k: %ld) (x: %ld, y: %ld, z: %ld)", i, j, k, x, y, z);
+            cr_expect(epsilon_eq(flt, g_volume_matrix_pp[vol_i], g_segment_matrix_p[0][block_with_offset_i][cube_i], EPSILON), 
+            "diff at (i: %ld, j: %ld, k: %ld) (x: %ld, y: %ld, z: %ld)", i - 1, j - 1, k - 1, x, y, z);
         }
     }
 }
 
 
-/*
-#define FSTBLK(blk) ((blk) == 1)
-#define LSTBLK(blk) ((blk) == g_width_in_cubes)
-#define START(blk, idx) (FSTBLK(blk) && (idx) < BORDER_WIDTH)
-#define END(blk, idx) (LSTBLK(blk) && (idx) >= (g_cube_width - BORDER_WIDTH))
-#define INEDGE(blk_idx, cidx) (START(blk_idx, cidx) || END(blk_idx, cidx))
+Test(fletcher_kernel, compute_many_step) {
+    const size_t amount_of_steps = 10;
+    //insert source
+    const FP dt = 0.001f;
+    const FP dx = 12.5f, dy = 12.5f, dz = 12.5f;
 
-#define EPSILON 0.0001
-int has_clear_edge(FP* block, size_t i, size_t j, size_t k){
-    for(size_t z = 0; z < g_cube_width; z++){
-        for(size_t y = 0; y < g_cube_width; y++){
+    const size_t volume_center_idx = volume_idx(g_volume_width / 2, g_volume_width / 2, g_volume_width / 2);
+    const size_t center_cube_idx = volume_to_block_idx(volume_center_idx) + block_idx(1, 1, 1);
+    const size_t source_local_cube_idx = volume_to_cube_idx(volume_center_idx);
+
+    cr_log_info("indice de propagação da onda é %ld", volume_center_idx);
+    for(size_t it = 0; it < amount_of_steps; it++){
+
+        /* ----------- INSERT SOURCE -----------*/
+        const FP source = medium_source_value(dt, it);
+        g_volume_matrix_pc[volume_center_idx] += source;
+        g_volume_matrix_qc[volume_center_idx] += source;
+
+        struct starpu_block_interface source_handles[2];
+        struct starpu_block_interface* v_source_handles[2];
+        source_handles[0] = ASBLK(g_segment_matrix_p[1][center_cube_idx]);
+        source_handles[1] = ASBLK(g_segment_matrix_q[1][center_cube_idx]);
+        virtualize_handles(source_handles, v_source_handles, 2);
+
+        //use the source kernel
+        struct perturb_args* p_args;
+        cr_assert(not(make_perturb_args(&p_args, source_local_cube_idx, source, it)));
+        perturbation_kernel((void**) v_source_handles, p_args);
+        free(p_args);
+        
+        /* ----------- PROPAGATE -----------*/
+        for(size_t k = 1; k < g_width_in_cubes + 1; k++)
+        for(size_t j = 1; j < g_width_in_cubes + 1; j++)
+        for(size_t i = 1; i < g_width_in_cubes + 1; i++){
+
+            struct starpu_block_interface handles[52];
+            struct starpu_block_interface* virtual_handles[52];
+            build_handles(handles, i, j, k);
+            virtualize_handles(handles, virtual_handles, 52);
+
+            const size_t start_z = k == 1 ? BORDER_WIDTH : 0;
+            const size_t end_z = g_cube_width - (k == g_width_in_cubes ? BORDER_WIDTH : 0);
+            const size_t start_y = j == 1 ? BORDER_WIDTH : 0;
+            const size_t end_y = g_cube_width - (j == g_width_in_cubes ? BORDER_WIDTH : 0);
+            const size_t start_x = i == 1 ? BORDER_WIDTH : 0;
+            const size_t end_x = g_cube_width - (i == g_width_in_cubes ? BORDER_WIDTH : 0);
+            
+            struct rtm_args* rtm_args;
+            cr_assert(not(make_rtm_args(&rtm_args, 
+                start_x, end_x,
+                start_y, end_y,
+                start_z, end_z,
+                dx, dy, dz, dt)));
+            
+            rtm_kernel((void**) virtual_handles, (void*) rtm_args);
+            free(rtm_args);
+
+            for(size_t z = 0; z < g_cube_width; z++)
+            for(size_t y = 0; y < g_cube_width; y++)
             for(size_t x = 0; x < g_cube_width; x++){
-                const size_t idx = cube_idx(x, y, z);
-                if(INEDGE(k, z) || INEDGE(j, y) || INEDGE(i, x)){
-                    if(block[idx] < EPSILON || block[idx] > -EPSILON){
 
-                    }else{
-                        return 1;
-                    }
+                if((z < start_z || z >= end_z) || 
+                (y < start_y || y >= end_y) || 
+                (x < start_x || x >= end_x)){
+                    continue;
                 }
+                const size_t vol_i = block_cube_to_volume_idx(x, y, z, i - 1, j - 1, k - 1);
+                const size_t block_i = block_idx(i - 1, j - 1, k - 1);
+                const size_t block_with_offset_i = block_idx(i, j, k);
+                const size_t cube_i = cube_idx(x, y, z);
+
+                base_computation_implementation(dt, dx, dy, dz, 
+                    vol_i, block_i, cube_i, 
+                    g_volume_matrix_pc, g_volume_matrix_pp, g_volume_matrix_qc, g_volume_matrix_qp
+                );
+
+                cr_expect(epsilon_eq(flt, g_volume_matrix_pp[vol_i], g_segment_matrix_p[0][block_with_offset_i][cube_i], EPSILON), 
+                "diff at (i: %ld, j: %ld, k: %ld) (x: %ld, y: %ld, z: %ld)", i - 1, j - 1, k - 1, x, y, z);
             }
         }
+        /* ----------- SWAP BUFFERS -----------*/
+
+        // swap the global one
+        FP* tmp = g_volume_matrix_pc;
+        g_volume_matrix_pc = g_volume_matrix_pp;
+        g_volume_matrix_pp = tmp;
+
+        tmp = g_volume_matrix_qc;
+        g_volume_matrix_qc = g_volume_matrix_qp;
+        g_volume_matrix_qp = tmp;
+
+        //rotate the ones around
+        FP** segtmp = g_segment_matrix_p[2];
+        g_segment_matrix_p[2] = g_segment_matrix_p[1];
+        g_segment_matrix_p[1] = g_segment_matrix_p[0];
+        g_segment_matrix_p[0] = segtmp;
+
+        segtmp = g_segment_matrix_q[2];
+        g_segment_matrix_q[2] = g_segment_matrix_q[1];
+        g_segment_matrix_q[1] = g_segment_matrix_q[0];
+        g_segment_matrix_q[0] = segtmp;
+
     }
-    return 0;
-}*/
+}
