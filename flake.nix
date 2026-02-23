@@ -70,9 +70,11 @@
 
                 #madagascar
                 madagascar.packages.${system}.default
-            ] ++ (with cudapkgs; [ 
-                # TODO: find which exact package is needed here to build 
-                cudaPackages.cudatoolkit 
+            ] ++ (with cudapkgs.cudaPackages; [ 
+                cuda_cudart
+                cuda_nvcc
+                cuda_nvml_dev.dev
+                libcusparse.dev
             ]);
             # export StarPU and hwloc store locations 
             # for use in vscode intellisence
@@ -81,6 +83,13 @@
             STARPU_STORE_PATH = "${StarPUVersion}";
             CRITERION_STORE_PATH = "${pkgs.criterion.dev}";
             HWLOC_STORE_PATH = "${pkgs.hwloc.dev}";
+
+            # cudas
+            CUDART_STORE_PATH =      "${cudapkgs.cudaPackages.cuda_cudart.dev}";
+            NVCC_STORE_PATH =        "${cudapkgs.cudaPackages.cuda_nvcc}";
+            NVML_STORE_PATH =        "${cudapkgs.cudaPackages.cuda_nvml_dev.dev}";
+            LIBCUSPARSE_STORE_PATH = "${cudapkgs.cudaPackages.libcusparse.dev}";
+
 
             # on relase this is overwritten
             COMPILE_MODE = "debug"; 
