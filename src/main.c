@@ -35,7 +35,7 @@ FILE* g_worker_files[MAXFILES];
 #define TOTAL_CUBES (g_width_in_cubes * g_width_in_cubes * g_width_in_cubes)
 
 #ifndef OUTPUT_FOLDER
-#define OUTPUT_FOLDER "result"
+#define OUTPUT_FOLDER "results"
 #endif
 
 #define STR(x) # x
@@ -296,9 +296,7 @@ int main(int argc, char **argv){
         switch (starpu_worker_get_type(worker_id)){
         case STARPU_CPU_WORKER:
             TRY(snprintf(file_name, MAXFILENAME - 1, "%s/%s-worker-out-%ld.bin", out_folder, form_str, worker_id) < 0 ? 1 : 0);
-            if((g_worker_files[worker_id] = fopen(file_name, "wb")) == NULL){
-                goto program_end;
-            }
+            TRY((g_worker_files[worker_id] = fopen(file_name, "wb")) == NULL);
             break;
         default: assert(0 && "No non-CPU worker should be available at this moment.");
         }
@@ -449,7 +447,7 @@ int main(int argc, char **argv){
 
     int64_t n_out = 0;
     // salva o primeiro bloco (nulo)
-    TRY(write_wave(&n_out, p_wave_iter[0]));
+    //TRY(write_wave(&n_out, p_wave_iter[0]));
 
     for(int64_t t = 1; t <= st; t++){
         // printf("t: %d\n", t);

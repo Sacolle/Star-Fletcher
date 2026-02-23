@@ -28,6 +28,7 @@ BIN = main
 
 SRCDIR = src
 OBJDIR = objs
+RESDIR = results
 SCRIPTDIR = scripts
 export INCLUDEDIR = src/includes
 
@@ -53,19 +54,19 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDEDIR)
 
 run: $(BIN)
-	@mkdir -p result
-	@echo "Runing $(BIN). Out putting at ./result"
+	@mkdir -p $(RESDIR)
+	@echo "Runing $(BIN). Out putting at ./$(RESDIR)"
 	./$(BIN) TTI 56 56 56 8 12.5 12.5 12.5 0.001 0.5 8
 	@echo "congealing the data..."
-	python3 ./scripts/parse-rsf.py "./result/out-TTI.rsf"
-#	./scripts/visualize.sh result/out-TTI.rsf
+	python3 ./scripts/parse-rsf.py "./$(RESDIR)/out-TTI.rsf"
+#	./scripts/visualize.sh $(RESDIR)/out-TTI.rsf
 
 debug: $(BIN)
-	@mkdir -p result
+	@mkdir -p $(RESDIR)
 	gdb --args ./$(BIN) TTI 32 32 32 4 12.5 12.5 12.5 0.001 0.5 4
 
 valgrind: $(BIN)
-	@mkdir -p result
+	@mkdir -p $(RESDIR)
 	valgrind ./$(BIN) TTI 16 16 16 4 12.5 12.5 12.5 0.001 0.1 2
 
 print:
