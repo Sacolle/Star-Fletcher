@@ -3,10 +3,13 @@
 
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+        # gets the proper version of the CUDA packages for compilation
         cudaNixpkgs.url = "github:nixos/nixpkgs/1da52dd49a127ad74486b135898da2cef8c62665";
+
+        madagascar.url = "github:Sacolle/nix-madagascar";
     };
 
-    outputs = { self, nixpkgs, cudaNixpkgs }: 
+    outputs = { self, nixpkgs, cudaNixpkgs, madagascar }: 
     let 
         system = "x86_64-linux";
         # import gcc13Stdenv from this because it uses the correct version of glibc (2.40-36)
@@ -21,15 +24,19 @@
 
         starpuOverlay = f: p: {
             StarPU = p.callPackage ../../starpu.nix { 
+                enableCUDA = true; 
                 cudaPackages  = cudapkgs.cudaPackages;
                 linuxPackages = cudapkgs.linuxPackages;
 
-                enableCUDA = true; 
+                maxBuffers = 56;
+                enableTrace = true;
             };
         };
+
         fxtOverlay = f: p: {
             fxt = p.callPackage ../../fxt.nix { static = true; };
         };
+
         pkgs = import nixpkgs {
             inherit system;
             overlays = [ starpuOverlay fxtOverlay ];
@@ -39,31 +46,59 @@
                 cudaVersion = "13";
             };
         };
-    in
-    {
-        packages.${system}.default = pkgs.StarPU;
-        devShells.${system}.default = pkgs.mkShell {
+        baseShell = StarPUVersion: extraArgs: pkgs.mkShell ({
             buildInputs = with pkgs; [
                 pkg-config
-                StarPU
                 hwloc
+                # StarPU
+                StarPUVersion
+                
+                # project libs
+                criterion
+
                 # for bash to work properlly inside vscode
                 bashInteractive
+                # for fuser
+                psmisc
+                # debug tools
                 gdb
-                gcc
+                # gcc
                 valgrind
-            ];
+                # scripting
+                python313
+                python313Packages.numpy
+
+                #madagascar
+                madagascar.packages.${system}.default
+            ] ++ (with cudapkgs; [ 
+                # TODO: find which exact package is needed here to build 
+                cudaPackages.cudatoolkit 
+            ]);
             # export StarPU and hwloc store locations 
             # for use in vscode intellisence
-            GCC_STORE_PATH = "${pkgs.gcc}";
-            STARPU_STORE_PATH = "${pkgs.StarPU}";
+
+            # TODO: add the cuda_runtime.h to PATH so that i can add to vscode
+            STARPU_STORE_PATH = "${StarPUVersion}";
+            CRITERION_STORE_PATH = "${pkgs.criterion.dev}";
             HWLOC_STORE_PATH = "${pkgs.hwloc.dev}";
 
+            # on relase this is overwritten
+            COMPILE_MODE = "debug"; 
+
             shellHook = ''
-                export SHELL=/run/current-system/sw/bin/bash
-                echo Added StarPU, Hwloc and gcc to ENV
-                echo ${pkgs.fxt}
+                echo Added StarPU, Hwloc, criterion and gcc to ENV
+                zsh
             '';
+        } // extraArgs);
+    in
+    {
+        # packages.${system}.default = pkgs.StarPU;
+        devShells.${system} = {
+            default = baseShell pkgs.StarPU {};
+            release = (baseShell (pkgs.StarPU.overrideAttrs (oldAttrs: {
+                enableTrace = false;
+                buildMode = "release";
+            }))) { COMPILE_MODE = "release"; };
         };
     };
 }
