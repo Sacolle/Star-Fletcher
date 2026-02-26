@@ -78,8 +78,6 @@
             ]);
             # export StarPU and hwloc store locations 
             # for use in vscode intellisence
-
-            # TODO: add the cuda_runtime.h to PATH so that i can add to vscode
             STARPU_STORE_PATH = "${StarPUVersion}";
             CRITERION_STORE_PATH = "${pkgs.criterion.dev}";
             HWLOC_STORE_PATH = "${pkgs.hwloc.dev}";
@@ -94,10 +92,7 @@
             # on relase this is overwritten
             COMPILE_MODE = "debug"; 
 
-            shellHook = ''
-                echo Added StarPU, Hwloc, criterion and gcc to ENV
-                zsh
-            '';
+            shellHook = ''zsh'';
         } // extraArgs);
     in
     {
@@ -108,6 +103,14 @@
                 enableTrace = false;
                 buildMode = "release";
             }))) { COMPILE_MODE = "release"; };
+            pcad_experiments = (baseShell (pkgs.StarPU.overrideAttrs (oldAttrs: {
+                enableTrace = true;
+                enableCUDA = false;
+                buildMode = "release";
+            }))) { 
+                COMPILE_MODE = "release"; 
+                shellHook = '''';
+            };
         };
     };
 }

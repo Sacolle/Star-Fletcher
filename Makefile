@@ -56,18 +56,18 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 run: $(BIN)
 	@mkdir -p $(RESDIR)
 	@echo "Runing $(BIN). Out putting at ./$(RESDIR)"
-	./$(BIN) TTI 56 56 56 8 12.5 12.5 12.5 0.001 0.5 8
+	./$(BIN) TTI 56 56 56 8 12.5 12.5 12.5 0.001 0.5 4 0.01
 	@echo "congealing the data..."
 	python3 ./scripts/parse-rsf.py "./$(RESDIR)/out-TTI.rsf"
 #	./scripts/visualize.sh $(RESDIR)/out-TTI.rsf
 
 debug: $(BIN)
 	@mkdir -p $(RESDIR)
-	gdb --args ./$(BIN) TTI 32 32 32 4 12.5 12.5 12.5 0.001 0.5 4
+	gdb --args ./$(BIN) TTI 32 32 32 4 12.5 12.5 12.5 0.001 0.5 4 0.01
 
 valgrind: $(BIN)
 	@mkdir -p $(RESDIR)
-	valgrind ./$(BIN) TTI 16 16 16 4 12.5 12.5 12.5 0.001 0.1 2
+	valgrind ./$(BIN) TTI 16 16 16 4 12.5 12.5 12.5 0.001 0.1 2 0.01
 
 print:
 	@echo "Sources: $(SRCS)"

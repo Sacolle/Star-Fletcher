@@ -41,8 +41,8 @@ FILE* g_worker_files[MAXFILES];
 #define STR(x) # x
 
 const char* out_folder = OUTPUT_FOLDER;
-
-const FP dt_output = FP_LIT(0.01);
+// instrumentalize this
+FP g_dt_output = FP_LIT(0.01);
 
 
 // passes the iter[0] to iter[1], iter[1] to iter[2] and iter[2] to iter[0]
@@ -211,7 +211,7 @@ int write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
         }
 
         struct starpu_task* dump_block_task = starpu_task_create();
-        dump_block_task->name = "write block";
+        dump_block_task->name = "write_block";
         dump_block_task->cl = &dump_block_codelet;
         dump_block_task->cl_arg = dump_args;
         dump_block_task->cl_arg_size = sizeof(dump_block_args_t);
@@ -270,11 +270,11 @@ int main(int argc, char **argv){
 	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
 
     int err = 0;
-    TRY(err = read_args(argc, argv, 11, 
+    TRY(err = read_args(argc, argv, 12, 
         ARG_str, &form_str, 
         ARG_u32, &nx, ARG_u32, &ny, ARG_u32, &nz, ARG_u32, &absorb_width, 
         FP_ARG, &dx, FP_ARG, &dy, FP_ARG, &dz, FP_ARG, &dt, FP_ARG, &tmax,
-        ARG_u64, &g_width_in_cubes 
+        ARG_u64, &g_width_in_cubes, FP_ARG, &g_dt_output
     ), "Error %s in parsing arg at %d\n.", get_parse_errors_name(err), get_parse_errors_local(err));
 
     TRY(str_to_medium(form_str, &form), "Failed at string to medium conversion");
@@ -457,7 +457,7 @@ int main(int argc, char **argv){
 
         // task that insert the perturbation on the handle
         struct starpu_task* perturb_task = starpu_task_create();
-        perturb_task->name = "wave insertion";
+        perturb_task->name = "wave_insertion";
 
         const FP source_value = medium_source_value(dt, t - 1);
         perturb_args_t* perturb_args;
@@ -492,7 +492,7 @@ int main(int argc, char **argv){
             );
 
             struct starpu_task* task = starpu_task_create();
-            task->name = "wave propagation";
+            task->name = "wave_propagation";
             task->cl = &rtm_codelet;
 
             const size_t start_z = k == 1 ? BORDER_WIDTH : 0;
@@ -605,12 +605,11 @@ int main(int argc, char **argv){
 
         //starpu_task_wait_for_all();
         // only output the block when simulation time overtakes the min time to generate output
-        //const FP simulation_time = t * dt;
-        //const FP output_time = n_out * dt_output;
-        //if(simulation_time >= output_time){ // hand made fst iter to dump
-          //  printf("n_out: %d\n", n_out);
-        TRY(write_wave(&n_out, p_wave_iter[0]));
-        //}
+        const FP simulation_time = t * dt;
+        const FP output_time = n_out * g_dt_output;
+        if(simulation_time >= output_time){ // hand made fst iter to dump
+            TRY(write_wave(&n_out, p_wave_iter[0]));
+        }
 
         if(t >= 2){
             for(size_t k = 1; k < g_width_in_cubes + 1; k++)
@@ -677,9 +676,7 @@ int main(int argc, char **argv){
     char filename[256];
 
     sprintf(filename, "%s/out-%s.rsf", out_folder, form_str);
-    if((rsf_header = fopen(filename, "w+")) == NULL){
-        goto program_end;
-    }
+    TRY((rsf_header = fopen(filename, "w+")) == NULL);
 
     fprintf(rsf_header,"in=\"./%s@\"\n", filename);
     fprintf(rsf_header,"data_format=\"native_float\"\n");
