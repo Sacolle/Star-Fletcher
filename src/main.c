@@ -678,7 +678,7 @@ int main(int argc, char **argv){
     sprintf(filename, "%s/out-%s.rsf", out_folder, form_str);
     TRY((rsf_header = fopen(filename, "w+")) == NULL);
 
-    fprintf(rsf_header,"in=\"./%s@\"\n", filename);
+    fprintf(rsf_header,"in=\"%s@\"\n", filename);
     fprintf(rsf_header,"data_format=\"native_float\"\n");
     fprintf(rsf_header,"esize=%lu\n", sizeof(float)); 
     fprintf(rsf_header,"n1=%ld\n", g_volume_width /*sx*/);
