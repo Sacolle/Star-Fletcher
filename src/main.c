@@ -248,6 +248,8 @@ int write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
 
 int main(int argc, char **argv){
 
+    printf("Outputting to folder %s\n", out_folder);
+
     srand(RANDOM_SEED);
 
     //need to be toplevel for the try macro
