@@ -96,7 +96,6 @@
         } // extraArgs);
     in
     {
-        # packages.${system}.default = pkgs.StarPU;
         devShells.${system} = {
             default = baseShell pkgs.StarPU {};
             release = (baseShell (pkgs.StarPU.overrideAttrs (oldAttrs: {
@@ -110,6 +109,31 @@
             }))) { 
                 COMPILE_MODE = "release"; 
                 shellHook = '''';
+            };
+        };
+        packages.${system} = {
+            star-fletcher = 
+                let 
+                    localStarPU = (pkgs.StarPU.overrideAttrs (oldAttrs: {
+                        enableTrace = true;
+                        enableCUDA = false;
+                        buildMode = "release";
+                    }));
+                in pkgs.stdenv.mkDerivation {
+                pname = "star-fletcher";
+                version = "0.1";
+                src = ./.;
+                nativeBuildInputs = with pkgs; [
+                    pkg-config
+                    hwloc
+                    localStarPU
+                ];
+                buildInputs = [
+                    pkgs.python313
+                    localStarPU
+                ];
+                buildPhase = "COMPILE_MODE=release make";
+                installPhase = "mkdir -p $out/bin && cp main $out/bin/star-fletcher";
             };
         };
     };
