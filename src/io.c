@@ -10,7 +10,7 @@
 
 int io_alignment_restrictions(FileDesc fd, uint32_t* alignment, uint32_t* offset){
     struct statx stx;
-    if(statx(fd, NULL, AT_EMPTY_PATH, STATX_DIOALIGN, &stx) != 0){
+    if(statx(fd, "", AT_EMPTY_PATH, STATX_DIOALIGN, &stx) != 0){
         return errno;
     }
     if(!HAS_FLAG(stx.stx_mask, STATX_DIOALIGN)){

@@ -306,7 +306,6 @@ int main(int argc, char **argv){
     }
     uint32_t mem_offset;
     int align_ret = io_alignment_restrictions(g_worker_files[test_case_worker], &g_mem_aligment, &mem_offset);
-    printf("Alignment ret is %d\n", align_ret);
     TRY(align_ret, "Failed with error %d", align_ret);
 
     DEBUG("Memory aligment of system is: %d\nIt's offset is: %d", g_mem_aligment, mem_offset);
