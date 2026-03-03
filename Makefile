@@ -2,8 +2,8 @@
 export STARPU_CFLAGS := $(shell pkg-config --cflags starpu-1.4)
 export STARPU_LDLIBS := $(shell pkg-config --libs starpu-1.4)
 
-CFLAGS := $(STARPU_CFLAGS) -Wall 
-LDLIBS += $(STARPU_LDLIBS) -lm
+CFLAGS := $(STARPU_CFLAGS) -Wall
+LDLIBS += $(STARPU_LDLIBS) -lm -lc
 
 # if COMPILE_MODE is not define, the makefile will generate a
 # missing separator Error because it will fail to parse the echo line
@@ -13,7 +13,7 @@ echo $(error, compile mode not defined)
 endif
 
 ifdef SCRATCH
-CFLAGS += -DOUTPUT_FOLDER='"$(SCRATCH)"'
+CFLAGS += -DOUTPUT_FOLDER='"$(SCRATCH)"' 
 endif
 
 ifeq ($(COMPILE_MODE), release)
@@ -32,7 +32,7 @@ RESDIR = results
 SCRIPTDIR = scripts
 export INCLUDEDIR = src/includes
 
-SRCS_ = argparse.c derivatives.c kernel.c main.c medium.c mem.c vector.c
+SRCS_ = argparse.c derivatives.c kernel.c main.c medium.c mem.c vector.c io.c
 SRCS := $(addprefix $(SRCDIR)/, $(SRCS_))
 OBJS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o,$(SRCS))
 

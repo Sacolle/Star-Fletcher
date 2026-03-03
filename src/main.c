@@ -10,6 +10,7 @@
 #include "argparse.h"
 #include "medium.h"
 #include "mem.h"
+#include "io.h"
 
 #include "vector.h"
 
@@ -26,27 +27,25 @@ size_t g_cube_width = 0;
 
 const size_t BORDER_WIDTH = 4;
 
-#define MAXFILES 64
-#define MAXFILENAME 128
-FILE* g_worker_files[MAXFILES];
-
-
 #define CUBE_SIZE (g_cube_width * g_cube_width * g_cube_width)
 #define TOTAL_CUBES (g_width_in_cubes * g_width_in_cubes * g_width_in_cubes)
 
+FP g_dt_output = FP_LIT(0.01);
+
+//TODO: change this to be a runtime thing, not compile time 
 #ifndef OUTPUT_FOLDER
 #define OUTPUT_FOLDER "results"
 #endif
 
-#define STR(x) # x
-
 const char* out_folder = OUTPUT_FOLDER;
 // instrumentalize this
-FP g_dt_output = FP_LIT(0.01);
-
+#define MAXFILES 128
+#define MAXFILENAME 256
+FileDesc g_worker_files[MAXFILES];
+uint32_t g_mem_aligment = 0;
 
 // passes the iter[0] to iter[1], iter[1] to iter[2] and iter[2] to iter[0]
-void rotate_for_next_iter(starpu_data_handle_t* iter[3]){
+static inline void rotate_for_next_iter(starpu_data_handle_t* iter[3]){
     starpu_data_handle_t* tmp = iter[2]; 
     iter[2] = iter[1]; 
     iter[1] = iter[0]; 
@@ -62,7 +61,8 @@ typedef struct dump_block_args {
 } dump_block_args_t;
 
 int make_dump_block_args(dump_block_args_t** args, size_t i, size_t j, size_t k, size_t t){
-    if((*args = (dump_block_args_t*) malloc(sizeof(dump_block_args_t))) == NULL){
+    //NOTE: isso quebra o meu script de reconstrução?
+    if(posix_memalign((void**) args, g_mem_aligment, sizeof(dump_block_args_t))){
         return 1;
     }
     **args = (dump_block_args_t) {i, j, k, t};
@@ -80,10 +80,10 @@ void dump_block_kernel(void *descr[], void *cl_args){
 
     const int worker_id = starpu_worker_get_id();
     // maybe validation here
-    FILE* worker_file = g_worker_files[worker_id];
+    FileDesc worker_fd = g_worker_files[worker_id];
 
-    fwrite(args, sizeof(dump_block_args_t), 1, worker_file);
-    fwrite(block, sizeof(FP), nx * ny * nz, worker_file);
+    io_write_file_to_disk(worker_fd, (void*) args, sizeof(dump_block_args_t));
+    io_write_file_to_disk(worker_fd, (void*) block, sizeof(FP) * nx * ny * nz);
 }
 
 
@@ -265,7 +265,7 @@ int main(int argc, char **argv){
 
     // NOTE: set a file for each worker so there's no race condition
     for(size_t wf = 0; wf < MAXFILES; wf++){
-        g_worker_files[wf] = NULL;
+        g_worker_files[wf] = 0;
     }
 
 	int ret = starpu_init(NULL);
@@ -292,17 +292,25 @@ int main(int argc, char **argv){
  
     const int64_t st = (int64_t) FP_CEIL(tmax / dt);
 
-    // NOTE: code for initializing the files for each thread.
     char file_name[MAXFILENAME];
+    size_t test_case_worker = 0;
     for(size_t worker_id = 0; worker_id < starpu_worker_get_count(); worker_id++){
         switch (starpu_worker_get_type(worker_id)){
         case STARPU_CPU_WORKER:
             TRY(snprintf(file_name, MAXFILENAME - 1, "%s/%s-worker-out-%ld.bin", out_folder, form_str, worker_id) < 0 ? 1 : 0);
-            TRY((g_worker_files[worker_id] = fopen(file_name, "wb")) == NULL);
+            TRY(io_open_disk_file(&g_worker_files[worker_id], file_name));
+            test_case_worker = worker_id;
             break;
-        default: assert(0 && "No non-CPU worker should be available at this moment.");
+        default: assert(0 && "Only CPU worker should be available at this moment.");
         }
     }
+    uint32_t mem_offset;
+    int align_ret = io_alignment_restrictions(g_worker_files[test_case_worker], &g_mem_aligment, &mem_offset);
+    TRY(align_ret, "Failed with error %d", align_ret);
+
+    DEBUG("Memory aligment of system is: %d\nIt's offset is: %d", g_mem_aligment, mem_offset);
+    starpu_malloc_set_align(g_mem_aligment);
+
     // the point in the global volume that the source is inserted
     const size_t volume_propagation_idx = volume_idx(g_volume_width / 2, g_volume_width / 2, g_volume_width / 2);
     DEBUG("Index of propagation is %ld.\n", volume_propagation_idx);
@@ -632,13 +640,6 @@ int main(int argc, char **argv){
     //at least after all iterations
     starpu_task_wait_for_all();
 
-    //FP* result_block, *result_volume;
-    //TRY(mem_allocate(allocs,(void**) &result_block, sizeof(FP) * CUBE_SIZE));
-    //TRY(mem_allocate(allocs,(void**) &result_volume, sizeof(FP) * CUBE(g_volume_width)));
-
-    //clear_block(result_block, g_cube_width);
-    //clear_block(result_volume, g_volume_width);
-
     // cleanup all remaning handles (p_wave_iter[2] and iteraions[1])
     for(size_t k = 1; k < g_width_in_cubes + 1; k++){
         for(size_t j = 1; j < g_width_in_cubes + 1; j++){
@@ -699,8 +700,8 @@ int main(int argc, char **argv){
     program_end:
 
     for(size_t wf = 0; wf < MAXFILES; wf++){
-        if(g_worker_files[wf] != NULL){
-            fclose(g_worker_files[wf]);
+        if(g_worker_files[wf] != 0){
+            io_close_disk_file(g_worker_files[wf]);
         } 
     }
 
