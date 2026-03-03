@@ -132,7 +132,7 @@
                     pkgs.python313
                     localStarPU
                 ];
-                buildPhase = "COMPILE_MODE=release make";
+                buildPhase = "SCRATCH=/scratch/phbcolle/ COMPILE_MODE=release make";
                 installPhase = "mkdir -p $out/bin && cp main $out/bin/star-fletcher";
             };
         };
