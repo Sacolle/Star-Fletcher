@@ -5,15 +5,14 @@
         nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
         # gets the proper version of the CUDA packages for compilation
         cudaNixpkgs.url = "github:nixos/nixpkgs/1da52dd49a127ad74486b135898da2cef8c62665";
-
+        StarPU.url = "github:Sacolle/nix-starpu";
         madagascar.url = "github:Sacolle/nix-madagascar";
     };
 
-    outputs = { self, nixpkgs, cudaNixpkgs, madagascar }: 
+    outputs = { self, nixpkgs, cudaNixpkgs, StarPU, madagascar }: 
     let 
         system = "x86_64-linux";
-        # import gcc13Stdenv from this because it uses the correct version of glibc (2.40-36)
-        cudapkgs = import cudaNixpkgs { 
+        pkgsconfigs = { 
             inherit system; 
             config = { 
                 allowUnfree = true;
@@ -21,36 +20,20 @@
                 cudaVersion = "13";
             };
         };
+        # import gcc13Stdenv from this because it uses the correct version of glibc (2.40-36)
+        cudapkgs = import cudaNixpkgs pkgsconfigs;
+        pkgs = import nixpkgs pkgsconfigs;
 
-        starpuOverlay = f: p: {
-            StarPU = p.callPackage ../../starpu.nix { 
+        myStarPU = StarPU.packages.${system}.default.override {
                 enableCUDA = true; 
-                cudaPackages  = cudapkgs.cudaPackages;
-                linuxPackages = cudapkgs.linuxPackages;
-
                 maxBuffers = 56;
                 enableTrace = true;
-            };
         };
 
-        fxtOverlay = f: p: {
-            fxt = p.callPackage ../../fxt.nix { static = true; };
-        };
-
-        pkgs = import nixpkgs {
-            inherit system;
-            overlays = [ starpuOverlay fxtOverlay ];
-            config = { 
-                allowUnfree = true;
-                cudaSupport = true;
-                cudaVersion = "13";
-            };
-        };
         baseShell = StarPUVersion: extraArgs: pkgs.mkShell ({
             buildInputs = with pkgs; [
                 pkg-config
                 hwloc
-                # StarPU
                 StarPUVersion
                 
                 # project libs
@@ -91,50 +74,55 @@
 
             # on relase this is overwritten
             COMPILE_MODE = "debug"; 
-
-            shellHook = ''zsh'';
         } // extraArgs);
     in
     {
         devShells.${system} = {
-            default = baseShell pkgs.StarPU {};
-            release = (baseShell (pkgs.StarPU.overrideAttrs (oldAttrs: {
+            default = baseShell myStarPU {};
+
+            release = (baseShell (myStarPU.overrideAttrs (oldAttrs: {
                 enableTrace = false;
-                buildMode = "release";
+                compileAsRelease = true;
             }))) { COMPILE_MODE = "release"; };
-            pcad_experiments = (baseShell (pkgs.StarPU.overrideAttrs (oldAttrs: {
+
+            pcad_experiments = (baseShell (myStarPU.overrideAttrs (oldAttrs: {
                 enableTrace = true;
                 enableCUDA = false;
-                buildMode = "release";
+                compileAsRelease = true;
             }))) { 
                 COMPILE_MODE = "release"; 
-                shellHook = '''';
             };
         };
-        packages.${system} = {
+        packages.${system} = 
+        let
             star-fletcher = 
                 let 
-                    localStarPU = (pkgs.StarPU.overrideAttrs (oldAttrs: {
+                    localStarPU = (myStarPU.overrideAttrs (oldAttrs: {
                         enableTrace = true;
                         enableCUDA = false;
-                        buildMode = "release";
+                        compileAsRelease = true;
                     }));
-                in pkgs.stdenv.mkDerivation {
-                pname = "star-fletcher";
-                version = "0.1";
-                src = ./.;
-                nativeBuildInputs = with pkgs; [
-                    pkg-config
-                    hwloc
-                    localStarPU
-                ];
-                buildInputs = [
-                    pkgs.python313
-                    localStarPU
-                ];
-                buildPhase = "SCRATCH=/scratch/phbcolle/ COMPILE_MODE=release make";
-                installPhase = "mkdir -p $out/bin && cp main $out/bin/star-fletcher";
-            };
+                in 
+                pkgs.stdenv.mkDerivation {
+                    pname = "star-fletcher";
+                    version = "0.1";
+                    src = ./.;
+                    nativeBuildInputs = with pkgs; [
+                        pkg-config
+                        hwloc
+                        localStarPU
+                    ];
+                    buildInputs = [
+                        pkgs.python313
+                        localStarPU
+                    ];
+                    buildPhase = "SCRATCH=/scratch/phbcolle/ COMPILE_MODE=release make";
+                    installPhase = "mkdir -p $out/bin && cp main $out/bin/star-fletcher";
+                };
+        in
+        {
+            default = star-fletcher;
+            inherit star-fletcher;
         };
     };
 }
