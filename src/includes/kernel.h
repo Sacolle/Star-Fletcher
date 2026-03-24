@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include "floatingpoint.h"
+#include "err.h"
 
 typedef struct rtm_args {
     size_t x_start;
@@ -17,7 +18,7 @@ typedef struct rtm_args {
     FP dt;
 } rtm_args_t;
 
-int make_rtm_args(rtm_args_t** rtm_args, 
+err_t make_rtm_args(rtm_args_t** rtm_args, 
     const size_t x_start, const size_t x_end,
     const size_t y_start, const size_t y_end,
     const size_t z_start, const size_t z_end,
@@ -29,7 +30,7 @@ typedef struct perturb_args{
     size_t t;
 } perturb_args_t;
 
-int make_perturb_args(perturb_args_t** perturb_args, const size_t idx, const FP value, const size_t t);
+err_t make_perturb_args(perturb_args_t** perturb_args, const size_t idx, const FP value, const size_t t);
 
 
 void rtm_kernel(void *descr[], void *cl_args);

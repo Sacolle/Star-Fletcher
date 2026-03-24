@@ -9,10 +9,14 @@
 #include "macros.h"
 
 //return != 0 if err
-int str_to_medium(const char *str, enum Form* form){
-    int err = 0;
-    *form = str_to_enum(str, &err, 3, "ISO", ISO, "VTI", VTI, "TTI", TTI);
-    return err;
+err_t str_to_medium(const char *str, enum Form* form){
+    err_t err;
+    int ret;
+    if((err = str_to_enum(str, &ret, 3, "ISO", ISO, "VTI", VTI, "TTI", TTI)) != 0){
+        return err;
+    }
+    *form = ret;
+    return 0;
 }
 
 // TODO: test

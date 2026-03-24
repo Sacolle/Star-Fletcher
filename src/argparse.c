@@ -10,58 +10,88 @@
 
 #include "argparse.h"
 
+bool has_envvar(const char* key){
+    return getenv(key) != NULL;
+}
+
+err_t i64_get_envvar(int64_t* out, const char* key){
+    char* env_out = getenv(key);
+    if(env_out == NULL){
+		return ME_MISSING_ENVVAR;
+  	}
+	char* rest;
+	errno = 0;
+	*out = strtoll(env_out, &rest, 10);
+	int err = errno;
+	if(err) {
+		return err;
+	}
+	if(rest == key){
+		// String vazia de entrada
+		return ME_IMPROPER_INPUT;
+	}
+	if(*rest != '\0'){ 
+		// há mais caracteres que não foram parseados
+		return ME_INCOMPLETE_PARSE;
+	};
+
+	return 0;
+}
+
+err_t str_get_envvar(char** out, const char* key){
+    char* env_out = getenv(key);
+    if(env_out == NULL){
+		return ME_MISSING_ENVVAR;
+  	}
+	*out = env_out;
+	return 0;
+}
 
 
-int str_to_enum(const char* word, int* err, int count, ...){
+err_t str_to_enum(const char* word, int* outp_res, int count, ...){
 	va_list valist;
 	va_start(valist, count);
-	int ret = 0;
-	*err = 1;
+	*outp_res = 0;
+	err_t err = ME_NOMATCH;
 	for(int i = 0; i < count; i++){
 		char* str = va_arg(valist, char*);
 		int enum_value = va_arg(valist, int);
 
 		if(strcmp(word, str) == 0){
-			ret = enum_value;
-			*err = 0;
+			*outp_res = enum_value;
+			err = 0;
 			break;
 		}
 	}
 	va_end(valist);
-	return ret;
+	return err;
 }
-
-//mask is 3 bits
-#define MASKSIZE 3
-#define MASK 7 // 111
-enum ParseErrors {
-	NoError = 0,
-	InvalidTag = 1,
-	ImproperConversion = 2,
-	OverflowConversion = 3,
-	InsuficientArgs = 4
-};
 
 bool is_neg(char* str){
 	return *str == '-';
 }
-int read_args(int argc, char** argv, int count, ...){
+
+err_t read_args(int* argc, char** argv, int count, ...){
 	va_list valist;
 	va_start(valist, count);
-	int err = NoError;
-	int i = 0;
-	if(argc < count){
-		err = InsuficientArgs;
+	err_t err = 0;
+
+	if(*argc < count){
+		err = ME_IMPROPER_INPUT;
 		goto exit;
 	}
 	//skipa o primeiro elemento
 	argv++;
 
-	for(i = 0; i < count; i++){
+	// store in argc the element, read, in case of error, 
+	// it is the index of the failed element
+	*argc = 0;
+
+	for(size_t i = 0; i < count; i++){
 		int tag = va_arg(valist, int);
 		
 		if(tag < 0 || tag > 7) {
-			err = InvalidTag;
+			err = ME_NOMATCH;
 			goto exit;
 		}
 
@@ -75,8 +105,8 @@ int read_args(int argc, char** argv, int count, ...){
 
 		#define READ_TO_VAL(type, func) \
 			*(type*) val = func; \
-			if(errno) { err = OverflowConversion; goto exit; } \
-			else if(*rest) { err = ImproperConversion; goto exit; };
+			if(errno) { err = errno; goto exit; } \
+			else if(*rest) { err = ME_INCOMPLETE_PARSE; goto exit; };
 
 		switch(tag){
 			case ARG_i32: 
@@ -86,11 +116,11 @@ int read_args(int argc, char** argv, int count, ...){
 				READ_TO_VAL(int64_t, strtoll(argv[i], &rest, 10)); 
 				break;
 			case ARG_u32: 
-				if(is_neg(argv[i])) { err = OverflowConversion; goto exit; }
+				if(is_neg(argv[i])) { err = ME_OVERFLOW_CONVERT; goto exit; }
 				READ_TO_VAL(uint32_t, strtoul(argv[i], &rest, 10)); 
 				break;
 			case ARG_u64: 
-				if(is_neg(argv[i])) { err = OverflowConversion; goto exit; }
+				if(is_neg(argv[i])) { err = ME_OVERFLOW_CONVERT; goto exit; }
 				READ_TO_VAL(uint64_t, strtoull(argv[i], &rest, 10)); 
 				break;
 			case ARG_f32: 
@@ -103,7 +133,7 @@ int read_args(int argc, char** argv, int count, ...){
 				*(char**) val = argv[i];
 				break;
 			case ARG_usize:
-				if(is_neg(argv[i])) { err = OverflowConversion; goto exit; }
+				if(is_neg(argv[i])) { err = ME_OVERFLOW_CONVERT; goto exit; }
 				//size_max is the max val of type size_t, 
 				// if its the same as u64, use strtoull, else use srtoul
 				#if SIZE_MAX == UINT64_MAX
@@ -115,29 +145,9 @@ int read_args(int argc, char** argv, int count, ...){
 			default:
 				assert(0 && "Unreachable!");
 		}
+		*argc += 1;
 	}
 	exit:
 	va_end(valist);
-	if(err == 0){
-		return 0;
-	}else{
-		return (i << MASKSIZE) | err;
-	}
-}
-
-int get_parse_errors_local(int err){
-	return err >> MASKSIZE;
-}
-
-char* get_parse_errors_name(int err){
-	#define ERR(e) e: return #e;  
-	switch (err & MASK) {
-		case ERR(NoError);
-		case ERR(InvalidTag);
-		case ERR(ImproperConversion);
-		case ERR(OverflowConversion);
-		case ERR(InsuficientArgs);
-	default:
-		return "<Invalid Error Code>";
-	}
+	return err;
 }

@@ -4,6 +4,7 @@
 #include <stddef.h>
 
 #include "floatingpoint.h"
+#include "err.h"
 
 #define MI 0.2
 #define SIGMA 0.75
@@ -11,7 +12,7 @@
 
 enum Form { ISO, VTI, TTI };
 
-int str_to_medium(const char *str, enum Form* form);
+err_t str_to_medium(const char *str, enum Form* form);
 
 //int medium_initialize();
 // calculates the stability condition of the time step

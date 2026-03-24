@@ -11,8 +11,10 @@
 #include "medium.h"
 #include "mem.h"
 #include "io.h"
-
+#include "err.h"
 #include "vector.h"
+
+#define DEFAULT_OUTPUT_FOLDER "results"
 
 // width for the volume of the whole sistem
 size_t g_volume_width = 0;
@@ -32,18 +34,6 @@ const size_t BORDER_WIDTH = 4;
 
 FP g_dt_output = FP_LIT(0.01);
 
-//TODO: change this to be a runtime thing, not compile time 
-#ifndef OUTPUT_FOLDER
-#define OUTPUT_FOLDER "results"
-#endif
-
-const char* out_folder = OUTPUT_FOLDER;
-// instrumentalize this
-#define MAXFILES 128
-#define MAXFILENAME 256
-FileDesc g_worker_files[MAXFILES];
-uint32_t g_mem_aligment = 0;
-
 // passes the iter[0] to iter[1], iter[1] to iter[2] and iter[2] to iter[0]
 static inline void rotate_for_next_iter(starpu_data_handle_t* iter[3]){
     starpu_data_handle_t* tmp = iter[2]; 
@@ -62,8 +52,8 @@ typedef struct dump_block_args {
 
 int make_dump_block_args(dump_block_args_t** args, size_t i, size_t j, size_t k, size_t t){
     //NOTE: isso quebra o meu script de reconstrução?
-    if(posix_memalign((void**) args, g_mem_aligment, sizeof(dump_block_args_t))){
-        return 1;
+    if((*args = (dump_block_args_t*) malloc(sizeof(dump_block_args_t))) == NULL){
+        return errno;
     }
     **args = (dump_block_args_t) {i, j, k, t};
     return 0;
@@ -72,18 +62,13 @@ int make_dump_block_args(dump_block_args_t** args, size_t i, size_t j, size_t k,
 
 void dump_block_kernel(void *descr[], void *cl_args){
     const dump_block_args_t* args = (dump_block_args_t*) cl_args;
-    const FP* block = (FP*) STARPU_BLOCK_GET_PTR(descr[0]);
+    FP* block = (FP*) STARPU_BLOCK_GET_PTR(descr[0]);
 
     const size_t nx = STARPU_BLOCK_GET_NX(descr[0]);
     const size_t ny = STARPU_BLOCK_GET_NY(descr[0]);
     const size_t nz = STARPU_BLOCK_GET_NZ(descr[0]);
 
-    const int worker_id = starpu_worker_get_id();
-    // maybe validation here
-    FileDesc worker_fd = g_worker_files[worker_id];
-
-    io_write_file_to_disk(worker_fd, (void*) args, sizeof(dump_block_args_t));
-    io_write_file_to_disk(worker_fd, (void*) block, sizeof(FP) * nx * ny * nz);
+    io_state_write_file(args->i, args->j, args->k, args->t, nx, ny, nz, block);
 }
 
 
@@ -198,7 +183,9 @@ struct starpu_codelet rtm_codelet = {
     .model = &starpu_perfmodel_nop,
 };
 
-int write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
+err_t write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
+
+    err_t err = 0;
     // salva o primeiro bloco (nulo)
     for(size_t k = 1; k < g_width_in_cubes + 1; k++)
     for(size_t j = 1; j < g_width_in_cubes + 1; j++)
@@ -206,8 +193,8 @@ int write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
 
         // call the write task
         dump_block_args_t* dump_args;
-        if(make_dump_block_args(&dump_args, i - 1, j - 1, k - 1, *n_out) != 0){
-            return 1;
+        if((err = make_dump_block_args(&dump_args, i - 1, j - 1, k - 1, *n_out)) != 0){
+            return err;
         }
 
         struct starpu_task* dump_block_task = starpu_task_create();
@@ -220,8 +207,8 @@ int write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
         //      no caso não importa pois write(t = 0) é só zeros no original
         dump_block_task->handles[0] = wave_iter[block_idx(i, j, k)];
 
-        if(starpu_task_submit(dump_block_task) != 0){
-            return 1;
+        if((err = starpu_task_submit(dump_block_task)) != 0){
+            return err;
         };
     }
     (*n_out)++;
@@ -235,8 +222,9 @@ int write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
 #define DEBUG(...) 
 #else
 // if x fails (!= 0), goto the end of main and log status;
-#define TRY(x,...) TRYTO(x, program_status = EXIT_FAILURE; \
-    printf("[error] Failed at line %d\n", __LINE__); \
+err_t g_err;
+#define TRY(x,...) TRYTO(g_err = (x), program_status = EXIT_FAILURE; \
+    printf("[error] Failed at line %d with error %ld: %s\n", __LINE__, g_err, err_name(g_err)); \
     printf("[err-msg] " __VA_ARGS__);, program_end)
 
 #define DEBUG(...) printf("[debug] " __VA_ARGS__)
@@ -248,8 +236,6 @@ int write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
 
 int main(int argc, char **argv){
 
-    printf("Outputting to folder %s\n", out_folder);
-
     srand(RANDOM_SEED);
 
     //need to be toplevel for the try macro
@@ -258,26 +244,27 @@ int main(int argc, char **argv){
     vector(void*) allocs = NULL;
     vector(void*) medium_allocs = NULL;
 
+
+	int ret = starpu_init(NULL);
+	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
+
+    char* output_folder;
+    if(get_envvar(&output_folder, "OUTPUT_FOLDER") != 0){
+        output_folder = DEFAULT_OUTPUT_FOLDER;
+    }
+    printf("Output folder is: %s\n", output_folder);
+
     enum Form form = 0;
     char* form_str = NULL;
     uint32_t nx, ny, nz, absorb_width;
     FP dx, dy, dz, dt, tmax;
 
-    // NOTE: set a file for each worker so there's no race condition
-    for(size_t wf = 0; wf < MAXFILES; wf++){
-        g_worker_files[wf] = 0;
-    }
-
-	int ret = starpu_init(NULL);
-	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
-
-    int err = 0;
-    TRY(err = read_args(argc, argv, 12, 
+    TRY(read_args(&argc, argv, 12, 
         ARG_str, &form_str, 
         ARG_u32, &nx, ARG_u32, &ny, ARG_u32, &nz, ARG_u32, &absorb_width, 
         FP_ARG, &dx, FP_ARG, &dy, FP_ARG, &dz, FP_ARG, &dt, FP_ARG, &tmax,
         ARG_u64, &g_width_in_cubes, FP_ARG, &g_dt_output
-    ), "Error %s in parsing arg at %d\n.", get_parse_errors_name(err), get_parse_errors_local(err));
+    ), "Error in parsing arg at %d\n.", argc);
 
     TRY(str_to_medium(form_str, &form), "Failed at string to medium conversion");
     
@@ -285,36 +272,37 @@ int main(int argc, char **argv){
     g_volume_width = nx + 2 * absorb_width + 2 * BORDER_WIDTH;
 
     // the number of segments divides the total volume
-    TRY(g_volume_width % g_width_in_cubes, 
+    TRY(g_volume_width % g_width_in_cubes == 0 ? 0 : ME_COUNT_DONT_MATCH, 
         "A largura do volume + kernel size devem ser divisíveis pela largura do segmento.\n");
 
 	g_cube_width = g_volume_width / g_width_in_cubes;
  
     const int64_t st = (int64_t) FP_CEIL(tmax / dt);
-
-    char file_name[MAXFILENAME];
-    size_t test_case_worker = 0;
-    for(size_t worker_id = 0; worker_id < starpu_worker_get_count(); worker_id++){
-        switch (starpu_worker_get_type(worker_id)){
-        case STARPU_CPU_WORKER:
-            TRY(snprintf(file_name, MAXFILENAME - 1, "%s/%s-worker-out-%ld.bin", out_folder, form_str, worker_id) < 0 ? 1 : 0);
-            TRY(io_open_disk_file(&g_worker_files[worker_id], file_name));
-            test_case_worker = worker_id;
-            break;
-        default: assert(0 && "Only CPU worker should be available at this moment.");
-        }
-    }
-    uint32_t mem_offset;
-    int align_ret = io_alignment_restrictions(g_worker_files[test_case_worker], &g_mem_aligment, &mem_offset);
-    TRY(align_ret, "Failed with error %d", align_ret);
-
-    DEBUG("Memory aligment of system is: %d\nIt's offset is: %d", g_mem_aligment, mem_offset);
-    starpu_malloc_set_align(g_mem_aligment);
+    // amount of iterations the program will save the block
+    const size_t total_saved_moments = (size_t) FP_CEIL(tmax / g_dt_output) + 1;
 
     // the point in the global volume that the source is inserted
     const size_t volume_propagation_idx = volume_idx(g_volume_width / 2, g_volume_width / 2, g_volume_width / 2);
     DEBUG("Index of propagation is %ld.\n", volume_propagation_idx);
 
+    // get the biggest page size available in the system
+    const size_t max_count_of_page_size = 16;
+    size_t available_page_sizes[16];
+    size_t page_size_results = 0;
+    
+    TRY(io_available_huge_page_sizes(max_count_of_page_size, &page_size_results, &available_page_sizes[0]));
+    TRY((page_size_results > 0 || page_size_results <= max_count_of_page_size) ? 0 : ME_COUNT_DONT_MATCH);
+
+    size_t max_page_size = 0;
+    for(size_t i = 0; i < page_size_results; i++){
+        max_page_size = max_page_size < available_page_sizes[i] ? available_page_sizes[i] : max_page_size;
+    }
+
+    char bin_filename[256];
+    sprintf(bin_filename, "%s/out-%s.rsf@", output_folder, form_str);
+
+    //init the IO here
+    TRY(io_state_init(bin_filename, max_page_size, total_saved_moments, g_volume_width * g_volume_width * g_volume_width));
 
     // mem_allocate the buffers that will be used in computing the 
     // intermediary values
@@ -677,33 +665,27 @@ int main(int argc, char **argv){
     //Write the header file
     FILE *rsf_header = NULL;
     char filename[256];
+    sprintf(filename, "%s/out-%s.rsf", output_folder, form_str);
 
-    sprintf(filename, "%s/out-%s.rsf", out_folder, form_str);
     TRY((rsf_header = fopen(filename, "w+")) == NULL);
 
-    fprintf(rsf_header,"in=\"%s@\"\n", filename);
-    fprintf(rsf_header,"data_format=\"native_float\"\n");
-    fprintf(rsf_header,"esize=%lu\n", sizeof(float)); 
-    fprintf(rsf_header,"n1=%ld\n", g_volume_width /*sx*/);
-    fprintf(rsf_header,"n2=%ld\n", g_volume_width /*sy*/);
-    fprintf(rsf_header,"n3=%ld\n", g_volume_width /*sz*/);
-    fprintf(rsf_header,"n4=%ld\n", n_out); // TODO: validar n_out 
-    fprintf(rsf_header,"d1=%f\n",dx);
-    fprintf(rsf_header,"d2=%f\n",dy);
-    fprintf(rsf_header,"d3=%f\n",dz);
-    fprintf(rsf_header,"d4=%f\n",dt);
-    fprintf(rsf_header,"seg=%ld\n", g_width_in_cubes);
+    fprintf(rsf_header, "in=\"%s\"\n", io_state_get_filename());
+    fprintf(rsf_header, "data_format=\"native_float\"\n");
+    fprintf(rsf_header, "esize=%lu\n", sizeof(float)); 
+    fprintf(rsf_header, "n1=%ld\n", g_volume_width /*sx*/);
+    fprintf(rsf_header, "n2=%ld\n", g_volume_width /*sy*/);
+    fprintf(rsf_header, "n3=%ld\n", g_volume_width /*sz*/);
+    fprintf(rsf_header, "n4=%ld\n", n_out); // TODO: validar n_out 
+    fprintf(rsf_header, "d1=%f\n", dx);
+    fprintf(rsf_header, "d2=%f\n", dy);
+    fprintf(rsf_header, "d3=%f\n", dz);
+    fprintf(rsf_header, "d4=%f\n", dt);
+    fprintf(rsf_header, "seg=%ld\n", g_width_in_cubes);
 
     fclose(rsf_header);
 
 
     program_end:
-
-    for(size_t wf = 0; wf < MAXFILES; wf++){
-        if(g_worker_files[wf] != 0){
-            io_close_disk_file(g_worker_files[wf]);
-        } 
-    }
 
     vector_free_all(medium_allocs, free);
     vector_free_all(allocs, free);
@@ -711,6 +693,7 @@ int main(int argc, char **argv){
     vector_free_all(starpu_allocations, STARPU_FREE);
 
 	starpu_shutdown();
+    assert(io_state_finish() == 0);
 	return program_status;
 }
 

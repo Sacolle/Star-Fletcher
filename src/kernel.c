@@ -4,9 +4,10 @@
 #include "floatingpoint.h"
 #include "macros.h"
 #include "derivatives.h"
+#include <errno.h>
 
 
-int make_rtm_args(rtm_args_t** rtm_args, 
+err_t make_rtm_args(rtm_args_t** rtm_args, 
     const size_t x_start, const size_t x_end,
     const size_t y_start, const size_t y_end,
     const size_t z_start, const size_t z_end,
@@ -14,7 +15,7 @@ int make_rtm_args(rtm_args_t** rtm_args,
 ){
     *rtm_args = (rtm_args_t*) malloc(sizeof(rtm_args_t));
     if(*rtm_args == NULL){
-        return 1;
+        return errno;
     }
     **rtm_args = (rtm_args_t){
         .x_start = x_start, .x_end = x_end,
@@ -26,10 +27,10 @@ int make_rtm_args(rtm_args_t** rtm_args,
 }
 
 
-int make_perturb_args(perturb_args_t** perturb_args, const size_t idx, const FP value, const size_t t){
+err_t make_perturb_args(perturb_args_t** perturb_args, const size_t idx, const FP value, const size_t t){
     *perturb_args = (perturb_args_t*) malloc(sizeof(perturb_args_t));
     if(*perturb_args == NULL){
-        return 1;
+        return errno;
     }
     (*perturb_args)->source_idx = idx;
     (*perturb_args)->perturb_value = value;

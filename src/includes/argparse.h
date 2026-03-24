@@ -1,6 +1,11 @@
 #ifndef _ARGPARSE_GUARD
 #define _ARGPARSE_GUARD
 
+#include <stdbool.h>
+#include <stdint.h>
+
+#include "err.h"
+
 #define ARG_i32 1
 #define ARG_i64 2
 #define ARG_u32 3
@@ -8,30 +13,38 @@
 #define ARG_f32 5
 #define ARG_f64 6
 #define ARG_str 7
-
 #define ARG_usize 8
 
-// TODO: mover para uma classe de string, que dai pode ser mais genérico?
-// e dai pode-se usar um parâmetro de saída que é oculto na implementação dos casos específicos
 
-// retorna o `int` seguinte a string passada nos argumentos variádicos se 
-// `word` for igual a ele.
-// count deve ser o número de opções passadas, sendo cada opção
-// uma string seguida de um int
-// str_to_enum("b", 3, "a", 21, "b", 67, "c", 47) -> 67
-// se err != 0, indica erro na função
-int str_to_enum(const char* word, int* err, int count, ...);
+bool has_envvar(const char* key);
 
-// dado uma sequência de `count` ARG_type tag, pointeiro para o valor,
-// realiza-se a leitura desses argumentos usando argv, realizando as checagem apropriadas
-// caso não seja possível, retorna um err != 0, que é composto de duas partes:
-// os 3 primeiros bits são o código de erro e o restantante é o índice do erro
-int read_args(int argc, char** argv, int count, ...);
+// get the environment variable key, and returns the value as a int64_t
+err_t i64_get_envvar(int64_t* out, const char* key);
 
-// get the index part of the error
-int get_parse_errors_local(int err);
+// get the environment variable key, and returns the value as a string
+err_t str_get_envvar(char** out, const char* key);
 
-// get the name of the error
-char* get_parse_errors_name(int err);
+
+// Get the environment variable from key and put on output
+// currently only implemented for string and int64_t
+// returns 0 on sucess
+#define get_envvar(output, key) _Generic((output), \
+    int64_t* : i64_get_envvar, \
+    char** : str_get_envvar, \
+    default: str_get_envvar \
+)(output, key)
+
+// 
+// In the arglist made by pairs `char*, int`, returns the `int` whose 
+// precious string matched with word
+// returns 0 on sucess and `ME_NOMATCH` if no matches where made
+err_t str_to_enum(const char* word, int* outp_res, int count, ...);
+
+// Given a sequence of pairs `ARG_type, type*` of length `count`,
+// read the `i`th element from `argv`, parse for type `ARG_type` 
+// and set the value of `type*` to be the parsed value
+// returns 0 on sucess
+// on error, argc will hold the index of the element that failed to parse
+err_t read_args(int* argc, char** argv, int count, ...);
 
 #endif
