@@ -303,7 +303,7 @@ int main(int argc, char **argv){
     max_page_size = available_page_sizes[0];
     */
 
-    char bin_filename[256] = {'\0'};
+    char bin_filename[512] = {'\0'};
     sprintf(bin_filename, "%s/out-%s.rsf@", output_folder, output_filename);
     printf("bin filename %s\n", bin_filename);
 
@@ -670,7 +670,7 @@ int main(int argc, char **argv){
 
     //Write the header file
     FILE *rsf_header = NULL;
-    char filename[256];
+    char filename[512] = {'\0'};
     sprintf(filename, "%s/out-%s.rsf", output_folder, output_filename);
 
     TRY((rsf_header = fopen(filename, "w+")) == NULL);
