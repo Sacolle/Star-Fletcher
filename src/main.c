@@ -15,6 +15,7 @@
 #include "vector.h"
 
 #define DEFAULT_OUTPUT_FOLDER "results"
+#define DEFAULT_OUTPUT_NAME "form"
 
 // width for the volume of the whole sistem
 size_t g_volume_width = 0;
@@ -248,11 +249,12 @@ int main(int argc, char **argv){
 	int ret = starpu_init(NULL);
 	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
 
-    char* output_folder;
-    if(get_envvar(&output_folder, "OUTPUT_FOLDER") != 0){
-        output_folder = DEFAULT_OUTPUT_FOLDER;
-    }
-    printf("Output folder is: %s\n", output_folder);
+    char* output_folder = DEFAULT_OUTPUT_FOLDER;
+    get_envvar(&output_folder, "OUTPUT_FOLDER");
+
+    char* output_filename = DEFAULT_OUTPUT_NAME;
+    get_envvar(&output_filename, "OUTPUT_FILE");
+    
 
     enum Form form = 0;
     char* form_str = NULL;
@@ -301,8 +303,9 @@ int main(int argc, char **argv){
     max_page_size = available_page_sizes[0];
     */
 
-    char bin_filename[256];
-    sprintf(bin_filename, "%s/out-%s.rsf@", output_folder, form_str);
+    char bin_filename[256] = {'\0'};
+    sprintf(bin_filename, "%s/out-%s.rsf@", output_folder, output_filename);
+    printf("bin filename %s\n", bin_filename);
 
     //init the IO here
     TRY(io_state_init(bin_filename, 4096, total_saved_moments, g_volume_width * g_volume_width * g_volume_width));
@@ -668,7 +671,7 @@ int main(int argc, char **argv){
     //Write the header file
     FILE *rsf_header = NULL;
     char filename[256];
-    sprintf(filename, "%s/out-%s.rsf", output_folder, form_str);
+    sprintf(filename, "%s/out-%s.rsf", output_folder, output_filename);
 
     TRY((rsf_header = fopen(filename, "w+")) == NULL);
 

@@ -21,7 +21,8 @@ err_t i64_get_envvar(int64_t* out, const char* key){
   	}
 	char* rest;
 	errno = 0;
-	*out = strtoll(env_out, &rest, 10);
+
+	int64_t ret = strtoll(env_out, &rest, 10);
 	int err = errno;
 	if(err) {
 		return err;
@@ -34,7 +35,7 @@ err_t i64_get_envvar(int64_t* out, const char* key){
 		// há mais caracteres que não foram parseados
 		return ME_INCOMPLETE_PARSE;
 	};
-
+	*out = ret;
 	return 0;
 }
 
