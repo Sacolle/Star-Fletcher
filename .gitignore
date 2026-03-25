@@ -1,5 +1,14 @@
+# build files
 results
 objs
 main
+
+
+# test files
 *.log
 *.out
+*.txt
+*.txt@
+
+# madagascar ignores
+sfpen*

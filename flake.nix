@@ -41,6 +41,7 @@
 
                 # for bash to work properlly inside vscode
                 bashInteractive
+                moreutils
                 # for fuser
                 psmisc
                 # debug tools

@@ -56,10 +56,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 run: $(BIN)
 	@mkdir -p $(RESDIR)
 	@echo "Runing $(BIN). Out putting at ./$(RESDIR)"
-	./$(BIN) TTI 56 56 56 8 12.5 12.5 12.5 0.001 0.5 4 0.01
-	@echo "congealing the data..."
-	python3 ./scripts/parse-rsf.py "./$(RESDIR)/out-TTI.rsf"
-#	./scripts/visualize.sh $(RESDIR)/out-TTI.rsf
+	./$(BIN) TTI 32 32 32 4 12.5 12.5 12.5 0.001 0.5 4 0.01
 
 debug: $(BIN)
 	@mkdir -p $(RESDIR)
