@@ -49,7 +49,7 @@ err_t io_state_init(
 
     // 1. open a file
     int fd = 0;
-    if((fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, S_IWUSR)) == -1){
+    if((fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, S_IWUSR)) == -1){
         return errno;
     }
 
@@ -59,16 +59,17 @@ err_t io_state_init(
     if((err = posix_fallocate64(fd, 0, total_file_size)) != 0){
         return err; //is errno
     }
-    int huge_flags = MAP_HUGETLB;
-    if (page_size > 4096) { // Se for maior que uma página comum
-        huge_flags |= (__builtin_ctzl(page_size) << MAP_HUGE_SHIFT);
+    // pass page size of 4096 to disable 
+    int huge_flags = 0;
+    if(page_size > 4096){
+        huge_flags = MAP_HUGETLB | (__builtin_ctzl(page_size) << MAP_HUGE_SHIFT);
     }
 
     // 3. mmap using the large page size
     FP* buff = NULL;
     if(
         (buff = (FP*) mmap(NULL, total_file_size, 
-            PROT_READ | PROT_WRITE, MAP_SHARED | huge_flags, 
+            PROT_WRITE | PROT_READ, MAP_SHARED | huge_flags, 
             fd, 0)
         ) == MAP_FAILED
     ){
@@ -86,6 +87,9 @@ err_t io_state_init(
 
     return 0;
 }
+#include <stdio.h>
+
+extern size_t g_volume_width;
 
 void io_state_write_file(
     const size_t i, const size_t j, const size_t k, const size_t t, 
@@ -93,14 +97,15 @@ void io_state_write_file(
 ){
     io_state_t* state = get_io_state();
     FP* buff = state->buff;
-    const size_t block_size = nx * ny * nz; // should be equal to CUBE(g_block_width)
+    const size_t total_volume_size = CUBE(g_volume_width);
 
     for(size_t x = 0; x < nx; x++)
     for(size_t y = 0; y < ny; y++)
     for(size_t z = 0; z < nz; z++){
         // get the absolute index for the point (x, y, z) of cube (i, j, k) in the total volue
         // then offset it by which iteration we are writing to.
-        const size_t buff_idx = block_cube_to_volume_idx(x, y, z, i, j, k) + block_size * t;
+        const size_t buff_idx = block_cube_to_volume_idx(x, y, z, i, j, k) + total_volume_size * t;
+        //printf("%ld\n", buff_idx);
         buff[buff_idx] = block[cube_idx(x, y, z)];
     }
 }

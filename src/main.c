@@ -285,7 +285,7 @@ int main(int argc, char **argv){
     const size_t volume_propagation_idx = volume_idx(g_volume_width / 2, g_volume_width / 2, g_volume_width / 2);
     DEBUG("Index of propagation is %ld.\n", volume_propagation_idx);
 
-    // get the biggest page size available in the system
+    /* 
     const size_t max_count_of_page_size = 16;
     size_t available_page_sizes[16];
     size_t page_size_results = 0;
@@ -295,14 +295,17 @@ int main(int argc, char **argv){
 
     size_t max_page_size = 0;
     for(size_t i = 0; i < page_size_results; i++){
-        max_page_size = max_page_size < available_page_sizes[i] ? available_page_sizes[i] : max_page_size;
+        printf("%d: page size %ld\n", i, available_page_sizes[i]);
+        //max_page_size = max_page_size < available_page_sizes[i] ? available_page_sizes[i] : max_page_size;
     }
+    max_page_size = available_page_sizes[0];
+    */
 
     char bin_filename[256];
     sprintf(bin_filename, "%s/out-%s.rsf@", output_folder, form_str);
 
     //init the IO here
-    TRY(io_state_init(bin_filename, max_page_size, total_saved_moments, g_volume_width * g_volume_width * g_volume_width));
+    TRY(io_state_init(bin_filename, 4096, total_saved_moments, g_volume_width * g_volume_width * g_volume_width));
 
     // mem_allocate the buffers that will be used in computing the 
     // intermediary values
