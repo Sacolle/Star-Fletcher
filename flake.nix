@@ -117,13 +117,37 @@
                         pkgs.python313
                         localStarPU
                     ];
-                    buildPhase = "SCRATCH=/scratch/phbcolle/ COMPILE_MODE=release make";
+                    buildPhase = "COMPILE_MODE=release make";
+                    installPhase = "mkdir -p $out/bin && cp main $out/bin/star-fletcher";
+                };
+            star-fletcher-debug = 
+                let 
+                    localStarPU = (myStarPU.overrideAttrs (oldAttrs: {
+                        enableTrace = true;
+                        enableCUDA = false;
+                        #compileAsRelease = true;
+                    }));
+                in 
+                pkgs.stdenv.mkDerivation {
+                    pname = "star-fletcher";
+                    version = "0.1";
+                    src = ./.;
+                    nativeBuildInputs = with pkgs; [
+                        pkg-config
+                        hwloc
+                        localStarPU
+                    ];
+                    buildInputs = [
+                        pkgs.python313
+                        localStarPU
+                    ];
+                    buildPhase = "COMPILE_MODE=debug make";
                     installPhase = "mkdir -p $out/bin && cp main $out/bin/star-fletcher";
                 };
         in
         {
             default = star-fletcher;
-            inherit star-fletcher;
+            inherit star-fletcher star-fletcher-debug;
         };
     };
 }
