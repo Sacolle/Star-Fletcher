@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 
+
 #include "kernel.h"
 #include "macros.h"
 #include "floatingpoint.h"
@@ -72,6 +73,19 @@ void dump_block_kernel(void *descr[], void *cl_args){
     io_state_write_file(args->i, args->j, args->k, args->t, nx, ny, nz, block);
 }
 
+#include <linux/time.h>
+#define NS_PER_SECOND 1000000000ULL
+#define SECONDS_PER_NS 1e-9
+
+uint64_t get_timestamp_ns() {
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    return ((uint64_t)ts.tv_sec * NS_PER_SECOND) + ts.tv_nsec;
+}
+
+double elapsed_seconds(const uint64_t t_end, const uint64_t t_start){
+    return ((double)t_end - t_start) * SECONDS_PER_NS;
+}
 
 
 struct starpu_codelet dump_block_codelet = {
@@ -254,6 +268,9 @@ int main(int argc, char **argv){
 
     char* output_filename = DEFAULT_OUTPUT_NAME;
     get_envvar(&output_filename, "OUTPUT_FILE");
+
+    int64_t enable_io = 1;
+    get_envvar(&enable_io, "ENABLE_IO");
     
 
     enum Form form = 0;
@@ -451,7 +468,11 @@ int main(int argc, char **argv){
 
     int64_t n_out = 0;
     // salva o primeiro bloco (nulo)
-    //TRY(write_wave(&n_out, p_wave_iter[0]));
+    if(enable_io){
+        TRY(write_wave(&n_out, p_wave_iter[0]));
+    }
+
+    const uint64_t start_time = get_timestamp_ns();
 
     for(int64_t t = 1; t <= st; t++){
         // printf("t: %d\n", t);
@@ -612,7 +633,9 @@ int main(int argc, char **argv){
         const FP simulation_time = t * dt;
         const FP output_time = n_out * g_dt_output;
         if(simulation_time >= output_time){ // hand made fst iter to dump
-            TRY(write_wave(&n_out, p_wave_iter[0]));
+            if(enable_io){
+                TRY(write_wave(&n_out, p_wave_iter[0]));
+            }
         }
 
         if(t >= 2){
@@ -633,6 +656,21 @@ int main(int argc, char **argv){
     DEBUG("Submitted all tasks\n");
     //at least after all iterations
     starpu_task_wait_for_all();
+
+    const uint64_t end_time = get_timestamp_ns();
+
+    const double total_elapsed_time = elapsed_seconds(end_time, start_time);
+
+    printf("Computation Elapsed time is: %lfs\n", total_elapsed_time);
+
+    const uint64_t samplesPropagate = CUBE(g_volume_width - 2 * BORDER_WIDTH);
+    const uint64_t totalSamples = samplesPropagate * (uint64_t) st;
+
+    #define MEGA 1.0e-6
+    const double mega_samples = (MEGA * (double) totalSamples) / total_elapsed_time;
+
+    printf("Msamples/s: %lf\n", mega_samples);
+
 
     // cleanup all remaning handles (p_wave_iter[2] and iteraions[1])
     for(size_t k = 1; k < g_width_in_cubes + 1; k++){

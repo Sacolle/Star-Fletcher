@@ -46,7 +46,6 @@
                 psmisc
                 # debug tools
                 gdb
-                # gcc
                 valgrind
                 # scripting
                 python313
@@ -62,6 +61,7 @@
             ]);
             # export StarPU and hwloc store locations 
             # for use in vscode intellisence
+            GCC_STORE_PATH = "${pkgs.gcc}";
             STARPU_STORE_PATH = "${StarPUVersion}";
             CRITERION_STORE_PATH = "${pkgs.criterion.dev}";
             HWLOC_STORE_PATH = "${pkgs.hwloc.dev}";

@@ -15,8 +15,9 @@
                 "${env:LIBCUSPARSE_STORE_PATH}/include/"
             ],
             "defines": [],
-            "compilerPath": "${env:GCC_STORE_PATH}/bin/gcc",
+            "compilerPath": "${env:CC}",
             "cStandard": "c17",
+            
             "cppStandard": "gnu++17",
             "intelliSenseMode": "linux-gcc-x64",
             "configurationProvider": "ms-vscode.makefile-tools"
