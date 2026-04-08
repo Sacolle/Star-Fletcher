@@ -90,6 +90,10 @@
                 enableTrace = true;
                 enableCUDA = false;
                 compileAsRelease = true;
+                # necessário na poti, pois a estrutura de 20 cores com 28 threads buga o StarPU
+                # versões mais recentes do StarPU resolvem isso aparentemente
+                # mais recentes as in 03/26
+                extraOptions = [ "--enable-maxcpus=256" ]; 
             }))) { 
                 COMPILE_MODE = "release"; 
             };
