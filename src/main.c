@@ -295,6 +295,10 @@ int main(int argc, char **argv){
         "A largura do volume + kernel size devem ser divisíveis pela largura do segmento.\n");
 
 	g_cube_width = g_volume_width / g_width_in_cubes;
+    
+    TRY(g_cube_width > 7 ? 0 : ME_COUNT_DONT_MATCH, 
+        "Tamanho interno para o cubo é muito pequeno."
+        "As funções de derivada requerem um bloco cujo tamanho seja pelo menos 1 a menos que o tamanho do kernel, que é 9");
  
     const int64_t st = (int64_t) FP_CEIL(tmax / dt);
     // amount of iterations the program will save the block
@@ -303,6 +307,7 @@ int main(int argc, char **argv){
     // the point in the global volume that the source is inserted
     const size_t volume_propagation_idx = volume_idx(g_volume_width / 2, g_volume_width / 2, g_volume_width / 2);
     DEBUG("Index of propagation is %ld.\n", volume_propagation_idx);
+
 
     /* 
     const size_t max_count_of_page_size = 16;

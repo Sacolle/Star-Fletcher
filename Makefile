@@ -12,10 +12,6 @@ ifndef COMPILE_MODE
 echo $(error, compile mode not defined)
 endif
 
-ifdef SCRATCH
-CFLAGS += -DOUTPUT_FOLDER='"$(SCRATCH)"' 
-endif
-
 ifeq ($(COMPILE_MODE), release)
 CFLAGS += -O3
 else
