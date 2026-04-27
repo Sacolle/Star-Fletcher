@@ -287,7 +287,7 @@ int main(int argc, char **argv){
 
     TRY(str_to_medium(form_str, &form), "Failed at string to medium conversion");
     
-    //fazendo dessa forma para ficar igual ao fletecher base
+    //fazendo dessa forma para ficar igual ao fletcher base
     g_volume_width = nx + 2 * absorb_width + 2 * BORDER_WIDTH;
 
     // the number of segments divides the total volume
