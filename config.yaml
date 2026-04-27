@@ -43,7 +43,7 @@ default:
     height: 2 # Vertical Size in the final visualization
     idleness: FALSE # Show resource idleness %
     expand: 0.01 # Expand for y ggplot
-    labels: "1CPU_per_NODE" # Labels of the Resources names, "ALL" "1CPU_per_NODE" "1GPU_per_NODE"
+    labels: "ALL" #"1CPU_per_NODE" # Labels of the Resources names, "ALL" "1CPU_per_NODE" "1GPU_per_NODE"
     legend: FALSE # Show the plot's Legends
     makespan: TRUE # Show the application makespan
     alpha: 0.25 # Alpha value to control transparency of tasks that are not outliers
