@@ -49,7 +49,7 @@ err_t io_state_init(
 
     // 1. open a file
     int fd = 0;
-    if((fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, S_IWUSR)) == -1){
+    if((fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR)) == -1){
         return errno;
     }
 
