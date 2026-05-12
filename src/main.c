@@ -18,6 +18,12 @@
 #define DEFAULT_OUTPUT_FOLDER "results"
 #define DEFAULT_OUTPUT_NAME "form"
 
+// 1, 3, 7
+#define WAVE_PROPAGATION_CENTER  0
+#define WAVE_PROPAGATION_SURFACE 1
+#define WAVE_PROPAGATION_BORDER  2
+#define WAVE_PROPAGATION_CORNER  3
+
 // width for the volume of the whole sistem
 size_t g_volume_width = 0;
 // amount of segments in a dimension. 
@@ -525,27 +531,40 @@ int main(int argc, char **argv){
             task->name = "wave_propagation";
             task->cl = &rtm_codelet;
 
-            const size_t start_z = k == 1 ? BORDER_WIDTH : 0;
-            const size_t end_z = g_cube_width - (k == g_width_in_cubes ? BORDER_WIDTH : 0);
-            const size_t start_y = j == 1 ? BORDER_WIDTH : 0;
-            const size_t end_y = g_cube_width - (j == g_width_in_cubes ? BORDER_WIDTH : 0);
-            const size_t start_x = i == 1 ? BORDER_WIDTH : 0;
-            const size_t end_x = g_cube_width - (i == g_width_in_cubes ? BORDER_WIDTH : 0);
+            const bool begin_z = k == 1;
+            const bool stop_z = k == g_width_in_cubes;
+            const bool begin_y = j == 1;
+            const bool stop_y = j == g_width_in_cubes;
+            const bool begin_x = i == 1;
+            const bool stop_x = i == g_width_in_cubes;
             
+            // if v == true, return the border size, else 0
+            #define AS_BORDER(v) ((v) ? BORDER_WIDTH : 0)
+
             struct rtm_args* rtm_args;
             TRY(make_rtm_args(&rtm_args, 
-                start_x, end_x,
-                start_y, end_y,
-                start_z, end_z,
+                AS_BORDER(begin_x), g_cube_width - AS_BORDER(stop_x),
+                AS_BORDER(begin_y), g_cube_width - AS_BORDER(stop_y),
+                AS_BORDER(begin_z), g_cube_width - AS_BORDER(stop_z),
                 dx, dy, dz, dt
             ));
-
-            //sprintf(cl_args->name, "[%d, %d, %d, %ld]", i, j, k, t + 1);
-            //task->name = cl_args->name;
 
             task->cl_arg = rtm_args;
             task->cl_arg_size = sizeof(struct rtm_args);
             task->cl_arg_free = 1; // free the args after use
+
+            #undef AS_BORDER
+
+            task->use_tag = 1;
+            task->tag_id = 
+                begin_z || stop_z ? 1 : 0 + 
+                begin_y || stop_y ? 1 : 0 + 
+                begin_x || stop_x ? 1 : 0;
+            
+
+            //sprintf(cl_args->name, "[%d, %d, %d, %ld]", i, j, k, t + 1);
+            //task->name = cl_args->name;
+
 
             //select the handles
             //          ^   ^

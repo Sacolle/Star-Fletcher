@@ -3,6 +3,8 @@ results
 objs
 main
 
+#nix ignores
+result
 
 # test files
 *.log
