@@ -20,3 +20,8 @@ compile_commands.json
 
 # madagascar ignores
 sfpen*
+
+
+#emacs 
+*~
+\#.*#

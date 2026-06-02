@@ -4,15 +4,14 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${env:STARPU_STORE_PATH}/include/starpu/1.4",
-                "${env:HWLOC_STORE_PATH}/include/",
-                "${env:CRITERION_STORE_PATH}/include/",
-                "${env:CRITERION_STORE_PATH}/include/criterion/internal",
+                "${env:STARPU_STORE_PATH}",
+                "${env:HWLOC_STORE_PATH}",
+                "${env:CRITERION_STORE_PATH}",
                 // cuda
-                "${env:CUDART_STORE_PATH}/include/",
-                "${env:NVCC_STORE_PATH}/include/",
-                "${env:NVML_STORE_PATH}/include/",
-                "${env:LIBCUSPARSE_STORE_PATH}/include/"
+                "${env:CUDART_STORE_PATH}",
+                "${env:NVCC_STORE_PATH}",
+                "${env:NVML_STORE_PATH}",
+                "${env:LIBCUSPARSE_STORE_PATH}"
             ],
             "defines": [],
             "compilerPath": "${env:CC}",

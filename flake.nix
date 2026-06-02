@@ -30,7 +30,7 @@
                 enableTrace = true;
         };
 
-        baseShell = StarPUVersion: extraArgs: pkgs.mkShell (rec {
+        baseShell = StarPUVersion: extraArgs: pkgs.mkShell.override { stdenv = pkgs.gcc13Stdenv; } (rec {
             buildInputs = with pkgs; [
                 pkg-config
                 bear # for emacs eglot
@@ -57,6 +57,7 @@
             ] ++ (with cudapkgs.cudaPackages; [ 
                 cuda_cudart
                 cuda_nvcc
+                cuda_cccl
                 cuda_nvml_dev.dev
                 libcusparse.dev
             ]);
@@ -65,14 +66,14 @@
             GCC_STORE_PATH =         "${pkgs.gcc}/include/";
             STARPU_STORE_PATH =      "${StarPUVersion}/include/starpu/1.4";
             CRITERION_STORE_PATH =   "${pkgs.criterion.dev}/include/";
-            HWLOC_STORE_PATH =       "${pkgs.hwloc.dev}/include/criterion/internal";
+            HWLOC_STORE_PATH =       "${pkgs.hwloc.dev}/include";
             # cudas
             CUDART_STORE_PATH =      "${cudapkgs.cudaPackages.cuda_cudart.dev}/include/";
             NVCC_STORE_PATH =        "${cudapkgs.cudaPackages.cuda_nvcc}/include/";
             NVML_STORE_PATH =        "${cudapkgs.cudaPackages.cuda_nvml_dev.dev}/include/";
             LIBCUSPARSE_STORE_PATH = "${cudapkgs.cudaPackages.libcusparse.dev}/include/";
 
-            CPATH = "${GCC_STORE_PATH}:${STARPU_STORE_PATH}:${CRITERION_STORE_PATH}:${HWLOC_STORE_PATH}:${CUDART_STORE_PATH}:${NVCC_STORE_PATH}:${NVML_STORE_PATH}:${LIBCUSPARSE_STORE_PATH}";
+            #CPATH = "${GCC_STORE_PATH}:${STARPU_STORE_PATH}:${CRITERION_STORE_PATH}:${HWLOC_STORE_PATH}:${CUDART_STORE_PATH}:${NVCC_STORE_PATH}:${NVML_STORE_PATH}:${LIBCUSPARSE_STORE_PATH}";
 
             # on relase this is overwritten
             COMPILE_MODE = "debug"; 
