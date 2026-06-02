@@ -12,5 +12,11 @@ result
 *.txt
 *.txt@
 
+# direnv 
+.direnv
+.envrc
+.cache
+compile_commands.json
+
 # madagascar ignores
 sfpen*

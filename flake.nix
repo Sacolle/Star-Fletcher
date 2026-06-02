@@ -30,9 +30,10 @@
                 enableTrace = true;
         };
 
-        baseShell = StarPUVersion: extraArgs: pkgs.mkShell ({
+        baseShell = StarPUVersion: extraArgs: pkgs.mkShell (rec {
             buildInputs = with pkgs; [
                 pkg-config
+                bear # for emacs eglot
                 hwloc
                 StarPUVersion
                 
@@ -61,17 +62,17 @@
             ]);
             # export StarPU and hwloc store locations 
             # for use in vscode intellisence
-            GCC_STORE_PATH = "${pkgs.gcc}";
-            STARPU_STORE_PATH = "${StarPUVersion}";
-            CRITERION_STORE_PATH = "${pkgs.criterion.dev}";
-            HWLOC_STORE_PATH = "${pkgs.hwloc.dev}";
-
+            GCC_STORE_PATH =         "${pkgs.gcc}/include/";
+            STARPU_STORE_PATH =      "${StarPUVersion}/include/starpu/1.4";
+            CRITERION_STORE_PATH =   "${pkgs.criterion.dev}/include/";
+            HWLOC_STORE_PATH =       "${pkgs.hwloc.dev}/include/criterion/internal";
             # cudas
-            CUDART_STORE_PATH =      "${cudapkgs.cudaPackages.cuda_cudart.dev}";
-            NVCC_STORE_PATH =        "${cudapkgs.cudaPackages.cuda_nvcc}";
-            NVML_STORE_PATH =        "${cudapkgs.cudaPackages.cuda_nvml_dev.dev}";
-            LIBCUSPARSE_STORE_PATH = "${cudapkgs.cudaPackages.libcusparse.dev}";
+            CUDART_STORE_PATH =      "${cudapkgs.cudaPackages.cuda_cudart.dev}/include/";
+            NVCC_STORE_PATH =        "${cudapkgs.cudaPackages.cuda_nvcc}/include/";
+            NVML_STORE_PATH =        "${cudapkgs.cudaPackages.cuda_nvml_dev.dev}/include/";
+            LIBCUSPARSE_STORE_PATH = "${cudapkgs.cudaPackages.libcusparse.dev}/include/";
 
+            CPATH = "${GCC_STORE_PATH}:${STARPU_STORE_PATH}:${CRITERION_STORE_PATH}:${HWLOC_STORE_PATH}:${CUDART_STORE_PATH}:${NVCC_STORE_PATH}:${NVML_STORE_PATH}:${LIBCUSPARSE_STORE_PATH}";
 
             # on relase this is overwritten
             COMPILE_MODE = "debug"; 

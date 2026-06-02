@@ -32,7 +32,7 @@ SRCS_ = argparse.c derivatives.c kernel.c main.c medium.c mem.c vector.c io.c
 SRCS := $(addprefix $(SRCDIR)/, $(SRCS_))
 OBJS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o,$(SRCS))
 
-.PHONY: all clean run print test debug valgrind
+.PHONY: all clean run print test debug valgrind lsp
 
 all: $(BIN)
 
@@ -57,6 +57,9 @@ run: $(BIN)
 debug: $(BIN)
 	@mkdir -p $(RESDIR)
 	gdb --args ./$(BIN) TTI 32 32 32 4 12.5 12.5 12.5 0.001 0.5 4 0.01
+
+lsp:
+	bear -- make clean all
 
 valgrind: $(BIN)
 	@mkdir -p $(RESDIR)
