@@ -25,12 +25,16 @@ BIN = main
 SRCDIR = src
 OBJDIR = objs
 RESDIR = results
-SCRIPTDIR = scripts
+DERIVATIVESDIR = $(SRCDIR)/derivatives
 export INCLUDEDIR = src/includes
 
 SRCS_ = argparse.c derivatives.c kernel.c main.c medium.c mem.c vector.c io.c
 SRCS := $(addprefix $(SRCDIR)/, $(SRCS_))
 OBJS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o,$(SRCS))
+
+
+# TODO: add CUDA compilation 
+# nvcc src/cuda/kernel.cu -o k.o -c -I ./src/includes
 
 .PHONY: all clean run print test debug valgrind lsp
 
@@ -40,8 +44,8 @@ $(BIN): $(OBJS)
 	$(CC) $(CFLAGS) $(LDLIBS) $^ -o $@
 
 # rule to specify dependency
-$(OBJDIR)/derivatives.o: $(SRCDIR)/derivatives.c $(SCRIPTDIR)/cross-deriv-gen.py
-	python3 $(SCRIPTDIR)/cross-deriv-gen.py > $(INCLUDEDIR)/cross-deriv.gen.c
+$(OBJDIR)/derivatives.o: $(SRCDIR)/derivatives.c $(DERIVATIVESDIR)/cross-deriv-gen.py
+	python3 $(DERIVATIVESDIR)/cross-deriv-gen.py > $(DERIVATIVESDIR)/cross-deriv.gen.c
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDEDIR)
 
@@ -71,7 +75,7 @@ print:
 
 # need to pass the commands directly inline
 test:
-	python3 $(SCRIPTDIR)/cross-deriv-gen.py > $(INCLUDEDIR)/cross-deriv.gen.c
+	python3 $(DERIVATIVESDIR)/cross-deriv-gen.py > $(DERIVATIVESDIR)/cross-deriv.gen.c
 	$(MAKE) -C tests 
 
 clean:

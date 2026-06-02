@@ -211,7 +211,7 @@ def main():
         for w2 in ['neg', 'pos', 'center']:
             curr_lambda = partial(compute_case, case1=w1, case2=w2)
             print(f'''
-FP cross_deriv_{w1}_{w2}(
+ATTRIBUTE FP cross_deriv_{w1}_{w2}(
     const FP* block, const size_t base_idx,
     const size_t dir1, const FP* block_neg_center, const FP* block_pos_center, const int stride1,
     const size_t dir2, const FP* block_center_neg, const FP* block_center_pos, const int stride2,

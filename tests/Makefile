@@ -9,7 +9,7 @@ CFLAGS = -g3 -O0 -Wno-cpp -lm
 # fuser -k 1234/tcp
 all: $(ALL_TESTS)
 	$(foreach test, $^, ./$(test) $(ARGS);)
-	
+
 deriv-tests.out: $(CURDIR)/deriv-tests.c $(PARENT_DIR)/src/derivatives.c $(PARENT_DIR)/src/includes/derivatives.h 
 	$(CC) -o $@ $^ $(CRITERION_CFLAGS) $(CRITERION_LDLIBS) -I $(PARENT_DIR)/$(INCLUDEDIR) $(CFLAGS)
 
