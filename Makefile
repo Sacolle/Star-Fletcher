@@ -32,6 +32,19 @@ SRCS_ = argparse.c derivatives.c kernel.c main.c medium.c mem.c vector.c io.c
 SRCS := $(addprefix $(SRCDIR)/, $(SRCS_))
 OBJS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o,$(SRCS))
 
+CUDADIR = $(SRCDIR)/cuda
+CUDAOBJS = $(OBJDIR)/cuda_kernel.o
+# set to native, but can be changed on the system
+ARCH ?= native
+
+ifeq ($(CUDA_BACKEND), 1)
+	CFLAGS += -DCUDA_BACKEND
+	OBJS += $(CUDAOBJS)
+	LDLIBS += -lcudart
+
+	NVCC = nvcc
+	NVCCFLAGS = -O2 $(STARPU_CFLAGS) -arch=$(ARCH)
+endif
 
 # TODO: add CUDA compilation 
 # nvcc src/cuda/kernel.cu -o k.o -c -I ./src/includes
@@ -43,6 +56,8 @@ all: $(BIN)
 $(BIN): $(OBJS)
 	$(CC) $(CFLAGS) $(LDLIBS) $^ -o $@
 
+
+
 # rule to specify dependency
 $(OBJDIR)/derivatives.o: $(SRCDIR)/derivatives.c $(DERIVATIVESDIR)/cross-deriv-gen.py
 	python3 $(DERIVATIVESDIR)/cross-deriv-gen.py > $(DERIVATIVESDIR)/cross-deriv.gen.c
@@ -52,6 +67,10 @@ $(OBJDIR)/derivatives.o: $(SRCDIR)/derivatives.c $(DERIVATIVESDIR)/cross-deriv-g
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDEDIR)
+
+$(OBJDIR)/cuda_kernel.o: $(CUDADIR)/kernel.cu $(SRCDIR)/derivatives/derivatives-impl.h
+	@mkdir -p $(OBJDIR)
+	$(NVCC) $(NVCCFLAGS) -c $< -o $@ -I $(INCLUDEDIR)
 
 run: $(BIN)
 	@mkdir -p $(RESDIR)
@@ -79,4 +98,4 @@ test:
 	$(MAKE) -C tests 
 
 clean:
-	rm -f $(BIN) $(OBJS)
+	rm -f $(BIN) $(OBJS) $(CUDAOBJS)

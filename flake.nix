@@ -2,10 +2,14 @@
     description = "A very basic flake";
 
     inputs = {
-        nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+        nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-26.05";
+        StarPU = {
+          url = "github:Sacolle/nix-starpu";
+          inputs.nixpkgs.follows = "nixpkgs";
+        };
+        
         # gets the proper version of the CUDA packages for compilation
         cudaNixpkgs.url = "github:nixos/nixpkgs/1da52dd49a127ad74486b135898da2cef8c62665";
-        StarPU.url = "github:Sacolle/nix-starpu";
         madagascar.url = "github:Sacolle/nix-madagascar";
     };
 
@@ -80,6 +84,7 @@
         } // extraArgs);
 
         star-fletcher = pkgs.callPackage ./star-fletcher.nix { StarPU = StarPU.packages.${system}.default; };
+        star-fletcher-cuda = pkgs.callPackage ./star-fletcher.nix { StarPU = StarPU.packages.${system}.default; enableCUDA = true; };
     in
     {
         devShells.${system} = {
@@ -103,7 +108,8 @@
             };
         };
         packages.${system} = {
-            default = star-fletcher;
+          default = star-fletcher;
+          inherit star-fletcher star-fletcher-cuda;
         };
     };
 }

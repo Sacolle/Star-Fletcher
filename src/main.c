@@ -79,7 +79,7 @@ void dump_block_kernel(void *descr[], void *cl_args){
     io_state_write_file(args->i, args->j, args->k, args->t, nx, ny, nz, block);
 }
 
-#include <linux/time.h>
+//#include <linux/time.h>
 #define NS_PER_SECOND 1000000000ULL
 #define SECONDS_PER_NS 1e-9
 
@@ -95,9 +95,9 @@ double elapsed_seconds(const uint64_t t_end, const uint64_t t_start){
 
 
 struct starpu_codelet dump_block_codelet = {
-    .cpu_funcs = { dump_block_kernel },
+    .cpu_funcs = {dump_block_kernel},
     .nbuffers = 1,
-    .modes = { STARPU_R }  // p wave
+    .modes = {STARPU_R} // p wave
 };
 
 struct starpu_codelet insert_perturbation_codelet = {
@@ -109,8 +109,15 @@ struct starpu_codelet insert_perturbation_codelet = {
     }
 };
 
+#ifdef CUDA_BACKEND
+extern void rtm_kernel_cuda(void *descr[], void *cl_args);
+#endif
+
 struct starpu_codelet rtm_codelet = {
     .cpu_funcs = { rtm_kernel },
+    #ifdef CUDA_BACKEND
+    .cuda_funcs = { rtm_kernel_cuda },
+    #endif
     .nbuffers = 52,
     .modes = {
         // precomputed values
@@ -232,6 +239,7 @@ err_t write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){
             return err;
         };
     }
+
     (*n_out)++;
     return 0;
 }
