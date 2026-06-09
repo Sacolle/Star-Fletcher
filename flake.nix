@@ -83,8 +83,14 @@
             COMPILE_MODE = "debug"; 
         } // extraArgs);
 
-        star-fletcher = pkgs.callPackage ./star-fletcher.nix { StarPU = StarPU.packages.${system}.default; };
-        star-fletcher-cuda = pkgs.callPackage ./star-fletcher.nix { StarPU = StarPU.packages.${system}.default; enableCUDA = true; };
+        star-fletcher = pkgs.callPackage ./star-fletcher.nix {
+          StarPU = StarPU.packages.${system}.default;
+        };
+
+        star-fletcher-cuda = pkgs.callPackage ./star-fletcher.nix {
+          StarPU = StarPU.packages.${system}.default;
+          enableCUDA = true;
+        };
     in
     {
         devShells.${system} = {

@@ -19,9 +19,9 @@ let
     cudaNativeBuildInputs = with cudaPackages; [ cuda_nvcc autoAddDriverRunpath ];
     cudaBuildInputs = with cudaPackages; [ cuda_cudart cuda_cccl ];
     
-    localStarPU = StarPU.overrideAttrs (old: {
-        inherit enableTrace enableCUDA compileAsRelease;
-        maxBuffers = 56;
+    localStarPU = (StarPU.override { inherit cudaPackages; }).overrideAttrs (old: {
+      inherit enableTrace enableCUDA compileAsRelease;
+      maxBuffers = 56;
     });
 in
 stdenv.mkDerivation {
