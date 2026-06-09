@@ -19,10 +19,11 @@ let
     cudaNativeBuildInputs = with cudaPackages; [ cuda_nvcc autoAddDriverRunpath ];
     cudaBuildInputs = with cudaPackages; [ cuda_cudart cuda_cccl ];
     
-    localStarPU = (StarPU.override { inherit cudaPackages; }).overrideAttrs (old: {
+    localStarPU = StarPU.override {
+      inherit cudaPackages;
       inherit enableTrace enableCUDA compileAsRelease;
       maxBuffers = 56;
-    });
+    };
 in
 stdenv.mkDerivation {
     pname = "star-fletcher";

@@ -96,12 +96,12 @@
         devShells.${system} = {
             default = baseShell myStarPU {};
 
-            release = (baseShell (myStarPU.overrideAttrs (oldAttrs: {
+            release = (baseShell (myStarPU.override {
                 enableTrace = false;
                 compileAsRelease = true;
-            }))) { COMPILE_MODE = "release"; };
+            })) { COMPILE_MODE = "release"; };
 
-            pcad_experiments = (baseShell (myStarPU.overrideAttrs (oldAttrs: {
+            pcad_experiments = (baseShell (myStarPU.override {
                 enableTrace = true;
                 enableCUDA = false;
                 compileAsRelease = true;
@@ -109,7 +109,7 @@
                 # versões mais recentes do StarPU resolvem isso aparentemente
                 # mais recentes as in 03/26
                 extraOptions = [ "--enable-maxcpus=256" ]; 
-            }))) { 
+            })) { 
                 COMPILE_MODE = "release"; 
             };
         };
