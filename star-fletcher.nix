@@ -16,8 +16,15 @@
     compileAsRelease ? true
 }:
 let 
-    cudaNativeBuildInputs = with cudaPackages; [ cuda_nvcc autoAddDriverRunpath ];
-    cudaBuildInputs = with cudaPackages; [ cuda_cudart cuda_cccl ];
+  cudaNativeBuildInputs = with cudaPackages; [
+    cuda_nvcc
+    autoAddDriverRunpath
+  ];
+  cudaBuildInputs = with cudaPackages; [
+    cuda_cudart
+    cuda_cccl
+    cuda_nvml_dev
+  ];
     
     localStarPU = StarPU.override {
       inherit cudaPackages;
