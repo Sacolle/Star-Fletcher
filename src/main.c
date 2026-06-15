@@ -117,6 +117,7 @@ struct starpu_codelet rtm_codelet = {
     .cpu_funcs = { rtm_kernel },
     #ifdef CUDA_BACKEND
     .cuda_funcs = { rtm_kernel_cuda },
+    .cuda_flags = {STARPU_CUDA_ASYNC},
     #endif
     .nbuffers = 52,
     .modes = {

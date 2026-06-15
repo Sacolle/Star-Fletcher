@@ -7,13 +7,17 @@
           url = "github:Sacolle/nix-starpu";
           inputs.nixpkgs.follows = "nixpkgs";
         };
+        nix-gl-host = {
+            url = "github:numtide/nix-gl-host";
+            inputs.nixpkgs.follows = "nixpkgs";
+        };
         
         # gets the proper version of the CUDA packages for compilation
         cudaNixpkgs.url = "github:nixos/nixpkgs/1da52dd49a127ad74486b135898da2cef8c62665";
         madagascar.url = "github:Sacolle/nix-madagascar";
     };
 
-    outputs = { self, nixpkgs, cudaNixpkgs, StarPU, madagascar }: 
+    outputs = { self, nixpkgs, cudaNixpkgs, StarPU, madagascar, nix-gl-host }: 
     let 
         system = "x86_64-linux";
         pkgsconfigs = { 
@@ -64,6 +68,7 @@
                 cuda_cccl
                 cuda_nvml_dev.dev
                 libcusparse.dev
+                cuda_cuobjdump
             ]);
             # export StarPU and hwloc store locations 
             # for use in vscode intellisence
@@ -77,8 +82,6 @@
             NVML_STORE_PATH =        "${cudapkgs.cudaPackages.cuda_nvml_dev.dev}/include/";
             LIBCUSPARSE_STORE_PATH = "${cudapkgs.cudaPackages.libcusparse.dev}/include/";
 
-            #CPATH = "${GCC_STORE_PATH}:${STARPU_STORE_PATH}:${CRITERION_STORE_PATH}:${HWLOC_STORE_PATH}:${CUDART_STORE_PATH}:${NVCC_STORE_PATH}:${NVML_STORE_PATH}:${LIBCUSPARSE_STORE_PATH}";
-
             # on relase this is overwritten
             COMPILE_MODE = "debug"; 
         } // extraArgs);
@@ -91,6 +94,8 @@
           StarPU = StarPU.packages.${system}.default;
           enableCUDA = true;
         };
+
+        nixglhost = nix-gl-host.defaultPackage.${system};
     in
     {
         devShells.${system} = {
@@ -111,6 +116,14 @@
                 extraOptions = [ "--enable-maxcpus=256" ]; 
             })) { 
                 COMPILE_MODE = "release"; 
+            };
+            test = pkgs.mkShell {
+                buildInputs = [ 
+                    star-fletcher-cuda
+                    #pkgs.gdb
+                    nixglhost 
+                    pkgs.cudaPackages.cuda_cuobjdump
+                ];
             };
         };
         packages.${system} = {
