@@ -24,6 +24,10 @@ let
     cuda_cudart
     cuda_cccl
     cuda_nvml_dev
+    libcublas 
+    libcusparse
+    libcusolver
+    libcufft
   ];
     
     localStarPU = StarPU.override {
