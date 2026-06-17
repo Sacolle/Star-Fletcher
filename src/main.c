@@ -275,8 +275,19 @@ int main(int argc, char **argv){
     vector(void*) medium_allocs = NULL;
 
 
-	int ret = starpu_init(NULL);
-	STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
+    int ret = starpu_init(NULL);
+    STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
+
+#ifdef CUDA_BACKEND
+    printf("Using CUDA backend.\n");
+#endif
+
+#ifdef RELEASE
+    printf("Compiled as release.\n");
+#else
+    printf("Compiled as debug.\n");
+#endif
+    
 
     char* output_folder = DEFAULT_OUTPUT_FOLDER;
     get_envvar(&output_folder, "OUTPUT_FOLDER");

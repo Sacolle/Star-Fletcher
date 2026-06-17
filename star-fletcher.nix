@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     system = "x86_64-linux";
     version = "0.1";
 
-    inherit enableTrace enableCUDA compileAsRelease;
+    # inherit enableTrace enableCUDA compileAsRelease;
 
     src = ./.;
 
