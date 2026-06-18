@@ -280,6 +280,8 @@ int main(int argc, char **argv){
 
 #ifdef CUDA_BACKEND
     printf("Using CUDA backend.\n");
+#else
+    printf("Not using CUDA.\n");
 #endif
 
 #ifdef RELEASE
@@ -297,7 +299,6 @@ int main(int argc, char **argv){
 
     int64_t enable_io = 1;
     get_envvar(&enable_io, "ENABLE_IO");
-    
 
     enum Form form = 0;
     char* form_str = NULL;
