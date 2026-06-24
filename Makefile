@@ -5,17 +5,10 @@ export STARPU_LDLIBS := $(shell pkg-config --libs starpu-1.4)
 CFLAGS := $(STARPU_CFLAGS) -Wall
 LDLIBS += $(STARPU_LDLIBS) -lm -lc
 
-# if COMPILE_MODE is not define, the makefile will generate a
-# missing separator Error because it will fail to parse the echo line
-# AKA, doing this as a throw because the compile_mode should be defined
-ifndef COMPILE_MODE
-echo $(error, compile mode not defined)
-endif
-
-ifeq ($(COMPILE_MODE), release)
-CFLAGS += -O3
+ifeq ($(RELEASE_MODE), 1)
+	CFLAGS += -O3
 else
-CFLAGS += -O0 -g
+	CFLAGS += -O0 -g
 endif
 
 export PARENT_DIR := $(CURDIR)
@@ -43,11 +36,14 @@ ifeq ($(CUDA_BACKEND), 1)
 	LDLIBS += -lcudart
 
 	NVCC = nvcc
-	NVCCFLAGS = -O2 $(STARPU_CFLAGS) -arch=$(ARCH)
+	NVCCFLAGS = $(STARPU_CFLAGS) -arch=$(ARCH) -O0 -g
+	
+	ifeq ($(RELEASE_MODE), 1)
+		NVCCFLAGS += -O2
+	else
+		NVCCFLAGS += -O0 -g
+	endif
 endif
-
-# TODO: add CUDA compilation 
-# nvcc src/cuda/kernel.cu -o k.o -c -I ./src/includes
 
 .PHONY: all clean run print test debug valgrind lsp
 

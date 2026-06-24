@@ -30,6 +30,9 @@
         };
         # import gcc13Stdenv from this because it uses the correct version of glibc (2.40-36)
         cudapkgs = import cudaNixpkgs pkgsconfigs;
+
+	cudaPacks = cudapkgs.cudaPackages_12_2;
+
         pkgs = import nixpkgs pkgsconfigs;
 
         myStarPU = StarPU.packages.${system}.default.override {
@@ -90,10 +93,19 @@
           StarPU = StarPU.packages.${system}.default;
         };
 
-        star-fletcher-cuda = pkgs.callPackage ./star-fletcher.nix {
-          StarPU = StarPU.packages.${system}.default;
+        star-fletcher-cuda = star-fletcher.override {
           enableCUDA = true;
         };
+
+	starpu-cuda = StarPU.packages.${system}.default.override {
+          enableCUDA = true;
+	  compileAsRelease = true;
+	  enableTrace = false;
+          maxBuffers = 56;
+	  cudaPackages = cudaPacks;
+	  # Stupid hack, but ig is the way to do
+	  gcc13Stdenv = cudapkgs.gcc12Stdenv;
+	};
 
         nixglhost = nix-gl-host.defaultPackage.${system};
     in
@@ -112,18 +124,31 @@
                 compileAsRelease = true;
                 # necessário na poti, pois a estrutura de 20 cores com 28 threads buga o StarPU
                 # versões mais recentes do StarPU resolvem isso aparentemente
-                # mais recentes as in 03/26
+                # mais recentes as in 0aru3/26
                 extraOptions = [ "--enable-maxcpus=256" ]; 
             })) { 
                 COMPILE_MODE = "release"; 
             };
-            test = pkgs.mkShell {
+            test = pkgs.mkShell.override { stdenv = cudapkgs.gcc12Stdenv; } {
                 buildInputs = [ 
-                    star-fletcher-cuda
+	 	    pkgs.cudaPackages.cuda_gdb
+                    #star-fletcher-cuda
+		    starpu-cuda
+	            pkgs.pkg-config
+	            pkgs.hwloc
                     #pkgs.gdb
                     nixglhost 
-                    pkgs.cudaPackages.cuda_cuobjdump
-                ];
+                    cudaPacks.cuda_cuobjdump
+                ] ++ (with cudaPacks; [
+		    cuda_nvcc
+		    cuda_cudart
+		    cuda_cccl
+		    cuda_nvml_dev
+		    libcublas 
+		    libcusparse
+		    libcusolver
+		    libcufft
+		]);
             };
         };
         packages.${system} = {

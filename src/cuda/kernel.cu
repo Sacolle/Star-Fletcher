@@ -6,7 +6,7 @@ __device__ static inline size_t cuda_idx(
     const size_t x, const size_t y, const size_t z, 
     const size_t ldy, const size_t ldz
 ){
-    return x + ldy * (y + z * ldz);
+    return x + ldy * y + z * ldz;
 }
 
 
