@@ -21,8 +21,10 @@ compile_commands.json
 # madagascar ignores
 sfpen*
 
-
 #emacs 
 *~
 \#*#
 .\#*
+
+# trace files
+main_trace

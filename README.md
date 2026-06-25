@@ -4,6 +4,7 @@ Star-Fletcher é uma implementação da propagação de onda com o tempo do algo
 Ele utiliza paralelismo de tarefas em primeira ordem com o framework [StarPU](https://starpu.gitlabpages.inria.fr/). 
 O flake [nix-starpu](https://github.com/Sacolle/nix-starpu) é usado para compilar esse programa em sistemas nix.
 
+Utilizando o [Madagascar](https://github.com/Sacolle/nix-madagascar) para a visualização do meio e o [Eztrace](https://github.com/Sacolle/eztrace-pallas-nix) para rastros 
 
 ## Execução
 
