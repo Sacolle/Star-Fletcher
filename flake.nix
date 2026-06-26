@@ -29,13 +29,13 @@
             config = { 
                 allowUnfree = true;
                 #cudaSupport = true;
-                cudaVersion = "13";
+                #cudaVersion = "13";
             };
         };
         # import gcc13Stdenv from this because it uses the correct version of glibc (2.40-36)
         cudapkgs = import cudaNixpkgs pkgsconfigs;
 
-	    cudaPacks = cudapkgs.cudaPackages_12_2;
+        cudaPacks = cudapkgs.cudaPackages_12_2;
 
         pkgs = import nixpkgs pkgsconfigs;
 
@@ -91,7 +91,7 @@
             StarPU = StarPU.packages.${system}.default;
         };
 
-	    starpu-cuda = StarPU.packages.${system}.default.override {
+        starpu-cuda = StarPU.packages.${system}.default.override {
             enableCUDA = true;
 	        compileAsRelease = true;
 	        enableTrace = false;
@@ -100,6 +100,15 @@
 	        # Stupid hack, but ig is the way to do
 	        gcc13Stdenv = cudapkgs.gcc12Stdenv;
 	    };
+
+        star-fletcher-cuda = pkgs.callPackage ./star-fletcher.nix {
+            StarPU = starpu-cuda;
+            cudaPackages = cudaPacks;
+            enableCUDA = true;
+            enableTrace = false;
+            compileAsRelease = true;
+            stdenv = cudapkgs.gcc12Stdenv;
+        };
 
         nixglhost = nix-gl-host.defaultPackage.${system};
     in
@@ -148,6 +157,13 @@
                     libcusolver
                     libcufft
                 ]);
+            };
+            star-compilation = pkgs.mkShell {
+                buildInputs = [ 
+                    star-fletcher-cuda		
+                    nixglhost 
+                    cudaPacks.cuda_cuobjdump
+                ];
             };
         };
         packages.${system} = {

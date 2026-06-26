@@ -6,7 +6,7 @@ CFLAGS := $(STARPU_CFLAGS) -Wall
 LDLIBS += $(STARPU_LDLIBS) -lm -lc
 
 ifeq ($(RELEASE_MODE), 1)
-	CFLAGS += -O3
+	CFLAGS += -O3 -DRELEASE
 else
 	CFLAGS += -O0 -g
 endif
@@ -36,7 +36,7 @@ ifeq ($(CUDA_BACKEND), 1)
 	LDLIBS += -lcudart
 
 	NVCC = nvcc
-	NVCCFLAGS = $(STARPU_CFLAGS) -arch=$(ARCH) -O0 -g
+	NVCCFLAGS = $(STARPU_CFLAGS) -arch=$(ARCH)
 	
 	ifeq ($(RELEASE_MODE), 1)
 		NVCCFLAGS += -O2

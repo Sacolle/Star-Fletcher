@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1782310045,
-        "narHash": "sha256-9BVSPw5FDFqft3246j45McYcFi37/rKAr5uiHrMZYqM=",
+        "lastModified": 1782479251,
+        "narHash": "sha256-Wwlsb71X/2pf/DqZb7ZiHtu50iYCr+FugTJZO1BhikY=",
         "owner": "Sacolle",
         "repo": "nix-starpu",
-        "rev": "dda0c51e9080bb641cd88adf83dd13c54a97f6a0",
+        "rev": "308af4f1aa15211843809d943ebeb1b91a63e6dc",
         "type": "github"
       },
       "original": {

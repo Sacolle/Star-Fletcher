@@ -57,12 +57,13 @@ stdenv.mkDerivation {
     ] ++ lib.optionals enableCUDA cudaBuildInputs;
 
     makeFlags = lib.optionals enableCUDA [
+      (if compileAsRelease then "RELEASE_MODE=1" else "")
       "CUDA_BACKEND=1 "
       (if cuda_arch != "" then "ARCH=${cuda_arch}" else " ")
     ];
 
     # preciso também do treco de achar os drivers da máquina
 
-    buildPhase = "COMPILE_MODE=${if compileAsRelease then "release" else "debug"} make";
+    #buildPhase = "make";
     installPhase = "mkdir -p $out/bin && cp main $out/bin/star-fletcher";
 }
