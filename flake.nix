@@ -26,11 +26,7 @@
         system = "x86_64-linux";
         pkgsconfigs = { 
             inherit system; 
-            config = { 
-                allowUnfree = true;
-                #cudaSupport = true;
-                #cudaVersion = "13";
-            };
+            config.allowUnfree = true;
         };
         # import gcc13Stdenv from this because it uses the correct version of glibc (2.40-36)
         cudapkgs = import cudaNixpkgs pkgsconfigs;
@@ -82,9 +78,6 @@
             NVCC_STORE_PATH =        "${cudapkgs.cudaPackages.cuda_nvcc}/include/";
             NVML_STORE_PATH =        "${cudapkgs.cudaPackages.cuda_nvml_dev.dev}/include/";
             LIBCUSPARSE_STORE_PATH = "${cudapkgs.cudaPackages.libcusparse.dev}/include/";
-
-            # on relase this is overwritten
-            COMPILE_MODE = "debug"; 
         } // extraArgs);
 
         star-fletcher = pkgs.callPackage ./star-fletcher.nix {

@@ -16,32 +16,32 @@
     compileAsRelease ? true
 }:
 let 
-  cudaNativeBuildInputs = with cudaPackages; [
-    cuda_nvcc
-    autoAddDriverRunpath
-  ];
-  cudaBuildInputs = with cudaPackages; [
-    cuda_cudart
-    cuda_cccl
-    cuda_nvml_dev
-    libcublas 
-    libcusparse
-    libcusolver
-    libcufft
-  ];
+    cudaNativeBuildInputs = with cudaPackages; [
+        cuda_nvcc
+        autoAddDriverRunpath
+    ];
+
+    cudaBuildInputs = with cudaPackages; [
+        cuda_cudart
+        cuda_cccl
+        cuda_nvml_dev
+        libcublas 
+        libcusparse
+        libcusolver
+        libcufft
+    ];
     
     localStarPU = StarPU.override {
-      inherit cudaPackages;
-      inherit enableTrace enableCUDA compileAsRelease;
-      maxBuffers = 56;
+        inherit cudaPackages;
+        inherit stdenv;
+        inherit enableTrace enableCUDA compileAsRelease;
+        maxBuffers = 56;
     };
 in
 stdenv.mkDerivation {
     pname = "star-fletcher";
     system = "x86_64-linux";
     version = "0.1";
-
-    # inherit enableTrace enableCUDA compileAsRelease;
 
     src = ./.;
 
