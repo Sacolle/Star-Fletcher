@@ -19,6 +19,10 @@ err_t mem_allocate(mem_vec_t v, void** ptr, const size_t size, const bool pin, c
     
     err_t err;
     if(is_starpus){
+        if((err = starpu_malloc(ptr, size)) != 0){
+            return err;
+        }
+    }else{
         if((*ptr = malloc(size)) == NULL){
 	    return errno;
 	}
@@ -27,10 +31,6 @@ err_t mem_allocate(mem_vec_t v, void** ptr, const size_t size, const bool pin, c
 	   	return err; 
 	    }
 	}
-    }else{
-        if((err = starpu_malloc(ptr, size)) != 0){
-            return err;
-        }
     }
 
     struct mem_stat stat = {

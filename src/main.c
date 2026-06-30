@@ -397,7 +397,7 @@ int main(int argc, char **argv){
     ALLOCATE_NESTED_BUFFER(v2sz);
     ALLOCATE_NESTED_BUFFER(v2pn);
 
-    #undef ALLOCAE_NESTED_BUFFER
+    #undef ALLOCATE_NESTED_BUFFER
 
     medium_calc_intermediary_values(
         vpz, vsv, epsilon, delta, phi, theta,

@@ -85,13 +85,12 @@
         };
 
         starpu-cuda = StarPU.packages.${system}.default.override {
-            enableCUDA = true;
+            	enableCUDA = true;
 	        compileAsRelease = true;
 	        enableTrace = false;
-            maxBuffers = 56;
+            	maxBuffers = 56;
 	        cudaPackages = cudaPacks;
-	        # Stupid hack, but ig is the way to do
-	        gcc13Stdenv = cudapkgs.gcc12Stdenv;
+	        stdenv = cudapkgs.gcc12Stdenv;
 	    };
 
         star-fletcher-cuda = pkgs.callPackage ./star-fletcher.nix {
@@ -114,7 +113,7 @@
                         maxBuffers = 56;
                         enableCUDA = false;
                         compileAsRelease = false;
-                        gcc13Stdenv = pkgs.gcc13Stdenv;
+                        stdenv = pkgs.gcc13Stdenv;
                     })
                     (eztrace.packages.${system}.eztrace.override {
                         pallas = eztrace.packages.${system}.pallas.override {

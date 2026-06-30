@@ -37,6 +37,12 @@ let
         inherit enableTrace enableCUDA compileAsRelease;
         maxBuffers = 56;
     };
+    # find a better way to get the hwloc configured, in this case I think it is propagatedInputs	
+    cudaHwloc = hwloc.override { 
+        inherit cudaPackages; 
+        enableCuda = true;
+    };
+    my-hwloc = if enableCUDA then cudaHwloc else hwloc;
 in
 stdenv.mkDerivation {
     pname = "star-fletcher";
@@ -48,7 +54,7 @@ stdenv.mkDerivation {
     nativeBuildInputs = [
       pkg-config
       python313
-      hwloc
+      my-hwloc
       localStarPU
     ] ++ lib.optionals enableCUDA cudaNativeBuildInputs;
 
