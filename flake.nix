@@ -94,7 +94,7 @@
 	    };
 
         star-fletcher-cuda = pkgs.callPackage ./star-fletcher.nix {
-            StarPU = starpu-cuda;
+            StarPU = StarPU.packages.${system}.default; #starpu-cuda;
             cudaPackages = cudaPacks;
             enableCUDA = true;
             enableTrace = false;
@@ -160,7 +160,7 @@
         };
         packages.${system} = {
           default = star-fletcher;
-          inherit star-fletcher;
+          inherit star-fletcher star-fletcher-cuda;
         };
     };
 }
