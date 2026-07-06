@@ -94,10 +94,21 @@ double elapsed_seconds(const uint64_t t_end, const uint64_t t_start){
 }
 
 
+static struct starpu_perfmodel dump_block_perf_model = {
+    .type = STARPU_HISTORY_BASED,
+    .symbol = "dump_block_perf_model"
+};
+
 struct starpu_codelet dump_block_codelet = {
     .cpu_funcs = {dump_block_kernel},
     .nbuffers = 1,
-    .modes = {STARPU_R} // p wave
+    .modes = {STARPU_R}, // p wave
+    .model = &dump_block_perf_model
+};
+
+static struct starpu_perfmodel insert_perturbation_perf_model = {
+    .type = STARPU_HISTORY_BASED,
+    .symbol = "insert_perturbation_perf_model"
 };
 
 struct starpu_codelet insert_perturbation_codelet = {
@@ -106,7 +117,13 @@ struct starpu_codelet insert_perturbation_codelet = {
     .modes = { 
         STARPU_RW, // p wave
         STARPU_RW  // q wave
-    }
+    },
+    .model = &insert_perturbation_perf_model
+};
+
+static struct starpu_perfmodel rtm_perf_model = {
+    .type = STARPU_HISTORY_BASED,
+    .symbol = "rtm_perf_model"
 };
 
 #ifdef CUDA_BACKEND
@@ -209,7 +226,7 @@ struct starpu_codelet rtm_codelet = {
 
         STARPU_R  // r at (i, j, k) of q_wave_iter[2]
     },
-    .model = &starpu_perfmodel_nop,
+    .model = &rtm_perf_model
 };
 
 err_t write_wave(int64_t* n_out, starpu_data_handle_t* wave_iter){

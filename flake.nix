@@ -60,12 +60,14 @@
                 #madagascar
                 madagascar.packages.${system}.default
             ] ++ (with cudapkgs.cudaPackages; [ 
-                cuda_cudart
                 cuda_nvcc
+                cuda_cudart
                 cuda_cccl
-                cuda_nvml_dev.dev
-                libcusparse.dev
-                cuda_cuobjdump
+                cuda_nvml_dev
+                libcublas 
+                libcusparse
+                libcusolver
+                libcufft
             ]);
             # export StarPU and hwloc store locations 
             # for use in vscode intellisence
@@ -106,6 +108,7 @@
     in
     {
         devShells.${system} = {
+          default = baseShell starpu-cuda {};
             eztrace-test = pkgs.mkShell {
                 buildInputs = [
                     (eztrace.packages.${system}.new-starpu.override {
