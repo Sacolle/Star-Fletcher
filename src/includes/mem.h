@@ -15,7 +15,7 @@ typedef vector(struct mem_stat) mem_vec_t;
 #define STARPU_ALLOCATION true
 #define CPU_ALLOCATION false
 
-err_t mem_allocate(mem_vec_t v, void** ptr, const size_t size, const bool pin, const bool is_starpus);    
-err_t mem_free(mem_vec_t v);
+err_t mem_allocate(mem_vec_t v, void** ptr, const size_t size);    
+void mem_free(mem_vec_t v);
 
 #endif
