@@ -144,13 +144,6 @@
                     cudaPacks.cuda_cuobjdump
                 ] ++ (with cudaPacks; [
                     cuda_nvcc
-                    cuda_cudart
-                    cuda_cccl
-                    cuda_nvml_dev
-                    libcublas 
-                    libcusparse
-                    libcusolver
-                    libcufft
                 ]);
             };
             star-compilation = pkgs.mkShell {
