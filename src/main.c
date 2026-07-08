@@ -291,10 +291,6 @@ int main(int argc, char **argv){
     mem_vec_t static_allocs = NULL;
     mem_vec_t medium_allocs = NULL;
 
-
-    int ret = starpu_init(NULL);
-    STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
-
 #ifdef CUDA_BACKEND
     printf("Using CUDA backend.\n");
 #else
@@ -365,12 +361,12 @@ int main(int argc, char **argv){
     FP *vpz, *vsv, *epsilon, *delta, *phi, *theta;
     const size_t medium_size = sizeof(FP) * CUBE(g_volume_width);
 
-    TRY(mem_allocate(medium_allocs, (void**) &vpz, medium_size));
-    TRY(mem_allocate(medium_allocs, (void**) &vsv, medium_size));
-    TRY(mem_allocate(medium_allocs, (void**) &epsilon, medium_size));
-    TRY(mem_allocate(medium_allocs, (void**) &delta, medium_size));
-    TRY(mem_allocate(medium_allocs, (void**) &phi, medium_size));
-    TRY(mem_allocate(medium_allocs, (void**) &theta, medium_size));
+    TRY(mem_allocate_local(medium_allocs, (void**) &vpz, medium_size));
+    TRY(mem_allocate_local(medium_allocs, (void**) &vsv, medium_size));
+    TRY(mem_allocate_local(medium_allocs, (void**) &epsilon, medium_size));
+    TRY(mem_allocate_local(medium_allocs, (void**) &delta, medium_size));
+    TRY(mem_allocate_local(medium_allocs, (void**) &phi, medium_size));
+    TRY(mem_allocate_local(medium_allocs, (void**) &theta, medium_size));
 
     // inicialize the buffers above based on the type of medium
     medium_initialize(form, CUBE(g_volume_width), vpz, vsv, epsilon, delta, phi, theta);
@@ -381,6 +377,10 @@ int main(int argc, char **argv){
     // run the stability condition for the size
     const FP stability_condition = medium_stability_condition(dx, dy, dz, vpz, epsilon, CUBE(g_volume_width));
     DEBUG("The stability condition (proper value for dt) for this problem is %lf.\n", stability_condition);
+
+    // all the medium functions above use openMP, so i need to init starpu latter
+    int ret = starpu_init(NULL);
+    STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
 
     FP **ch1dxx, **ch1dyy, **ch1dzz, **ch1dxy, **ch1dyz, **ch1dxz, **v2px, **v2pz, **v2sz, **v2pn;
     #define ALLOCATE_NESTED_BUFFER(v) \
@@ -400,15 +400,6 @@ int main(int argc, char **argv){
     ALLOCATE_NESTED_BUFFER(v2pn);
 
     #undef ALLOCATE_NESTED_BUFFER
-
-    medium_calc_intermediary_values(
-        vpz, vsv, epsilon, delta, phi, theta,
-        ch1dxx, ch1dyy, ch1dzz, ch1dxy, ch1dyz, ch1dxz, 
-        v2px, v2pz, v2sz, v2pn
-    );
-
-    //at this point the values for the medium will not be used again
-    mem_free(medium_allocs);
 
     // a iteração do bloco t depende dos blocos t - 1 e t - 2.
     // aloca-se mais data_handles que necessário, compreendendo 0..g_width_in_cubes + 2
@@ -456,6 +447,16 @@ int main(int argc, char **argv){
         BLOCK_REGISTER(hdl_v2sz + idx, v2sz[idx]);
         BLOCK_REGISTER(hdl_v2pn + idx, v2pn[idx]);
     }
+
+    medium_calc_intermediary_values(vpz, vsv, epsilon, delta, phi, theta,
+                                    hdl_ch1dxx, hdl_ch1dyy, hdl_ch1dzz,
+                                    hdl_ch1dxy, hdl_ch1dyz, hdl_ch1dxz,
+                                    hdl_v2px, hdl_v2pz, hdl_v2sz,
+                                    hdl_v2pn
+				    );
+
+    //at this point the values for the medium will not be used again
+    mem_free_local(medium_allocs);
    
     // alocate the initial values for the waves pp, pc, qp, qc.
     // the null_block holds all zeros, which all blocks in pp and qp are
