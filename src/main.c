@@ -283,6 +283,7 @@ err_t g_err;
 
 int main(int argc, char **argv){
 
+    const uint64_t initialization_start_time = get_timestamp_ns();
     srand(RANDOM_SEED);
 
     //need to be toplevel for the try macro
@@ -351,22 +352,6 @@ int main(int argc, char **argv){
     const size_t volume_propagation_idx = volume_idx(g_volume_width / 2, g_volume_width / 2, g_volume_width / 2);
     DEBUG("Index of propagation is %ld.\n", volume_propagation_idx);
 
-
-    /* 
-    const size_t max_count_of_page_size = 16;
-    size_t available_page_sizes[16];
-    size_t page_size_results = 0;
-    
-    TRY(io_available_huge_page_sizes(max_count_of_page_size, &page_size_results, &available_page_sizes[0]));
-    TRY((page_size_results > 0 || page_size_results <= max_count_of_page_size) ? 0 : ME_COUNT_DONT_MATCH);
-
-    size_t max_page_size = 0;
-    for(size_t i = 0; i < page_size_results; i++){
-        printf("%d: page size %ld\n", i, available_page_sizes[i]);
-        //max_page_size = max_page_size < available_page_sizes[i] ? available_page_sizes[i] : max_page_size;
-    }
-    max_page_size = available_page_sizes[0];
-    */
 
     char bin_filename[512] = {'\0'};
     sprintf(bin_filename, "%s/out-%s.rsf@", output_folder, output_filename);
@@ -515,7 +500,13 @@ int main(int argc, char **argv){
     }
 
     #undef BLOCK_REGISTER 
-    // TODO: rename n_out para algo que faça mais sentido
+
+    const uint64_t initialization_end_time = get_timestamp_ns();
+
+    const double initialization_total_time = elapsed_seconds(initialization_end_time, initialization_start_time);
+
+    printf("Initialization Elapsed time is: %lfs\n", initialization_total_time);
+
 
     int64_t n_out = 0;
     // salva o primeiro bloco (nulo)
