@@ -104,6 +104,15 @@
             stdenv = cudapkgs.gcc12Stdenv;
         };
 
+        star-fletcher-cuda-trace = pkgs.callPackage ./star-fletcher.nix {
+            StarPU = StarPU.packages.${system}.default; #starpu-cuda;
+            cudaPackages = cudaPacks;
+            enableCUDA = true;
+            enableTrace = true;
+            compileAsRelease = true;
+            stdenv = cudapkgs.gcc12Stdenv;
+        };
+
         nixglhost = nix-gl-host.defaultPackage.${system};
     in
     {
@@ -151,6 +160,13 @@
                     star-fletcher-cuda		
                     nixglhost 
                     cudaPacks.cuda_cuobjdump
+                ];
+            };
+
+            star-fletcher-trace = pkgs.mkShell {
+                buildInputs = [ 
+                    star-fletcher-cuda-trace
+                    nixglhost 
                 ];
             };
         };
