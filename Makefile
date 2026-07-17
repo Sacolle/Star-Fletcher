@@ -2,8 +2,8 @@
 export STARPU_CFLAGS := $(shell pkg-config --cflags starpu-1.4)
 export STARPU_LDLIBS := $(shell pkg-config --libs starpu-1.4)
 
-CFLAGS := $(STARPU_CFLAGS) -Wall
-LDLIBS += $(STARPU_LDLIBS) -lm -lc
+CFLAGS := $(STARPU_CFLAGS) -Wall -fopenmp
+LDLIBS += $(STARPU_LDLIBS) -lm -lc 
 
 ifeq ($(RELEASE_MODE), 1)
 	CFLAGS += -O3 -DRELEASE
@@ -37,13 +37,15 @@ ifeq ($(CUDA_BACKEND), 1)
 
 	NVCC = nvcc
 	NVCCFLAGS = $(STARPU_CFLAGS) -arch=$(ARCH)
-	
+
 	ifeq ($(RELEASE_MODE), 1)
 		NVCCFLAGS += -O2
 	else
 		NVCCFLAGS += -O0 -g
 	endif
 endif
+
+ARGS = TTI 200 200 200 8 12.5 12.5 12.5 0.0001 0.001 4 0.0005
 
 .PHONY: all clean run print test debug valgrind lsp
 
@@ -68,14 +70,16 @@ $(OBJDIR)/cuda_kernel.o: $(CUDADIR)/kernel.cu $(SRCDIR)/derivatives/derivatives-
 	@mkdir -p $(OBJDIR)
 	$(NVCC) $(NVCCFLAGS) -c $< -o $@ -I $(INCLUDEDIR)
 
+
+
 run: $(BIN)
 	@mkdir -p $(RESDIR)
 	@echo "Runing $(BIN). Out putting at ./$(RESDIR)"
-	./$(BIN) TTI 32 32 32 4 12.5 12.5 12.5 0.001 0.5 4 0.01
+	./$(BIN) $(ARGS)
 
 debug: $(BIN)
 	@mkdir -p $(RESDIR)
-	gdb --args ./$(BIN) TTI 32 32 32 4 12.5 12.5 12.5 0.001 0.5 4 0.01
+	gdb --args ./$(BIN) $(ARGS)
 
 lsp:
 	bear -- make clean all

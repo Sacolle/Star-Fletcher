@@ -19,7 +19,7 @@ MEDIUM_TEST_DEP += $(PARENT_DIR)/src/argparse.c $(PARENT_DIR)/src/includes/argpa
 MEDIUM_TEST_DEP += $(PARENT_DIR)/src/includes/macros.h $(PARENT_DIR)/src/includes/floatingpoint.h
 
 medium-tests.out: $(MEDIUM_TEST_DEP)
-	$(CC) -o $@ $^ $(CRITERION_CFLAGS) $(CRITERION_LDLIBS) -I $(PARENT_DIR)/$(INCLUDEDIR) $(CFLAGS)
+	$(CC) -o $@ $^ $(CRITERION_CFLAGS) $(CRITERION_LDLIBS) $(STARPU_CFLAGS) $(STARPU_LDLIBS) -I $(PARENT_DIR)/$(INCLUDEDIR) $(CFLAGS)
 
 
 KERNEL_TEST_DEP := $(CURDIR)/kernel-tests.c $(PARENT_DIR)/src/derivatives.c $(PARENT_DIR)/src/includes/derivatives.h 

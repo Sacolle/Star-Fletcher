@@ -35,3 +35,24 @@ void mem_free(mem_vec_t v){
     #undef FREE
 }
 
+
+err_t mem_allocate_local(mem_vec_t v, void** ptr, const size_t size){
+
+  if((*ptr = (void*) malloc(size)) == NULL){
+        return errno;
+    }
+
+    struct mem_stat stat = {
+        .ptr = *ptr, 
+        .size = size
+    };
+
+    vector_push(v, stat);
+    return 0;
+}
+
+void mem_free_local(mem_vec_t v){
+    #define FREE(x) free(x.ptr);
+    vector_free_all(v, FREE);
+    #undef FREE
+}

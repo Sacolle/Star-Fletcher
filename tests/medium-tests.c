@@ -3,8 +3,8 @@
 #include <criterion/new/assert.h>
 #include <criterion/logging.h>
 
-#include <stdint.h>
 #include <float.h>
+#include <starpu.h>
 
 #include "medium.h"
 #include "macros.h"
@@ -470,18 +470,57 @@ Test(medium, correct_intermediary_values){
         }
     }
 
-    intermediary_values(sx, sy, sz, 
-        vpz_base, vsv_base, epsilon_base, delta_base, phi_base, theta_base,
-        ch1dxx_base, ch1dyy_base, ch1dzz_base, ch1dxy_base, ch1dyz_base, ch1dxz_base, 
-        v2px_base, v2pz_base, v2sz_base, v2pn_base
-    );
+    intermediary_values(
+        sx, sy, sz, vpz_base, vsv_base, epsilon_base, delta_base, phi_base,
+        theta_base, ch1dxx_base, ch1dyy_base, ch1dzz_base, ch1dxy_base,
+        ch1dyz_base, ch1dxz_base, v2px_base, v2pz_base, v2sz_base, v2pn_base);
 
-    medium_calc_intermediary_values(
-        vpz_myimpl, vsv_myimpl, epsilon_myimpl, delta_myimpl, phi_myimpl, theta_myimpl,
-        (FP**) ch1dxx_myimpl, (FP**) ch1dyy_myimpl, (FP**) ch1dzz_myimpl,
-        (FP**) ch1dxy_myimpl, (FP**) ch1dyz_myimpl, (FP**) ch1dxz_myimpl, 
-        (FP**) v2px_myimpl, (FP**) v2pz_myimpl, (FP**) v2sz_myimpl, (FP**) v2pn_myimpl
-    );
+    // TODO: init starPU
+    int ret = starpu_init(NULL);
+    STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
+    // alocate the handles
+    starpu_data_handle_t hdl_ch1dxx[total_seg], hdl_ch1dyy[total_seg], hdl_ch1dzz[total_seg], 
+        hdl_ch1dxy[total_seg], hdl_ch1dyz[total_seg], hdl_ch1dxz[total_seg], 
+        hdl_v2px[total_seg], hdl_v2pz[total_seg], hdl_v2sz[total_seg], hdl_v2pn[total_seg];
+
+    #define BLOCK_REGISTER(handle, ptr) starpu_block_data_register((handle), STARPU_MAIN_RAM, (uintptr_t) (ptr), \
+        g_cube_width, SQUARE(g_cube_width), g_cube_width, g_cube_width, g_cube_width, sizeof(FP))
+
+    // register the intemediary value handles
+    for (size_t i = 0; i < total_seg; i++) {
+	BLOCK_REGISTER(hdl_ch1dxx + i, ch1dxx_myimpl);
+	BLOCK_REGISTER(hdl_ch1dyy + i, ch1dyy_myimpl);
+	BLOCK_REGISTER(hdl_ch1dzz + i, ch1dzz_myimpl);
+	BLOCK_REGISTER(hdl_ch1dxy + i, ch1dxy_myimpl);
+	BLOCK_REGISTER(hdl_ch1dyz + i, ch1dyz_myimpl);
+	BLOCK_REGISTER(hdl_ch1dxz + i, ch1dxz_myimpl);
+	BLOCK_REGISTER(hdl_v2px + i, v2px_myimpl);
+	BLOCK_REGISTER(hdl_v2pz + i, v2pz_myimpl);
+	BLOCK_REGISTER(hdl_v2sz + i, v2sz_myimpl);
+	BLOCK_REGISTER(hdl_v2pn + i, v2pn_myimpl);
+    } 
+
+    medium_calc_intermediary_values(vpz_myimpl, vsv_myimpl, epsilon_myimpl,
+                                    delta_myimpl, phi_myimpl, theta_myimpl,
+                                    hdl_ch1dxx, hdl_ch1dyy, hdl_ch1dzz,
+                                    hdl_ch1dxy, hdl_ch1dyz, hdl_ch1dxz,
+				    hdl_v2px, hdl_v2pz, hdl_v2sz, hdl_v2pn);
+
+    // unregister the handles
+    for (size_t i = 0; i < total_seg; i++) {
+	starpu_data_unregister(hdl_ch1dxx[i]);
+	starpu_data_unregister(hdl_ch1dyy[i]);
+	starpu_data_unregister(hdl_ch1dzz[i]);
+	starpu_data_unregister(hdl_ch1dxy[i]);
+	starpu_data_unregister(hdl_ch1dyz[i]);
+	starpu_data_unregister(hdl_ch1dxz[i]);
+	starpu_data_unregister(hdl_v2px[i]);
+	starpu_data_unregister(hdl_v2pz[i]);
+	starpu_data_unregister(hdl_v2sz[i]);
+	starpu_data_unregister(hdl_v2pn[i]);
+    } 
+    // finish starpu
+    starpu_shutdown();
 
     for(size_t k = 0; k < g_width_in_cubes; k++){
         for(size_t j = 0; j < g_width_in_cubes; j++){

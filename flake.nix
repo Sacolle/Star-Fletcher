@@ -118,7 +118,13 @@
     {
         devShells.${system} = {
           default = baseShell starpu-cuda {};
-            eztrace-test = pkgs.mkShell {
+          no-cuda = baseShell (StarPU.packages.${system}.default.override {
+            	enableCUDA = false;
+	            compileAsRelease = true;
+	            enableTrace = false;
+            	maxBuffers = 56;
+	        }) {};
+          eztrace-test = pkgs.mkShell {
                 buildInputs = [
                     (eztrace.packages.${system}.new-starpu.override {
                         enableTrace = false;

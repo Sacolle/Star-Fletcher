@@ -2,6 +2,7 @@
 #define _MEDIUM_GUARD_
 
 #include <stddef.h>
+#include <starpu.h>
 
 #include "floatingpoint.h"
 #include "err.h"
@@ -35,12 +36,12 @@ void medium_random_velocity_boundary(
 );
 
 // calculates intermediary values for future computations
-void medium_calc_intermediary_values(
+err_t medium_calc_intermediary_values(
     const FP* vpz, const FP* vsv, const FP* epsilon,
     const FP* delta, const FP* phi, const FP* theta,
-    FP **restrict ch1dxx, FP **restrict ch1dyy, FP **restrict ch1dzz, 
-    FP **restrict ch1dxy, FP **restrict ch1dyz, FP **restrict ch1dxz, 
-    FP **restrict v2px, FP **restrict v2pz, FP **restrict v2sz, FP **restrict v2pn
+    starpu_data_handle_t* hdl_ch1dxx, starpu_data_handle_t* hdl_ch1dyy, starpu_data_handle_t* hdl_ch1dzz, 
+    starpu_data_handle_t* hdl_ch1dxy, starpu_data_handle_t* hdl_ch1dyz, starpu_data_handle_t* hdl_ch1dxz, 
+    starpu_data_handle_t* hdl_v2px, starpu_data_handle_t* hdl_v2pz, starpu_data_handle_t* hdl_v2sz, starpu_data_handle_t* hdl_v2pn
 );
 
 

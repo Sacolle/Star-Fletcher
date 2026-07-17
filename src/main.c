@@ -283,16 +283,13 @@ err_t g_err;
 
 int main(int argc, char **argv){
 
+    const uint64_t initialization_start_time = get_timestamp_ns();
     srand(RANDOM_SEED);
 
     //need to be toplevel for the try macro
     int program_status = EXIT_SUCCESS;
     mem_vec_t static_allocs = NULL;
     mem_vec_t medium_allocs = NULL;
-
-
-    int ret = starpu_init(NULL);
-    STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
 
 #ifdef CUDA_BACKEND
     printf("Using CUDA backend.\n");
@@ -352,22 +349,6 @@ int main(int argc, char **argv){
     DEBUG("Index of propagation is %ld.\n", volume_propagation_idx);
 
 
-    /* 
-    const size_t max_count_of_page_size = 16;
-    size_t available_page_sizes[16];
-    size_t page_size_results = 0;
-    
-    TRY(io_available_huge_page_sizes(max_count_of_page_size, &page_size_results, &available_page_sizes[0]));
-    TRY((page_size_results > 0 || page_size_results <= max_count_of_page_size) ? 0 : ME_COUNT_DONT_MATCH);
-
-    size_t max_page_size = 0;
-    for(size_t i = 0; i < page_size_results; i++){
-        printf("%d: page size %ld\n", i, available_page_sizes[i]);
-        //max_page_size = max_page_size < available_page_sizes[i] ? available_page_sizes[i] : max_page_size;
-    }
-    max_page_size = available_page_sizes[0];
-    */
-
     char bin_filename[512] = {'\0'};
     sprintf(bin_filename, "%s/out-%s.rsf@", output_folder, output_filename);
     printf("bin filename %s\n", bin_filename);
@@ -380,12 +361,12 @@ int main(int argc, char **argv){
     FP *vpz, *vsv, *epsilon, *delta, *phi, *theta;
     const size_t medium_size = sizeof(FP) * CUBE(g_volume_width);
 
-    TRY(mem_allocate(medium_allocs, (void**) &vpz, medium_size));
-    TRY(mem_allocate(medium_allocs, (void**) &vsv, medium_size));
-    TRY(mem_allocate(medium_allocs, (void**) &epsilon, medium_size));
-    TRY(mem_allocate(medium_allocs, (void**) &delta, medium_size));
-    TRY(mem_allocate(medium_allocs, (void**) &phi, medium_size));
-    TRY(mem_allocate(medium_allocs, (void**) &theta, medium_size));
+    TRY(mem_allocate_local(medium_allocs, (void**) &vpz, medium_size));
+    TRY(mem_allocate_local(medium_allocs, (void**) &vsv, medium_size));
+    TRY(mem_allocate_local(medium_allocs, (void**) &epsilon, medium_size));
+    TRY(mem_allocate_local(medium_allocs, (void**) &delta, medium_size));
+    TRY(mem_allocate_local(medium_allocs, (void**) &phi, medium_size));
+    TRY(mem_allocate_local(medium_allocs, (void**) &theta, medium_size));
 
     // inicialize the buffers above based on the type of medium
     medium_initialize(form, CUBE(g_volume_width), vpz, vsv, epsilon, delta, phi, theta);
@@ -396,6 +377,10 @@ int main(int argc, char **argv){
     // run the stability condition for the size
     const FP stability_condition = medium_stability_condition(dx, dy, dz, vpz, epsilon, CUBE(g_volume_width));
     DEBUG("The stability condition (proper value for dt) for this problem is %lf.\n", stability_condition);
+
+    // all the medium functions above use openMP, so i need to init starpu latter
+    int ret = starpu_init(NULL);
+    STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
 
     FP **ch1dxx, **ch1dyy, **ch1dzz, **ch1dxy, **ch1dyz, **ch1dxz, **v2px, **v2pz, **v2sz, **v2pn;
     #define ALLOCATE_NESTED_BUFFER(v) \
@@ -415,15 +400,6 @@ int main(int argc, char **argv){
     ALLOCATE_NESTED_BUFFER(v2pn);
 
     #undef ALLOCATE_NESTED_BUFFER
-
-    medium_calc_intermediary_values(
-        vpz, vsv, epsilon, delta, phi, theta,
-        ch1dxx, ch1dyy, ch1dzz, ch1dxy, ch1dyz, ch1dxz, 
-        v2px, v2pz, v2sz, v2pn
-    );
-
-    //at this point the values for the medium will not be used again
-    mem_free(medium_allocs);
 
     // a iteração do bloco t depende dos blocos t - 1 e t - 2.
     // aloca-se mais data_handles que necessário, compreendendo 0..g_width_in_cubes + 2
@@ -471,6 +447,16 @@ int main(int argc, char **argv){
         BLOCK_REGISTER(hdl_v2sz + idx, v2sz[idx]);
         BLOCK_REGISTER(hdl_v2pn + idx, v2pn[idx]);
     }
+
+    medium_calc_intermediary_values(vpz, vsv, epsilon, delta, phi, theta,
+                                    hdl_ch1dxx, hdl_ch1dyy, hdl_ch1dzz,
+                                    hdl_ch1dxy, hdl_ch1dyz, hdl_ch1dxz,
+                                    hdl_v2px, hdl_v2pz, hdl_v2sz,
+                                    hdl_v2pn
+				    );
+
+    //at this point the values for the medium will not be used again
+    mem_free_local(medium_allocs);
    
     // alocate the initial values for the waves pp, pc, qp, qc.
     // the null_block holds all zeros, which all blocks in pp and qp are
@@ -515,7 +501,13 @@ int main(int argc, char **argv){
     }
 
     #undef BLOCK_REGISTER 
-    // TODO: rename n_out para algo que faça mais sentido
+
+    const uint64_t initialization_end_time = get_timestamp_ns();
+
+    const double initialization_total_time = elapsed_seconds(initialization_end_time, initialization_start_time);
+
+    printf("Initialization Elapsed time is: %lfs\n", initialization_total_time);
+
 
     int64_t n_out = 0;
     // salva o primeiro bloco (nulo)
