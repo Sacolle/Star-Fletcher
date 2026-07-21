@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include<time.h>
+#include <cuda_runtime.h>
 
 #include "macros.h"
 #include "floatingpoint.h"
@@ -45,6 +46,13 @@ err_t g_err;
 #define RANDOM_SEED 0
 #endif
 
+#define CUDA_TRY(call) do{ \
+   const cudaError_t err=call;\
+   if (err != cudaSuccess){\
+     fprintf(stderr, "CUDA ERROR: %s on %s:%d\n", cudaGetErrorString(err), __FILE__, __LINE__);\
+     goto program_end; \
+   }}while(0)
+
 
 // extracted from mem.c and mem.h 
 typedef vector(void*) mem_vec_t;
@@ -56,28 +64,54 @@ err_t mem_allocate(mem_vec_t v, void** ptr, const size_t size){
     vector_push(v, *ptr);
     return 0;
 }
+
 void mem_free(mem_vec_t v){
     vector_free_all(v, free);
 }
 
+cudaError_t cuda_mem_allocate(mem_vec_t v, void** ptr, const size_t size){
+  cudaError_t err;
+  if((err = cudaMalloc(ptr, size)) != cudaSuccess){
+        return err;
+    }
+    vector_push(v, *ptr);
+    return 0;
+}
 
-err_t init_nested_buffer(FP*** buff, mem_vec_t allocs, const size_t outter_count, const size_t inner_count){
-  err_t err;
+void cuda_mem_free(mem_vec_t v){
+    vector_free_all(v, cudaFree);
+}
+
+
+err_t init_nested_buffer(FP** buff[], mem_vec_t allocs, const size_t outter_count, const size_t inner_count){
+  err_t err = 0;
   if((err = mem_allocate(allocs, (void**) buff, outter_count * sizeof(FP*))) != 0){
     return err;
   }
-
-  for (size_t i = 0; i < TOTAL_CUBES; i++) {
+  #pragma omp parallel for
+  for (size_t i = 0; i < outter_count; i++) {
     FP** b = *buff;
-    if((err = mem_allocate(allocs, (void**)(b + i), inner_count * sizeof(FP))) != 0){
-      return err;
-    }
-
-    for (size_t i = 0; i < CUBE_SIZE; i++) {
+    err = mem_allocate(allocs, (void**)(b + i), inner_count * sizeof(FP));
+    for (size_t i = 0; i < inner_count; i++) {
       (*b)[i] = FP_RAND();
     }
   }
-  return 0;
+  return err;
+}
+
+cudaError_t cuda_copy_nested_buffer(FP** buff[], FP* ref[], mem_vec_t allocs, const size_t outter_count, const size_t inner_count){
+  cudaError_t err = cudaSuccess;
+  if((err = cuda_mem_allocate(allocs, (void**) buff, outter_count * sizeof(FP*))) != cudaSuccess){
+    return err;
+  }
+
+  #pragma omp parallel for
+  for (size_t i = 0; i < outter_count; i++) {
+    FP** b = *buff;
+    err = cuda_mem_allocate(allocs, (void**)(b + i), inner_count * sizeof(FP));
+    err = cudaMemcpy(b + i, ref[i], inner_count * sizeof(FP), cudaMemcpyHostToDevice);
+  }
+  return err;
 }
 
 extern void rtm_kernel_cuda(
@@ -94,6 +128,7 @@ int main(int argc, char **argv){
     //need to be toplevel for the try macro
     int program_status = EXIT_SUCCESS;
     mem_vec_t allocs = NULL;
+    mem_vec_t cuda_allocs = NULL;
     uint32_t nx = 552, ny = 552, nz = 552, absorb_width = 8;
     FP dx, dy, dz, dt = 0.0001, tmax = 0.005;
     dx = dy = dz = FP_LIT(12.5);
@@ -121,28 +156,63 @@ int main(int argc, char **argv){
     const size_t volume_propagation_idx = volume_idx(g_volume_width / 2, g_volume_width / 2, g_volume_width / 2);
     DEBUG("Index of propagation is %ld.\n", volume_propagation_idx);
 
+    // INITIALIZE THE CUDA
+    int deviceCount;
+    CUDA_TRY(cudaGetDeviceCount(&deviceCount));
+    const int device = 0;
+    struct cudaDeviceProp deviceProp;
+    CUDA_TRY(cudaGetDeviceProperties(&deviceProp, device));
+    printf("CUDA source using device(%d) %s with compute capability %d.%d.\n",
+           device, deviceProp.name, deviceProp.major, deviceProp.minor);
+    CUDA_TRY(cudaSetDevice(device));
+    
 
     FP **ch1dxx, **ch1dyy, **ch1dzz, **ch1dxy, **ch1dyz, **ch1dxz, **v2px, **v2pz, **v2sz, **v2pn;
 
-    init_nested_buffer(&ch1dxx, allocs, TOTAL_CUBES, CUBE_SIZE);
-    init_nested_buffer(&ch1dyy, allocs, TOTAL_CUBES, CUBE_SIZE);
-    init_nested_buffer(&ch1dzz, allocs, TOTAL_CUBES, CUBE_SIZE);
-    init_nested_buffer(&ch1dxy, allocs, TOTAL_CUBES, CUBE_SIZE);
-    init_nested_buffer(&ch1dyz, allocs, TOTAL_CUBES, CUBE_SIZE);
-    init_nested_buffer(&ch1dxz, allocs, TOTAL_CUBES, CUBE_SIZE);
-    init_nested_buffer(&v2px, allocs, TOTAL_CUBES, CUBE_SIZE);
-    init_nested_buffer(&v2pz, allocs, TOTAL_CUBES, CUBE_SIZE);
-    init_nested_buffer(&v2sz, allocs, TOTAL_CUBES, CUBE_SIZE);
-    init_nested_buffer(&v2pn, allocs, TOTAL_CUBES, CUBE_SIZE);
+    TRY(init_nested_buffer(&ch1dxx, allocs, TOTAL_CUBES, CUBE_SIZE));
+    TRY(init_nested_buffer(&ch1dyy, allocs, TOTAL_CUBES, CUBE_SIZE));
+    TRY(init_nested_buffer(&ch1dzz, allocs, TOTAL_CUBES, CUBE_SIZE));
+    TRY(init_nested_buffer(&ch1dxy, allocs, TOTAL_CUBES, CUBE_SIZE));
+    TRY(init_nested_buffer(&ch1dyz, allocs, TOTAL_CUBES, CUBE_SIZE));
+    TRY(init_nested_buffer(&ch1dxz, allocs, TOTAL_CUBES, CUBE_SIZE));
+    TRY(init_nested_buffer(&v2px, allocs, TOTAL_CUBES, CUBE_SIZE));
+    TRY(init_nested_buffer(&v2pz, allocs, TOTAL_CUBES, CUBE_SIZE));
+    TRY(init_nested_buffer(&v2sz, allocs, TOTAL_CUBES, CUBE_SIZE));
+    TRY(init_nested_buffer(&v2pn, allocs, TOTAL_CUBES, CUBE_SIZE));
 
-    FP **p_wave[3], **q_wave[4];
+    FP **p_wave[3], **q_wave[3];
 
-    init_nested_buffer(&p_wave[0], allocs, CUBE(g_width_in_cubes + 1), CUBE_SIZE);
-    init_nested_buffer(&p_wave[1], allocs, CUBE(g_width_in_cubes + 1), CUBE_SIZE);
-    init_nested_buffer(&p_wave[2], allocs, CUBE(g_width_in_cubes + 1), CUBE_SIZE);
-    init_nested_buffer(&q_wave[0], allocs, CUBE(g_width_in_cubes + 1), CUBE_SIZE);
-    init_nested_buffer(&q_wave[1], allocs, CUBE(g_width_in_cubes + 1), CUBE_SIZE);
-    init_nested_buffer(&q_wave[2], allocs, CUBE(g_width_in_cubes + 1), CUBE_SIZE);
+    TRY(init_nested_buffer(&p_wave[0], allocs, CUBE(g_width_in_cubes + 1), CUBE_SIZE));
+    TRY(init_nested_buffer(&p_wave[1], allocs, CUBE(g_width_in_cubes + 1), CUBE_SIZE));
+    TRY(init_nested_buffer(&p_wave[2], allocs, CUBE(g_width_in_cubes + 1), CUBE_SIZE));
+    TRY(init_nested_buffer(&q_wave[0], allocs, CUBE(g_width_in_cubes + 1), CUBE_SIZE));
+    TRY(init_nested_buffer(&q_wave[1], allocs, CUBE(g_width_in_cubes + 1), CUBE_SIZE));
+    TRY(init_nested_buffer(&q_wave[2], allocs, CUBE(g_width_in_cubes + 1), CUBE_SIZE));
+
+
+    
+    // - Allocate all those mediums in the GPU
+
+    FP **dev_ch1dxx, **dev_ch1dyy, **dev_ch1dzz, **dev_ch1dxy, **dev_ch1dyz, **dev_ch1dxz, **dev_v2px, **dev_v2pz, **dev_v2sz, **dev_v2pn;
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dxx, ch1dxx, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dyy, ch1dyy, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dzz, ch1dzz, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dxy, ch1dxy, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dyz, ch1dyz, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dxz, ch1dxz, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_v2px, v2px, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_v2pz, v2pz, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_v2sz, v2sz, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_v2pn, v2pn, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+
+    FP **dev_p_wave[3], **dev_q_wave[3];
+
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_p_wave[0], p_wave[0], cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_p_wave[1], p_wave[1], cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_p_wave[2], p_wave[2], cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_q_wave[0], q_wave[0], cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_q_wave[1], q_wave[1], cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_q_wave[2], q_wave[2], cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
 
 
     const uint64_t initialization_end_time = get_timestamp_ns();
@@ -183,72 +253,72 @@ int main(int argc, char **argv){
             const size_t precomp_idx = block_idx(i - 1, j - 1, k - 1);
 	    FP* buffers[52];
 	    
-            buffers[0] = ch1dxx[precomp_idx];
-            buffers[1] = ch1dyy[precomp_idx];
-            buffers[2] = ch1dzz[precomp_idx];
-            buffers[3] = ch1dxy[precomp_idx];
-            buffers[4] = ch1dyz[precomp_idx];
-            buffers[5] = ch1dxz[precomp_idx];
-            buffers[6] = v2px[precomp_idx];
-            buffers[7] = v2pz[precomp_idx];
-            buffers[8] = v2sz[precomp_idx];
-            buffers[9] = v2pn[precomp_idx];
+            buffers[0] = dev_ch1dxx[precomp_idx];
+            buffers[1] = dev_ch1dyy[precomp_idx];
+            buffers[2] = dev_ch1dzz[precomp_idx];
+            buffers[3] = dev_ch1dxy[precomp_idx];
+            buffers[4] = dev_ch1dyz[precomp_idx];
+            buffers[5] = dev_ch1dxz[precomp_idx];
+            buffers[6] = dev_v2px[precomp_idx];
+            buffers[7] = dev_v2pz[precomp_idx];
+            buffers[8] = dev_v2sz[precomp_idx];
+            buffers[9] = dev_v2pn[precomp_idx];
 
             // p wave blocks
-            buffers[10] = p_wave[0][idx]; // write block
+            buffers[10] = dev_p_wave[0][idx]; // write block
 
-            buffers[11] = p_wave[1][idx]; //central block when t - 1
+            buffers[11] = dev_p_wave[1][idx]; //central block when t - 1
 
-            buffers[12] = p_wave[1][block_idx(i + 0, j + 0, k - 1)];
-            buffers[13] = p_wave[1][block_idx(i + 0, j - 1, k - 1)];
-            buffers[14] = p_wave[1][block_idx(i - 1, j + 0, k - 1)];
-            buffers[15] = p_wave[1][block_idx(i + 1, j + 0, k - 1)];
-            buffers[16] = p_wave[1][block_idx(i + 0, j + 1, k - 1)];
+            buffers[12] = dev_p_wave[1][block_idx(i + 0, j + 0, k - 1)];
+            buffers[13] = dev_p_wave[1][block_idx(i + 0, j - 1, k - 1)];
+            buffers[14] = dev_p_wave[1][block_idx(i - 1, j + 0, k - 1)];
+            buffers[15] = dev_p_wave[1][block_idx(i + 1, j + 0, k - 1)];
+            buffers[16] = dev_p_wave[1][block_idx(i + 0, j + 1, k - 1)];
 
-            buffers[17] = p_wave[1][block_idx(i - 1, j - 1, k + 0)];
-            buffers[18] = p_wave[1][block_idx(i + 0, j - 1, k + 0)];
-            buffers[19] = p_wave[1][block_idx(i + 1, j - 1, k + 0)];
-            buffers[20] = p_wave[1][block_idx(i - 1, j + 0, k + 0)];
-            buffers[21] = p_wave[1][block_idx(i + 1, j + 0, k + 0)];
-            buffers[22] = p_wave[1][block_idx(i - 1, j + 1, k + 0)];
-            buffers[23] = p_wave[1][block_idx(i + 0, j + 1, k + 0)];
-            buffers[24] = p_wave[1][block_idx(i + 1, j + 1, k + 0)];
+            buffers[17] = dev_p_wave[1][block_idx(i - 1, j - 1, k + 0)];
+            buffers[18] = dev_p_wave[1][block_idx(i + 0, j - 1, k + 0)];
+            buffers[19] = dev_p_wave[1][block_idx(i + 1, j - 1, k + 0)];
+            buffers[20] = dev_p_wave[1][block_idx(i - 1, j + 0, k + 0)];
+            buffers[21] = dev_p_wave[1][block_idx(i + 1, j + 0, k + 0)];
+            buffers[22] = dev_p_wave[1][block_idx(i - 1, j + 1, k + 0)];
+            buffers[23] = dev_p_wave[1][block_idx(i + 0, j + 1, k + 0)];
+            buffers[24] = dev_p_wave[1][block_idx(i + 1, j + 1, k + 0)];
 
-            buffers[25] = p_wave[1][block_idx(i + 0, j + 0, k + 1)];
-            buffers[26] = p_wave[1][block_idx(i + 0, j - 1, k + 1)];
-            buffers[27] = p_wave[1][block_idx(i - 1, j + 0, k + 1)];
-            buffers[28] = p_wave[1][block_idx(i + 1, j + 0, k + 1)];
-            buffers[29] = p_wave[1][block_idx(i + 0, j + 1, k + 1)];
+            buffers[25] = dev_p_wave[1][block_idx(i + 0, j + 0, k + 1)];
+            buffers[26] = dev_p_wave[1][block_idx(i + 0, j - 1, k + 1)];
+            buffers[27] = dev_p_wave[1][block_idx(i - 1, j + 0, k + 1)];
+            buffers[28] = dev_p_wave[1][block_idx(i + 1, j + 0, k + 1)];
+            buffers[29] = dev_p_wave[1][block_idx(i + 0, j + 1, k + 1)];
 
-            buffers[30] = p_wave[2][idx]; //central block when t - 2
+            buffers[30] = dev_p_wave[2][idx]; //central block when t - 2
 
             // q wave blocks
-            buffers[31] = q_wave[0][idx]; // write block
+            buffers[31] = dev_q_wave[0][idx]; // write block
 
-            buffers[32] = q_wave[1][idx]; //central block when t - 1
+            buffers[32] = dev_q_wave[1][idx]; //central block when t - 1
 
-            buffers[33] = q_wave[1][block_idx(i + 0, j + 0, k - 1)];
-            buffers[34] = q_wave[1][block_idx(i + 0, j - 1, k - 1)];
-            buffers[35] = q_wave[1][block_idx(i - 1, j + 0, k - 1)];
-            buffers[36] = q_wave[1][block_idx(i + 1, j + 0, k - 1)];
-            buffers[37] = q_wave[1][block_idx(i + 0, j + 1, k - 1)];
+            buffers[33] = dev_q_wave[1][block_idx(i + 0, j + 0, k - 1)];
+            buffers[34] = dev_q_wave[1][block_idx(i + 0, j - 1, k - 1)];
+            buffers[35] = dev_q_wave[1][block_idx(i - 1, j + 0, k - 1)];
+            buffers[36] = dev_q_wave[1][block_idx(i + 1, j + 0, k - 1)];
+            buffers[37] = dev_q_wave[1][block_idx(i + 0, j + 1, k - 1)];
 
-            buffers[38] = q_wave[1][block_idx(i - 1, j - 1, k + 0)];
-            buffers[39] = q_wave[1][block_idx(i + 0, j - 1, k + 0)];
-            buffers[40] = q_wave[1][block_idx(i + 1, j - 1, k + 0)];
-            buffers[41] = q_wave[1][block_idx(i - 1, j + 0, k + 0)];
-            buffers[42] = q_wave[1][block_idx(i + 1, j + 0, k + 0)];
-            buffers[43] = q_wave[1][block_idx(i - 1, j + 1, k + 0)];
-            buffers[44] = q_wave[1][block_idx(i + 0, j + 1, k + 0)];
-            buffers[45] = q_wave[1][block_idx(i + 1, j + 1, k + 0)];
+            buffers[38] = dev_q_wave[1][block_idx(i - 1, j - 1, k + 0)];
+            buffers[39] = dev_q_wave[1][block_idx(i + 0, j - 1, k + 0)];
+            buffers[40] = dev_q_wave[1][block_idx(i + 1, j - 1, k + 0)];
+            buffers[41] = dev_q_wave[1][block_idx(i - 1, j + 0, k + 0)];
+            buffers[42] = dev_q_wave[1][block_idx(i + 1, j + 0, k + 0)];
+            buffers[43] = dev_q_wave[1][block_idx(i - 1, j + 1, k + 0)];
+            buffers[44] = dev_q_wave[1][block_idx(i + 0, j + 1, k + 0)];
+            buffers[45] = dev_q_wave[1][block_idx(i + 1, j + 1, k + 0)];
 
-            buffers[46] = q_wave[1][block_idx(i + 0, j + 0, k + 1)];
-            buffers[47] = q_wave[1][block_idx(i + 0, j - 1, k + 1)];
-            buffers[48] = q_wave[1][block_idx(i - 1, j + 0, k + 1)];
-            buffers[49] = q_wave[1][block_idx(i + 1, j + 0, k + 1)];
-            buffers[50] = q_wave[1][block_idx(i + 0, j + 1, k + 1)];
+            buffers[46] = dev_q_wave[1][block_idx(i + 0, j + 0, k + 1)];
+            buffers[47] = dev_q_wave[1][block_idx(i + 0, j - 1, k + 1)];
+            buffers[48] = dev_q_wave[1][block_idx(i - 1, j + 0, k + 1)];
+            buffers[49] = dev_q_wave[1][block_idx(i + 1, j + 0, k + 1)];
+            buffers[50] = dev_q_wave[1][block_idx(i + 0, j + 1, k + 1)];
 
-            buffers[51] = q_wave[2][idx]; // central block when t - 2
+            buffers[51] = dev_q_wave[2][idx]; // central block when t - 2
 
             // TODO: call the function
             rtm_kernel_cuda(x_start, y_start, z_start, x_end, y_end, z_end, dx, dy, dz, dt, buffers);
@@ -258,15 +328,15 @@ int main(int argc, char **argv){
         // rotate the iterations so that the currently computed values are the t - 1 values
         // reuse the space for the t - 2 for the new t values
         FP **tmp;
-        tmp = p_wave[0];
-        p_wave[0] = p_wave[1];
-        p_wave[1] = p_wave[2];
-	p_wave[2] = tmp;
+        tmp = dev_p_wave[0];
+        dev_p_wave[0] = dev_p_wave[1];
+        dev_p_wave[1] = dev_p_wave[2];
+	dev_p_wave[2] = tmp;
 
-        tmp = q_wave[0];
-        q_wave[0] = q_wave[1];
-        q_wave[1] = q_wave[2];
-        q_wave[2] = tmp;
+        tmp = dev_q_wave[0];
+        dev_q_wave[0] = dev_q_wave[1];
+        dev_q_wave[1] = dev_q_wave[2];
+        dev_q_wave[2] = tmp;
 
 	printf("%ld iteration.\n", t);
     }
@@ -286,6 +356,7 @@ int main(int argc, char **argv){
 
     program_end:
     mem_free(allocs);
+    cuda_mem_free(cuda_allocs);
     return program_status;
 }
 

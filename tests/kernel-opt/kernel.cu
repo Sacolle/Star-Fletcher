@@ -5,6 +5,13 @@ __device__ static inline size_t cuda_idx(
     return x + ldy * y + z * ldz;
 }
 
+#define CUDA_CALL(call) do{ \
+   const cudaError_t err = call; \
+   if (err != cudaSuccess){ \
+     fprintf(stderr, "CUDA ERROR: %s on %s:%d\n", cudaGetErrorString(err), __FILE__, __LINE__);\
+     exit(1); \
+   }}while(0)
+
 
 #define CODE_IMPL
 #define CUDA_CODE
@@ -414,12 +421,6 @@ extern "C" void rtm_kernel_cuda(
         qwcentralt2
     );
 
-    // Standard error checking
-    cudaError_t status = cudaGetLastError();
-    if (status != cudaSuccess) {
-        //printf("")
-    }
+    CUDA_CALL(cudaGetLastError());
+    CUDA_CALL(cudaDeviceSynchronize());
 }
-
-
-    
