@@ -142,15 +142,17 @@ int main(int argc, char **argv){
 
     TRY(argc > 1 ? 0 : ME_COUNT_DONT_MATCH, "Passe a segmentação.");
     g_width_in_cubes = atoi(argv[1]);
+    g_cube_width = atoi(argv[2]);
 
     //fazendo dessa forma para ficar igual ao fletcher base
-    g_volume_width = nx + 2 * absorb_width + 2 * BORDER_WIDTH;
+    //g_volume_width = nx + 2 * absorb_width + 2 * BORDER_WIDTH;
+    g_volume_width = g_width_in_cubes * g_cube_width;
 
     // the number of segments divides the total volume
     TRY(g_volume_width % g_width_in_cubes == 0 ? 0 : ME_COUNT_DONT_MATCH, 
         "A largura do volume + kernel size devem ser divisíveis pela largura do segmento.\n");
 
-	g_cube_width = g_volume_width / g_width_in_cubes;
+    //g_cube_width = g_volume_width / g_width_in_cubes;
     
     TRY(g_cube_width > 7 ? 0 : ME_COUNT_DONT_MATCH, 
         "Tamanho interno para o cubo é muito pequeno."
