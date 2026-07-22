@@ -88,30 +88,36 @@ err_t init_nested_buffer(FP** buff[], mem_vec_t allocs, const size_t outter_coun
   if((err = mem_allocate(allocs, (void**) buff, outter_count * sizeof(FP*))) != 0){
     return err;
   }
-  #pragma omp parallel for
+  FP** b = *buff;
   for (size_t i = 0; i < outter_count; i++) {
-    FP** b = *buff;
-    err = mem_allocate(allocs, (void**)(b + i), inner_count * sizeof(FP));
-    for (size_t i = 0; i < inner_count; i++) {
-      (*b)[i] = FP_RAND();
+    if ((err = mem_allocate(allocs, (void **) &b[i],
+                            inner_count * sizeof(FP))) != 0) {
+      return err;
+    }
+    for (size_t j = 0; j < inner_count; j++) {
+      b[i][j] = FP_RAND();
     }
   }
   return err;
 }
 
-cudaError_t cuda_copy_nested_buffer(FP** buff[], FP* ref[], mem_vec_t allocs, const size_t outter_count, const size_t inner_count){
-  cudaError_t err = cudaSuccess;
-  if((err = cuda_mem_allocate(allocs, (void**) buff, outter_count * sizeof(FP*))) != cudaSuccess){
-    return err;
+cudaError_t cuda_copy_nested_buffer(FP** buff[], FP* ref[], mem_vec_t allocs, mem_vec_t cuda_allocs, const size_t outter_count, const size_t inner_count){
+  if(mem_allocate(allocs, (void**) buff, outter_count * sizeof(FP*)) != 0){
+    return cudaErrorMemoryAllocation;
   }
 
-  #pragma omp parallel for
+  cudaError_t err;
+  FP** b = *buff;
   for (size_t i = 0; i < outter_count; i++) {
-    FP** b = *buff;
-    err = cuda_mem_allocate(allocs, (void**)(b + i), inner_count * sizeof(FP));
-    err = cudaMemcpy(b + i, ref[i], inner_count * sizeof(FP), cudaMemcpyHostToDevice);
+    if ((err = cuda_mem_allocate(cuda_allocs, (void **)(b + i),
+                                 inner_count * sizeof(FP))) != cudaSuccess) {
+      return err;
+    }
+    if((err = cudaMemcpy(b + i, ref[i], inner_count * sizeof(FP), cudaMemcpyHostToDevice)) != cudaSuccess){
+      return err;
+    }
   }
-  return err;
+  return cudaSuccess;
 }
 
 extern void rtm_kernel_cuda(
@@ -194,25 +200,25 @@ int main(int argc, char **argv){
     // - Allocate all those mediums in the GPU
 
     FP **dev_ch1dxx, **dev_ch1dyy, **dev_ch1dzz, **dev_ch1dxy, **dev_ch1dyz, **dev_ch1dxz, **dev_v2px, **dev_v2pz, **dev_v2sz, **dev_v2pn;
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dxx, ch1dxx, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dyy, ch1dyy, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dzz, ch1dzz, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dxy, ch1dxy, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dyz, ch1dyz, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dxz, ch1dxz, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_v2px, v2px, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_v2pz, v2pz, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_v2sz, v2sz, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_v2pn, v2pn, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dxx, ch1dxx, allocs, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dyy, ch1dyy, allocs, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dzz, ch1dzz, allocs, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dxy, ch1dxy, allocs, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dyz, ch1dyz, allocs, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_ch1dxz, ch1dxz, allocs, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_v2px, v2px, allocs, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_v2pz, v2pz, allocs, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_v2sz, v2sz, allocs, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_v2pn, v2pn, allocs, cuda_allocs,  TOTAL_CUBES,  CUBE_SIZE));
 
     FP **dev_p_wave[3], **dev_q_wave[3];
 
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_p_wave[0], p_wave[0], cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_p_wave[1], p_wave[1], cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_p_wave[2], p_wave[2], cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_q_wave[0], q_wave[0], cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_q_wave[1], q_wave[1], cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
-    CUDA_TRY(cuda_copy_nested_buffer(&dev_q_wave[2], q_wave[2], cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_p_wave[0], p_wave[0], allocs, cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_p_wave[1], p_wave[1], allocs, cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_p_wave[2], p_wave[2], allocs, cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_q_wave[0], q_wave[0], allocs, cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_q_wave[1], q_wave[1], allocs, cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
+    CUDA_TRY(cuda_copy_nested_buffer(&dev_q_wave[2], q_wave[2], allocs, cuda_allocs,  CUBE(g_width_in_cubes + 1),  CUBE_SIZE));
 
 
     const uint64_t initialization_end_time = get_timestamp_ns();
