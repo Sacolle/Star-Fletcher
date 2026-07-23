@@ -266,9 +266,9 @@ int main(int argc, char **argv){
 	    const size_t x_start = AS_BORDER(begin_x);
 	    const size_t y_start = AS_BORDER(begin_y);
 	    const size_t z_start = AS_BORDER(begin_z);
-	    const size_t x_end = AS_BORDER(stop_x);
-	    const size_t y_end = AS_BORDER(stop_y);
-	    const size_t z_end = AS_BORDER(stop_z);
+	    const size_t x_end = g_cube_width - AS_BORDER(stop_x);
+	    const size_t y_end = g_cube_width - AS_BORDER(stop_y);
+	    const size_t z_end = g_cube_width - AS_BORDER(stop_z);
 
             #undef AS_BORDER
 
