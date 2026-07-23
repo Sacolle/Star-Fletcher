@@ -57,6 +57,20 @@ err_t g_err;
 // extracted from mem.c and mem.h 
 typedef vector(void*) mem_vec_t;
 
+struct rtm_kernel_params {
+    // Spatial bounds & dimensions
+    size_t x_start, y_start, z_start;
+    size_t x_end, y_end, z_end;
+    size_t cube_width_x, cube_width_y, cube_width_z;
+    size_t stride_x, stride_y, stride_z;
+
+    // Finite difference coefficients
+    FP dt, dxxinv, dyyinv, dzzinv, dxyinv, dxzinv, dyzinv;
+
+    // Buffer pointers
+    FP* ptrs[52];
+};
+
 err_t mem_allocate(mem_vec_t* v, void** ptr, const size_t size){
   if((*ptr = (void*) malloc(size)) == NULL){
         return errno;
@@ -65,9 +79,7 @@ err_t mem_allocate(mem_vec_t* v, void** ptr, const size_t size){
     return 0;
 }
 
-void mem_free(mem_vec_t* v){
-    vector_free_all(*v, free);
-}
+void mem_free(mem_vec_t *v) { vector_free_all(*v, free); }
 
 cudaError_t cuda_mem_allocate(mem_vec_t* v, void** ptr, const size_t size){
   cudaError_t err;
@@ -120,11 +132,7 @@ cudaError_t cuda_copy_nested_buffer(FP** buff[], FP* ref[], mem_vec_t* allocs, m
   return cudaSuccess;
 }
 
-extern void rtm_kernel_cuda(
-    const size_t x_start, const size_t y_start, const size_t z_start,
-    const size_t x_end, const size_t y_end, const size_t z_end,
-    const FP dx, const FP dy, const FP dz, const FP dt, FP* descr[]
-			    );
+extern void rtm_kernel_cuda(struct rtm_kernel_params* p);
 
 int main(int argc, char **argv){
 
@@ -135,7 +143,7 @@ int main(int argc, char **argv){
     int program_status = EXIT_SUCCESS;
     mem_vec_t allocs = NULL;
     mem_vec_t cuda_allocs = NULL;
-    uint32_t nx = 552, ny = 552, nz = 552, absorb_width = 8;
+    //uint32_t nx = 552, ny = 552, nz = 552, absorb_width = 8;
     FP dx, dy, dz, dt = 0.0001, tmax = 0.005;
     dx = dy = dz = FP_LIT(12.5);
 
@@ -231,6 +239,13 @@ int main(int argc, char **argv){
 
     const uint64_t start_time = get_timestamp_ns();
 
+    const FP dxxinv = FP_LIT(1.0) / (dx * dx);
+    const FP dyyinv = FP_LIT(1.0) / (dy * dy);
+    const FP dzzinv = FP_LIT(1.0) / (dz * dz);
+    const FP dxyinv = FP_LIT(1.0) / (dx * dy);
+    const FP dxzinv = FP_LIT(1.0) / (dx * dz);
+    const FP dyzinv = FP_LIT(1.0) / (dy * dz);
+
     for(int64_t t = 1; t <= st; t++){
       for (size_t k = 1; k < g_width_in_cubes + 1; k++) {
         for (size_t j = 1; j < g_width_in_cubes + 1; j++) {
@@ -259,80 +274,91 @@ int main(int argc, char **argv){
 
             //pre computed values do not have a border and have to be adjusted as such
             const size_t precomp_idx = block_idx(i - 1, j - 1, k - 1);
-	    FP* buffers[52];
+
+            struct rtm_kernel_params params = {
+              .x_start = x_start, .y_start = y_start, .z_start = z_start,
+              .x_end = x_end, .y_end = y_end, .z_end = z_end,
+              .cube_width_x = g_cube_width, .cube_width_y = g_cube_width,
+              .cube_width_z = g_cube_width, .stride_x = 1,
+              .stride_y = g_cube_width, .stride_z = g_cube_width * g_cube_width,
+	      .dt = dt,
+	      .dxxinv = dxxinv, .dyyinv = dyyinv, .dzzinv = dzzinv, .dxyinv = dxyinv, .dxzinv = dxzinv, .dyzinv = dyzinv
+            };
 	    
-            buffers[0] = dev_ch1dxx[precomp_idx];
-            buffers[1] = dev_ch1dyy[precomp_idx];
-            buffers[2] = dev_ch1dzz[precomp_idx];
-            buffers[3] = dev_ch1dxy[precomp_idx];
-            buffers[4] = dev_ch1dyz[precomp_idx];
-            buffers[5] = dev_ch1dxz[precomp_idx];
-            buffers[6] = dev_v2px[precomp_idx];
-            buffers[7] = dev_v2pz[precomp_idx];
-            buffers[8] = dev_v2sz[precomp_idx];
-            buffers[9] = dev_v2pn[precomp_idx];
+            params.ptrs[0] = dev_ch1dxx[precomp_idx];
+            params.ptrs[1] = dev_ch1dyy[precomp_idx];
+            params.ptrs[2] = dev_ch1dzz[precomp_idx];
+            params.ptrs[3] = dev_ch1dxy[precomp_idx];
+            params.ptrs[4] = dev_ch1dyz[precomp_idx];
+            params.ptrs[5] = dev_ch1dxz[precomp_idx];
+            params.ptrs[6] = dev_v2px[precomp_idx];
+            params.ptrs[7] = dev_v2pz[precomp_idx];
+            params.ptrs[8] = dev_v2sz[precomp_idx];
+            params.ptrs[9] = dev_v2pn[precomp_idx];
 
             // p wave blocks
-            buffers[10] = dev_p_wave[0][idx]; // write block
+            params.ptrs[10] = dev_p_wave[0][idx]; // write block
 
-            buffers[11] = dev_p_wave[1][idx]; //central block when t - 1
+            params.ptrs[11] = dev_p_wave[1][idx]; //central block when t - 1
 
-            buffers[12] = dev_p_wave[1][block_idx(i + 0, j + 0, k - 1)];
-            buffers[13] = dev_p_wave[1][block_idx(i + 0, j - 1, k - 1)];
-            buffers[14] = dev_p_wave[1][block_idx(i - 1, j + 0, k - 1)];
-            buffers[15] = dev_p_wave[1][block_idx(i + 1, j + 0, k - 1)];
-            buffers[16] = dev_p_wave[1][block_idx(i + 0, j + 1, k - 1)];
+            params.ptrs[12] = dev_p_wave[1][block_idx(i + 0, j + 0, k - 1)];
+            params.ptrs[13] = dev_p_wave[1][block_idx(i + 0, j - 1, k - 1)];
+            params.ptrs[14] = dev_p_wave[1][block_idx(i - 1, j + 0, k - 1)];
+            params.ptrs[15] = dev_p_wave[1][block_idx(i + 1, j + 0, k - 1)];
+            params.ptrs[16] = dev_p_wave[1][block_idx(i + 0, j + 1, k - 1)];
 
-            buffers[17] = dev_p_wave[1][block_idx(i - 1, j - 1, k + 0)];
-            buffers[18] = dev_p_wave[1][block_idx(i + 0, j - 1, k + 0)];
-            buffers[19] = dev_p_wave[1][block_idx(i + 1, j - 1, k + 0)];
-            buffers[20] = dev_p_wave[1][block_idx(i - 1, j + 0, k + 0)];
-            buffers[21] = dev_p_wave[1][block_idx(i + 1, j + 0, k + 0)];
-            buffers[22] = dev_p_wave[1][block_idx(i - 1, j + 1, k + 0)];
-            buffers[23] = dev_p_wave[1][block_idx(i + 0, j + 1, k + 0)];
-            buffers[24] = dev_p_wave[1][block_idx(i + 1, j + 1, k + 0)];
+            params.ptrs[17] = dev_p_wave[1][block_idx(i - 1, j - 1, k + 0)];
+            params.ptrs[18] = dev_p_wave[1][block_idx(i + 0, j - 1, k + 0)];
+            params.ptrs[19] = dev_p_wave[1][block_idx(i + 1, j - 1, k + 0)];
+            params.ptrs[20] = dev_p_wave[1][block_idx(i - 1, j + 0, k + 0)];
+            params.ptrs[21] = dev_p_wave[1][block_idx(i + 1, j + 0, k + 0)];
+            params.ptrs[22] = dev_p_wave[1][block_idx(i - 1, j + 1, k + 0)];
+            params.ptrs[23] = dev_p_wave[1][block_idx(i + 0, j + 1, k + 0)];
+            params.ptrs[24] = dev_p_wave[1][block_idx(i + 1, j + 1, k + 0)];
 
-            buffers[25] = dev_p_wave[1][block_idx(i + 0, j + 0, k + 1)];
-            buffers[26] = dev_p_wave[1][block_idx(i + 0, j - 1, k + 1)];
-            buffers[27] = dev_p_wave[1][block_idx(i - 1, j + 0, k + 1)];
-            buffers[28] = dev_p_wave[1][block_idx(i + 1, j + 0, k + 1)];
-            buffers[29] = dev_p_wave[1][block_idx(i + 0, j + 1, k + 1)];
+            params.ptrs[25] = dev_p_wave[1][block_idx(i + 0, j + 0, k + 1)];
+            params.ptrs[26] = dev_p_wave[1][block_idx(i + 0, j - 1, k + 1)];
+            params.ptrs[27] = dev_p_wave[1][block_idx(i - 1, j + 0, k + 1)];
+            params.ptrs[28] = dev_p_wave[1][block_idx(i + 1, j + 0, k + 1)];
+            params.ptrs[29] = dev_p_wave[1][block_idx(i + 0, j + 1, k + 1)];
 
-            buffers[30] = dev_p_wave[2][idx]; //central block when t - 2
+            params.ptrs[30] = dev_p_wave[2][idx]; //central block when t - 2
 
             // q wave blocks
-            buffers[31] = dev_q_wave[0][idx]; // write block
+            params.ptrs[31] = dev_q_wave[0][idx]; // write block
 
-            buffers[32] = dev_q_wave[1][idx]; //central block when t - 1
+            params.ptrs[32] = dev_q_wave[1][idx]; //central block when t - 1
 
-            buffers[33] = dev_q_wave[1][block_idx(i + 0, j + 0, k - 1)];
-            buffers[34] = dev_q_wave[1][block_idx(i + 0, j - 1, k - 1)];
-            buffers[35] = dev_q_wave[1][block_idx(i - 1, j + 0, k - 1)];
-            buffers[36] = dev_q_wave[1][block_idx(i + 1, j + 0, k - 1)];
-            buffers[37] = dev_q_wave[1][block_idx(i + 0, j + 1, k - 1)];
+            params.ptrs[33] = dev_q_wave[1][block_idx(i + 0, j + 0, k - 1)];
+            params.ptrs[34] = dev_q_wave[1][block_idx(i + 0, j - 1, k - 1)];
+            params.ptrs[35] = dev_q_wave[1][block_idx(i - 1, j + 0, k - 1)];
+            params.ptrs[36] = dev_q_wave[1][block_idx(i + 1, j + 0, k - 1)];
+            params.ptrs[37] = dev_q_wave[1][block_idx(i + 0, j + 1, k - 1)];
 
-            buffers[38] = dev_q_wave[1][block_idx(i - 1, j - 1, k + 0)];
-            buffers[39] = dev_q_wave[1][block_idx(i + 0, j - 1, k + 0)];
-            buffers[40] = dev_q_wave[1][block_idx(i + 1, j - 1, k + 0)];
-            buffers[41] = dev_q_wave[1][block_idx(i - 1, j + 0, k + 0)];
-            buffers[42] = dev_q_wave[1][block_idx(i + 1, j + 0, k + 0)];
-            buffers[43] = dev_q_wave[1][block_idx(i - 1, j + 1, k + 0)];
-            buffers[44] = dev_q_wave[1][block_idx(i + 0, j + 1, k + 0)];
-            buffers[45] = dev_q_wave[1][block_idx(i + 1, j + 1, k + 0)];
+            params.ptrs[38] = dev_q_wave[1][block_idx(i - 1, j - 1, k + 0)];
+            params.ptrs[39] = dev_q_wave[1][block_idx(i + 0, j - 1, k + 0)];
+            params.ptrs[40] = dev_q_wave[1][block_idx(i + 1, j - 1, k + 0)];
+            params.ptrs[41] = dev_q_wave[1][block_idx(i - 1, j + 0, k + 0)];
+            params.ptrs[42] = dev_q_wave[1][block_idx(i + 1, j + 0, k + 0)];
+            params.ptrs[43] = dev_q_wave[1][block_idx(i - 1, j + 1, k + 0)];
+            params.ptrs[44] = dev_q_wave[1][block_idx(i + 0, j + 1, k + 0)];
+            params.ptrs[45] = dev_q_wave[1][block_idx(i + 1, j + 1, k + 0)];
 
-            buffers[46] = dev_q_wave[1][block_idx(i + 0, j + 0, k + 1)];
-            buffers[47] = dev_q_wave[1][block_idx(i + 0, j - 1, k + 1)];
-            buffers[48] = dev_q_wave[1][block_idx(i - 1, j + 0, k + 1)];
-            buffers[49] = dev_q_wave[1][block_idx(i + 1, j + 0, k + 1)];
-            buffers[50] = dev_q_wave[1][block_idx(i + 0, j + 1, k + 1)];
+            params.ptrs[46] = dev_q_wave[1][block_idx(i + 0, j + 0, k + 1)];
+            params.ptrs[47] = dev_q_wave[1][block_idx(i + 0, j - 1, k + 1)];
+            params.ptrs[48] = dev_q_wave[1][block_idx(i - 1, j + 0, k + 1)];
+            params.ptrs[49] = dev_q_wave[1][block_idx(i + 1, j + 0, k + 1)];
+            params.ptrs[50] = dev_q_wave[1][block_idx(i + 0, j + 1, k + 1)];
 
-            buffers[51] = dev_q_wave[2][idx]; // central block when t - 2
+            params.ptrs[51] = dev_q_wave[2][idx]; // central block when t - 2
 
             // TODO: call the function
-            rtm_kernel_cuda(x_start, y_start, z_start, x_end, y_end, z_end, dx, dy, dz, dt, buffers);
+            rtm_kernel_cuda(&params);
 	  }
 	}
       }
+
+      CUDA_TRY(cudaDeviceSynchronize());
         // rotate the iterations so that the currently computed values are the t - 1 values
         // reuse the space for the t - 2 for the new t values
         FP **tmp;

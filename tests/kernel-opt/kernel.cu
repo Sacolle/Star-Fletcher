@@ -5,6 +5,8 @@ __device__ static inline size_t cuda_idx(
     return x + ldy * y + z * ldz;
 }
 
+#define STARPU_BLOCK_GET_PTR(x) x
+
 #define CUDA_CALL(call) do{ \
    const cudaError_t err = call; \
    if (err != cudaSuccess){ \
@@ -19,10 +21,42 @@ __device__ static inline size_t cuda_idx(
 #undef CUDA_CODE
 #undef CODE_IMPL
 
+struct rtm_kernel_params {
+    // Spatial bounds & dimensions
+    size_t x_start, y_start, z_start;
+    size_t x_end, y_end, z_end;
+    size_t cube_width_x, cube_width_y, cube_width_z;
+    size_t stride_x, stride_y, stride_z;
+
+    // Finite difference coefficients
+    FP dt, dxxinv, dyyinv, dzzinv, dxyinv, dxzinv, dyzinv;
+
+    // Buffer pointers
+    FP* ptrs[52];
+};
+
 extern size_t g_cube_width;
 
-__global__ void rtm_cuda_kernel_impl(
-    // By-value arguments
+__global__ void rtm_cuda_kernel_impl(struct rtm_kernel_params p) {
+    /*
+
+    const FP dxxinv = FP_LIT(1.0) / (dx * dx);
+    const FP dyyinv = FP_LIT(1.0) / (dy * dy);
+    const FP dzzinv = FP_LIT(1.0) / (dz * dz);
+    const FP dxyinv = FP_LIT(1.0) / (dx * dy);
+    const FP dxzinv = FP_LIT(1.0) / (dx * dz);
+    const FP dyzinv = FP_LIT(1.0) / (dy * dz);
+
+    // global
+
+    const size_t cube_width_x = g_cube_width;
+    const size_t cube_width_y = g_cube_width;
+    const size_t cube_width_z = g_cube_width;
+
+    const size_t stride_x = 1;
+    const size_t stride_y = g_cube_width;
+    const size_t stride_z = g_cube_width * g_cube_width;
+
     const size_t x_start,
     const size_t y_start,
     const size_t z_start,
@@ -94,53 +128,160 @@ __global__ void rtm_cuda_kernel_impl(
     const FP* qwip1jp0kp1,
     const FP* qwip0jp1kp1,
     const FP* qwcentralt2
-) {
+*/
+
+    // precomputed values
+    const FP* ch1dxx = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[0]);
+    const FP* ch1dyy = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[1]);
+    const FP* ch1dzz = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[2]);
+    const FP* ch1dxy = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[3]);
+    const FP* ch1dyz = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[4]);
+    const FP* ch1dxz = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[5]);
+    const FP* v2px = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[6]);
+    const FP* v2pz = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[7]);
+    const FP* v2sz = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[8]);
+    const FP* v2pn = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[9]);
+
+    // w at (i, j, k) of t[0]
+    FP *const pwwrite = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[10]);
+    // primary wave
+    // STARPU_R, // r at (i, j, k) of t[1]
+    const FP* pwcentralt1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[11]);
+    // // layer when k - 1
+    // // o x o
+    // // x x x 
+    // // o x o
+    // STARPU_R, // r at (i + 0, j + 0, k - 1) of t[1]
+    // STARPU_R, // r at (i + 0, j - 1, k - 1) of t[1]
+    // STARPU_R, // r at (i - 1, j + 0, k - 1) of t[1]
+    // STARPU_R, // r at (i + 1, j + 0, k - 1) of t[1]
+    // STARPU_R, // r at (i + 0, j + 1, k - 1) of t[1]
+    // nomenclatura de variável é:
+    // pw (onda primária do bloco)  ip0 (i + 0)  jp0 (j + 0)  km1 (k - 1), em relação ao central
+    const FP* pwip0jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[12]);
+    const FP* pwip0jm1km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[13]);
+    const FP* pwim1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[14]);
+    const FP* pwip1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[15]);
+    const FP* pwip0jp1km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[16]);
+
+    // // layer when k
+    // // x x x
+    // // x o x 
+    // // x x x
+    // STARPU_R, // r at (i - 1, j - 1, k + 0) of t[1]
+    // STARPU_R, // r at (i + 0, j - 1, k + 0) of t[1]
+    // STARPU_R, // r at (i + 1, j - 1, k + 0) of t[1]
+    // STARPU_R, // r at (i - 1, j + 0, k + 0) of t[1]
+    // STARPU_R, // r at (i + 1, j + 0, k + 0) of t[1]
+    // STARPU_R, // r at (i - 1, j + 1, k + 0) of t[1]
+    // STARPU_R, // r at (i + 0, j + 1, k + 0) of t[1]
+    // STARPU_R, // r at (i + 1, j + 1, k + 0) of t[1]
+    const FP* pwim1jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[17]);
+    const FP* pwip0jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[18]);
+    const FP* pwip1jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[19]);
+    const FP* pwim1jp0kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[20]);
+    const FP* pwip1jp0kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[21]);
+    const FP* pwim1jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[22]);
+    const FP* pwip0jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[23]);
+    const FP* pwip1jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[24]);
+
+    // // layer when k + 1
+    // // o x o
+    // // x x x 
+    // // o x o
+    // STARPU_R, // r at (i + 0, j + 0, k + 1) of t[1]
+    // STARPU_R, // r at (i + 0, j - 1, k + 1) of t[1]
+    // STARPU_R, // r at (i - 1, j + 0, k + 1) of t[1]
+    // STARPU_R, // r at (i + 1, j + 0, k + 1) of t[1]
+    // STARPU_R, // r at (i + 0, j + 1, k + 1) of t[1]
+    const FP* pwip0jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[25]);
+    const FP* pwip0jm1kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[26]);
+    const FP* pwim1jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[27]);
+    const FP* pwip1jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[28]);
+    const FP* pwip0jp1kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[29]);
+
+    // STARPU_R  // r at (i, j, k) of t[2]
+    const FP* pwcentralt2 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[30]);
+
+    // secondary wave
+    FP *const qwwrite = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[31]);
+
+    const FP* qwcentralt1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[32]);
+
+    // layer when k - 1
+    const FP* qwip0jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[33]);
+    const FP* qwip0jm1km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[34]);
+    const FP* qwim1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[35]);
+    const FP* qwip1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[36]);
+    const FP* qwip0jp1km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[37]);
+
+    // layer when k
+    const FP* qwim1jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[38]);
+    const FP* qwip0jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[39]);
+    const FP* qwip1jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[40]);
+    const FP* qwim1jp0kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[41]);
+    const FP* qwip1jp0kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[42]);
+    const FP* qwim1jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[43]);
+    const FP* qwip0jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[44]);
+    const FP* qwip1jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[45]);
+
+    // layer when k + 1
+    const FP* qwip0jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[46]);
+    const FP* qwip0jm1kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[47]);
+    const FP* qwim1jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[48]);
+    const FP* qwip1jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[49]);
+    const FP* qwip0jp1kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[50]);
+
+    const FP* qwcentralt2 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[51]);
+
+
+
     // 1. Calculate thread's 3D coordinate
     const size_t x = blockIdx.x * blockDim.x + threadIdx.x;
     const size_t y = blockIdx.y * blockDim.y + threadIdx.y;
     const size_t z = blockIdx.z * blockDim.z + threadIdx.z;
 
     // 2. Bounds check against the total cube dimension
-    if (x >= cube_width_x || y >= cube_width_y || z >= cube_width_z) {
+    if (x >= p.cube_width_x || y >= p.cube_width_y || z >= p.cube_width_z) {
         return;
     }
 
-    const size_t idx = cuda_idx(x, y, z, stride_y, stride_z);
+    const size_t idx = cuda_idx(x, y, z, p.stride_y, p.stride_z);
 
     // 3. Apply the internal boundary logic from your original code
     if (
-        (z < z_start || z >= z_end) || 
-        (y < y_start || y >= y_end) || 
-        (x < x_start || x >= x_end)
+        (z < p.z_start || z >= p.z_end) || 
+        (y < p.y_start || y >= p.y_end) || 
+        (x < p.x_start || x >= p.x_end)
     ) {
         pwwrite[idx] = FP_LIT(0.0);
         qwwrite[idx] = FP_LIT(0.0);
         return;
     }
 
-    const FP pxx = snd_deriv_dir(pwcentralt1, pwim1jp0kp0, pwip1jp0kp0, x, idx, stride_x, dxxinv, cube_width_x);
-    const FP pyy = snd_deriv_dir(pwcentralt1, pwip0jm1kp0, pwip0jp1kp0, y, idx, stride_y, dyyinv, cube_width_y);
-    const FP pzz = snd_deriv_dir(pwcentralt1, pwip0jp0km1, pwip0jp0kp1, z, idx, stride_z, dzzinv, cube_width_z);
+    const FP pxx = snd_deriv_dir(pwcentralt1, pwim1jp0kp0, pwip1jp0kp0, x, idx, p.stride_x, p.dxxinv, p.cube_width_x);
+    const FP pyy = snd_deriv_dir(pwcentralt1, pwip0jm1kp0, pwip0jp1kp0, y, idx, p.stride_y, p.dyyinv, p.cube_width_y);
+    const FP pzz = snd_deriv_dir(pwcentralt1, pwip0jp0km1, pwip0jp0kp1, z, idx, p.stride_z, p.dzzinv, p.cube_width_z);
     const FP pxy = cross_deriv_ddir(
         pwcentralt1, idx, 
-        x, pwim1jp0kp0, pwip1jp0kp0, stride_x, 
-        y, pwip0jm1kp0, pwip0jp1kp0, stride_y, 
+        x, pwim1jp0kp0, pwip1jp0kp0, p.stride_x, 
+        y, pwip0jm1kp0, pwip0jp1kp0, p.stride_y, 
         pwip1jp1kp0, pwip1jm1kp0, pwim1jp1kp0, pwim1jm1kp0,
-        cube_width_x, dxyinv
+        p.cube_width_x, p.dxyinv
     ); 
     const FP pyz = cross_deriv_ddir(
         pwcentralt1, idx, 
-        y, pwip0jm1kp0, pwip0jp1kp0, stride_y, 
-        z, pwip0jp0km1, pwip0jp0kp1, stride_z, 
+        y, pwip0jm1kp0, pwip0jp1kp0, p.stride_y, 
+        z, pwip0jp0km1, pwip0jp0kp1, p.stride_z, 
         pwip0jp1kp1, pwip0jp1km1, pwip0jm1kp1, pwip0jm1km1,
-        cube_width_y, dyzinv
+        p.cube_width_y, p.dyzinv
     ); 
     const FP pxz = cross_deriv_ddir(
         pwcentralt1, idx, 
-        x, pwim1jp0kp0, pwip1jp0kp0, stride_x, 
-        z, pwip0jp0km1, pwip0jp0kp1, stride_z, 
+        x, pwim1jp0kp0, pwip1jp0kp0, p.stride_x, 
+        z, pwip0jp0km1, pwip0jp0kp1, p.stride_z, 
         pwip1jp0kp1, pwip1jp0km1, pwim1jp0kp1, pwim1jp0km1,
-        cube_width_x, dxzinv
+        p.cube_width_x, p.dxzinv
     ); 
 
     const FP cpxx = ch1dxx[idx] * pxx;
@@ -153,29 +294,29 @@ __global__ void rtm_cuda_kernel_impl(
     const FP h2p = pxx + pyy + pzz - h1p;
 
     // q derivatives, H1(q) and H2(q)
-    const FP qxx = snd_deriv_dir(qwcentralt1, qwim1jp0kp0, qwip1jp0kp0, x, idx, stride_x, dxxinv, cube_width_x);
-    const FP qyy = snd_deriv_dir(qwcentralt1, qwip0jm1kp0, qwip0jp1kp0, y, idx, stride_y, dyyinv, cube_width_y);
-    const FP qzz = snd_deriv_dir(qwcentralt1, qwip0jp0km1, qwip0jp0kp1, z, idx, stride_z, dzzinv, cube_width_z);
+    const FP qxx = snd_deriv_dir(qwcentralt1, qwim1jp0kp0, qwip1jp0kp0, x, idx, p.stride_x, p.dxxinv, p.cube_width_x);
+    const FP qyy = snd_deriv_dir(qwcentralt1, qwip0jm1kp0, qwip0jp1kp0, y, idx, p.stride_y, p.dyyinv, p.cube_width_y);
+    const FP qzz = snd_deriv_dir(qwcentralt1, qwip0jp0km1, qwip0jp0kp1, z, idx, p.stride_z, p.dzzinv, p.cube_width_z);
     const FP qxy = cross_deriv_ddir(
         qwcentralt1, idx, 
-        x, qwim1jp0kp0, qwip1jp0kp0, stride_x, 
-        y, qwip0jm1kp0, qwip0jp1kp0, stride_y, 
+        x, qwim1jp0kp0, qwip1jp0kp0, p.stride_x, 
+        y, qwip0jm1kp0, qwip0jp1kp0, p.stride_y, 
         qwip1jp1kp0, qwip1jm1kp0, qwim1jp1kp0, qwim1jm1kp0,
-        cube_width_x, dxyinv
+        p.cube_width_x, p.dxyinv
     ); 
     const FP qyz = cross_deriv_ddir(
         qwcentralt1, idx, 
-        y, qwip0jm1kp0, qwip0jp1kp0, stride_y, 
-        z, qwip0jp0km1, qwip0jp0kp1, stride_z, 
+        y, qwip0jm1kp0, qwip0jp1kp0, p.stride_y, 
+        z, qwip0jp0km1, qwip0jp0kp1, p.stride_z, 
         qwip0jp1kp1, qwip0jp1km1, qwip0jm1kp1, qwip0jm1km1,
-        cube_width_y, dyzinv
+        p.cube_width_y, p.dyzinv
     ); 
     const FP qxz = cross_deriv_ddir(
         qwcentralt1, idx, 
-        x, qwim1jp0kp0, qwip1jp0kp0, stride_x, 
-        z, qwip0jp0km1, qwip0jp0kp1, stride_z, 
+        x, qwim1jp0kp0, qwip1jp0kp0, p.stride_x, 
+        z, qwip0jp0km1, qwip0jp0kp1, p.stride_z, 
         qwip1jp0kp1, qwip1jp0km1, qwim1jp0kp1, qwim1jp0km1,
-        cube_width_x, dxzinv
+        p.cube_width_x, p.dxzinv
     ); 
 
     const FP cqxx = ch1dxx[idx] * qxx;
@@ -196,231 +337,24 @@ __global__ void rtm_cuda_kernel_impl(
     const FP rhsq = v2pn[idx] * h2p + v2pz[idx] * h1q - v2sz[idx] * h2pmq;
 
     // new p and q
-    pwwrite[idx] = FP_LIT(2.0) * pwcentralt1[idx] - pwcentralt2[idx] + rhsp * dt * dt;
-    qwwrite[idx] = FP_LIT(2.0) * qwcentralt1[idx] - qwcentralt2[idx] + rhsq * dt * dt;
+    pwwrite[idx] = FP_LIT(2.0) * pwcentralt1[idx] - pwcentralt2[idx] + rhsp * p.dt * p.dt;
+    qwwrite[idx] = FP_LIT(2.0) * qwcentralt1[idx] - qwcentralt2[idx] + rhsq * p.dt * p.dt;
 }
 
-#define STARPU_BLOCK_GET_PTR(x) x
 
-extern "C" void rtm_kernel_cuda(
-    const size_t x_start,
-    const size_t y_start,
-    const size_t z_start,
-    const size_t x_end,
-    const size_t y_end,
-    const size_t z_end,
-    const FP dx,
-    const FP dy,
-    const FP dz,
-    const FP dt,
-    FP* descr[]
-){
-
-    const FP dxxinv = FP_LIT(1.0) / (dx * dx);
-    const FP dyyinv = FP_LIT(1.0) / (dy * dy);
-    const FP dzzinv = FP_LIT(1.0) / (dz * dz);
-    const FP dxyinv = FP_LIT(1.0) / (dx * dy);
-    const FP dxzinv = FP_LIT(1.0) / (dx * dz);
-    const FP dyzinv = FP_LIT(1.0) / (dy * dz);
-
-    // global
-
-    const size_t cube_width_x = g_cube_width;
-    const size_t cube_width_y = g_cube_width;
-    const size_t cube_width_z = g_cube_width;
-
-    const size_t stride_x = 1;
-    const size_t stride_y = g_cube_width;
-    const size_t stride_z = g_cube_width * g_cube_width;
-
-    // precomputed values
-    const FP* ch1dxx = (FP*) STARPU_BLOCK_GET_PTR(descr[0]);
-    const FP* ch1dyy = (FP*) STARPU_BLOCK_GET_PTR(descr[1]);
-    const FP* ch1dzz = (FP*) STARPU_BLOCK_GET_PTR(descr[2]);
-    const FP* ch1dxy = (FP*) STARPU_BLOCK_GET_PTR(descr[3]);
-    const FP* ch1dyz = (FP*) STARPU_BLOCK_GET_PTR(descr[4]);
-    const FP* ch1dxz = (FP*) STARPU_BLOCK_GET_PTR(descr[5]);
-    const FP* v2px = (FP*) STARPU_BLOCK_GET_PTR(descr[6]);
-    const FP* v2pz = (FP*) STARPU_BLOCK_GET_PTR(descr[7]);
-    const FP* v2sz = (FP*) STARPU_BLOCK_GET_PTR(descr[8]);
-    const FP* v2pn = (FP*) STARPU_BLOCK_GET_PTR(descr[9]);
-
-    // w at (i, j, k) of t[0]
-    FP *const pwwrite = (FP*) STARPU_BLOCK_GET_PTR(descr[10]);
-    // primary wave
-    // STARPU_R, // r at (i, j, k) of t[1]
-    const FP* pwcentralt1 = (FP*) STARPU_BLOCK_GET_PTR(descr[11]);
-    // // layer when k - 1
-    // // o x o
-    // // x x x 
-    // // o x o
-    // STARPU_R, // r at (i + 0, j + 0, k - 1) of t[1]
-    // STARPU_R, // r at (i + 0, j - 1, k - 1) of t[1]
-    // STARPU_R, // r at (i - 1, j + 0, k - 1) of t[1]
-    // STARPU_R, // r at (i + 1, j + 0, k - 1) of t[1]
-    // STARPU_R, // r at (i + 0, j + 1, k - 1) of t[1]
-    // nomenclatura de variável é:
-    // pw (onda primária do bloco)  ip0 (i + 0)  jp0 (j + 0)  km1 (k - 1), em relação ao central
-    const FP* pwip0jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[12]);
-    const FP* pwip0jm1km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[13]);
-    const FP* pwim1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[14]);
-    const FP* pwip1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[15]);
-    const FP* pwip0jp1km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[16]);
-
-    // // layer when k
-    // // x x x
-    // // x o x 
-    // // x x x
-    // STARPU_R, // r at (i - 1, j - 1, k + 0) of t[1]
-    // STARPU_R, // r at (i + 0, j - 1, k + 0) of t[1]
-    // STARPU_R, // r at (i + 1, j - 1, k + 0) of t[1]
-    // STARPU_R, // r at (i - 1, j + 0, k + 0) of t[1]
-    // STARPU_R, // r at (i + 1, j + 0, k + 0) of t[1]
-    // STARPU_R, // r at (i - 1, j + 1, k + 0) of t[1]
-    // STARPU_R, // r at (i + 0, j + 1, k + 0) of t[1]
-    // STARPU_R, // r at (i + 1, j + 1, k + 0) of t[1]
-    const FP* pwim1jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[17]);
-    const FP* pwip0jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[18]);
-    const FP* pwip1jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[19]);
-    const FP* pwim1jp0kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[20]);
-    const FP* pwip1jp0kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[21]);
-    const FP* pwim1jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[22]);
-    const FP* pwip0jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[23]);
-    const FP* pwip1jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[24]);
-
-    // // layer when k + 1
-    // // o x o
-    // // x x x 
-    // // o x o
-    // STARPU_R, // r at (i + 0, j + 0, k + 1) of t[1]
-    // STARPU_R, // r at (i + 0, j - 1, k + 1) of t[1]
-    // STARPU_R, // r at (i - 1, j + 0, k + 1) of t[1]
-    // STARPU_R, // r at (i + 1, j + 0, k + 1) of t[1]
-    // STARPU_R, // r at (i + 0, j + 1, k + 1) of t[1]
-    const FP* pwip0jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(descr[25]);
-    const FP* pwip0jm1kp1 = (FP*) STARPU_BLOCK_GET_PTR(descr[26]);
-    const FP* pwim1jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(descr[27]);
-    const FP* pwip1jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(descr[28]);
-    const FP* pwip0jp1kp1 = (FP*) STARPU_BLOCK_GET_PTR(descr[29]);
-
-    // STARPU_R  // r at (i, j, k) of t[2]
-    const FP* pwcentralt2 = (FP*) STARPU_BLOCK_GET_PTR(descr[30]);
-
-    // secondary wave
-    FP *const qwwrite = (FP*) STARPU_BLOCK_GET_PTR(descr[31]);
-
-    const FP* qwcentralt1 = (FP*) STARPU_BLOCK_GET_PTR(descr[32]);
-
-    // layer when k - 1
-    const FP* qwip0jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[33]);
-    const FP* qwip0jm1km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[34]);
-    const FP* qwim1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[35]);
-    const FP* qwip1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[36]);
-    const FP* qwip0jp1km1 = (FP*) STARPU_BLOCK_GET_PTR(descr[37]);
-
-    // layer when k
-    const FP* qwim1jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[38]);
-    const FP* qwip0jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[39]);
-    const FP* qwip1jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[40]);
-    const FP* qwim1jp0kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[41]);
-    const FP* qwip1jp0kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[42]);
-    const FP* qwim1jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[43]);
-    const FP* qwip0jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[44]);
-    const FP* qwip1jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(descr[45]);
-
-    // layer when k + 1
-    const FP* qwip0jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(descr[46]);
-    const FP* qwip0jm1kp1 = (FP*) STARPU_BLOCK_GET_PTR(descr[47]);
-    const FP* qwim1jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(descr[48]);
-    const FP* qwip1jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(descr[49]);
-    const FP* qwip0jp1kp1 = (FP*) STARPU_BLOCK_GET_PTR(descr[50]);
-
-    const FP* qwcentralt2 = (FP*) STARPU_BLOCK_GET_PTR(descr[51]);
+extern "C" void rtm_kernel_cuda(struct rtm_kernel_params* p){
 
     // Define CUDA Grid and Block Dimensions
     // A 3D block of 8x8x8 is 512 threads, which is a standard starting point for 3D stencils.
     dim3 threads_per_block(8, 8, 8); 
     dim3 num_blocks(
-        (cube_width_x + threads_per_block.x - 1) / threads_per_block.x,
-        (cube_width_y + threads_per_block.y - 1) / threads_per_block.y,
-        (cube_width_z + threads_per_block.z - 1) / threads_per_block.z
+        (p->cube_width_x + threads_per_block.x - 1) / threads_per_block.x,
+        (p->cube_width_y + threads_per_block.y - 1) / threads_per_block.y,
+        (p->cube_width_z + threads_per_block.z - 1) / threads_per_block.z
     );
 
     // Launch the kernel asynchronously on StarPU's managed stream
-    rtm_cuda_kernel_impl<<<num_blocks, threads_per_block>>>(
-	x_start,
-	y_start,
-	z_start,
-	x_end,
-	y_end,
-	z_end,
-        cube_width_x,
-	cube_width_y,
-	cube_width_z,
-        stride_x,
-	stride_y,
-	stride_z,
-        dt,
-	dxxinv,
-	dyyinv,
-	dzzinv,
-	dxyinv,
-	dxzinv,
-	dyzinv,
-        ch1dxx,
-	ch1dyy,
-	ch1dzz,
-	ch1dxy,
-	ch1dyz,
-	ch1dxz,
-        v2px,
-	v2pz,
-	v2sz,
-	v2pn,
-        pwwrite,
-        pwcentralt1,
-        pwip0jp0km1,
-        pwip0jm1km1,
-        pwim1jp0km1,
-        pwip1jp0km1,
-        pwip0jp1km1,
-        pwim1jm1kp0,
-        pwip0jm1kp0,
-        pwip1jm1kp0,
-        pwim1jp0kp0,
-        pwip1jp0kp0,
-        pwim1jp1kp0,
-        pwip0jp1kp0,
-        pwip1jp1kp0,
-        pwip0jp0kp1,
-        pwip0jm1kp1,
-        pwim1jp0kp1,
-        pwip1jp0kp1,
-        pwip0jp1kp1,
-        pwcentralt2,
-        qwwrite,
-        qwcentralt1,
-        qwip0jp0km1,
-        qwip0jm1km1,
-        qwim1jp0km1,
-        qwip1jp0km1,
-        qwip0jp1km1,
-        qwim1jm1kp0,
-        qwip0jm1kp0,
-        qwip1jm1kp0,
-        qwim1jp0kp0,
-        qwip1jp0kp0,
-        qwim1jp1kp0,
-        qwip0jp1kp0,
-        qwip1jp1kp0,
-        qwip0jp0kp1,
-        qwip0jm1kp1,
-        qwim1jp0kp1,
-        qwip1jp0kp1,
-        qwip0jp1kp1,
-        qwcentralt2
-    );
+    rtm_cuda_kernel_impl<<<num_blocks, threads_per_block>>>(*p);
 
     CUDA_CALL(cudaGetLastError());
-    CUDA_CALL(cudaDeviceSynchronize());
 }
