@@ -38,201 +38,60 @@ struct rtm_kernel_params {
 extern size_t g_cube_width;
 
 __global__ void rtm_cuda_kernel_impl(struct rtm_kernel_params p) {
-    /*
-
-    const FP dxxinv = FP_LIT(1.0) / (dx * dx);
-    const FP dyyinv = FP_LIT(1.0) / (dy * dy);
-    const FP dzzinv = FP_LIT(1.0) / (dz * dz);
-    const FP dxyinv = FP_LIT(1.0) / (dx * dy);
-    const FP dxzinv = FP_LIT(1.0) / (dx * dz);
-    const FP dyzinv = FP_LIT(1.0) / (dy * dz);
-
-    // global
-
-    const size_t cube_width_x = g_cube_width;
-    const size_t cube_width_y = g_cube_width;
-    const size_t cube_width_z = g_cube_width;
-
-    const size_t stride_x = 1;
-    const size_t stride_y = g_cube_width;
-    const size_t stride_z = g_cube_width * g_cube_width;
-
-    const size_t x_start,
-    const size_t y_start,
-    const size_t z_start,
-    const size_t x_end,
-    const size_t y_end,
-    const size_t z_end,
-    const size_t cube_width_x,
-    const size_t cube_width_y,
-    const size_t cube_width_z,
-    const size_t stride_x,
-    const size_t stride_y,
-    const size_t stride_z,
-    const FP dt,
-    const FP dxxinv,
-    const FP dyyinv,
-    const FP dzzinv,
-    const FP dxyinv,
-    const FP dxzinv,
-    const FP dyzinv, 
-    const FP* ch1dxx,
-    const FP* ch1dyy,
-    const FP* ch1dzz, 
-    const FP* ch1dxy,
-    const FP* ch1dyz,
-    const FP* ch1dxz,
-    const FP* v2px,
-    const FP* v2pz,
-    const FP* v2sz,
-    const FP* v2pn,
-    FP *const pwwrite,
-    const FP* pwcentralt1,
-    const FP* pwip0jp0km1,
-    const FP* pwip0jm1km1,
-    const FP* pwim1jp0km1,
-    const FP* pwip1jp0km1,
-    const FP* pwip0jp1km1,
-    const FP* pwim1jm1kp0,
-    const FP* pwip0jm1kp0,
-    const FP* pwip1jm1kp0,
-    const FP* pwim1jp0kp0,
-    const FP* pwip1jp0kp0,
-    const FP* pwim1jp1kp0,
-    const FP* pwip0jp1kp0,
-    const FP* pwip1jp1kp0,
-    const FP* pwip0jp0kp1,
-    const FP* pwip0jm1kp1,
-    const FP* pwim1jp0kp1,
-    const FP* pwip1jp0kp1,
-    const FP* pwip0jp1kp1,
-    const FP* pwcentralt2,
-    FP *const qwwrite,
-    const FP* qwcentralt1,
-    const FP* qwip0jp0km1,
-    const FP* qwip0jm1km1,
-    const FP* qwim1jp0km1,
-    const FP* qwip1jp0km1,
-    const FP* qwip0jp1km1,
-    const FP* qwim1jm1kp0,
-    const FP* qwip0jm1kp0,
-    const FP* qwip1jm1kp0,
-    const FP* qwim1jp0kp0,
-    const FP* qwip1jp0kp0,
-    const FP* qwim1jp1kp0,
-    const FP* qwip0jp1kp0,
-    const FP* qwip1jp1kp0,
-    const FP* qwip0jp0kp1,
-    const FP* qwip0jm1kp1,
-    const FP* qwim1jp0kp1,
-    const FP* qwip1jp0kp1,
-    const FP* qwip0jp1kp1,
-    const FP* qwcentralt2
-*/
 
     // precomputed values
-    const FP* ch1dxx = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[0]);
-    const FP* ch1dyy = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[1]);
-    const FP* ch1dzz = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[2]);
-    const FP* ch1dxy = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[3]);
-    const FP* ch1dyz = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[4]);
-    const FP* ch1dxz = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[5]);
-    const FP* v2px = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[6]);
-    const FP* v2pz = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[7]);
-    const FP* v2sz = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[8]);
-    const FP* v2pn = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[9]);
-
-    // w at (i, j, k) of t[0]
-    FP *const pwwrite = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[10]);
-    // primary wave
-    // STARPU_R, // r at (i, j, k) of t[1]
-    const FP* pwcentralt1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[11]);
-    // // layer when k - 1
-    // // o x o
-    // // x x x 
-    // // o x o
-    // STARPU_R, // r at (i + 0, j + 0, k - 1) of t[1]
-    // STARPU_R, // r at (i + 0, j - 1, k - 1) of t[1]
-    // STARPU_R, // r at (i - 1, j + 0, k - 1) of t[1]
-    // STARPU_R, // r at (i + 1, j + 0, k - 1) of t[1]
-    // STARPU_R, // r at (i + 0, j + 1, k - 1) of t[1]
-    // nomenclatura de variável é:
-    // pw (onda primária do bloco)  ip0 (i + 0)  jp0 (j + 0)  km1 (k - 1), em relação ao central
-    const FP* pwip0jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[12]);
-    const FP* pwip0jm1km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[13]);
-    const FP* pwim1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[14]);
-    const FP* pwip1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[15]);
-    const FP* pwip0jp1km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[16]);
-
-    // // layer when k
-    // // x x x
-    // // x o x 
-    // // x x x
-    // STARPU_R, // r at (i - 1, j - 1, k + 0) of t[1]
-    // STARPU_R, // r at (i + 0, j - 1, k + 0) of t[1]
-    // STARPU_R, // r at (i + 1, j - 1, k + 0) of t[1]
-    // STARPU_R, // r at (i - 1, j + 0, k + 0) of t[1]
-    // STARPU_R, // r at (i + 1, j + 0, k + 0) of t[1]
-    // STARPU_R, // r at (i - 1, j + 1, k + 0) of t[1]
-    // STARPU_R, // r at (i + 0, j + 1, k + 0) of t[1]
-    // STARPU_R, // r at (i + 1, j + 1, k + 0) of t[1]
-    const FP* pwim1jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[17]);
-    const FP* pwip0jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[18]);
-    const FP* pwip1jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[19]);
-    const FP* pwim1jp0kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[20]);
-    const FP* pwip1jp0kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[21]);
-    const FP* pwim1jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[22]);
-    const FP* pwip0jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[23]);
-    const FP* pwip1jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[24]);
-
-    // // layer when k + 1
-    // // o x o
-    // // x x x 
-    // // o x o
-    // STARPU_R, // r at (i + 0, j + 0, k + 1) of t[1]
-    // STARPU_R, // r at (i + 0, j - 1, k + 1) of t[1]
-    // STARPU_R, // r at (i - 1, j + 0, k + 1) of t[1]
-    // STARPU_R, // r at (i + 1, j + 0, k + 1) of t[1]
-    // STARPU_R, // r at (i + 0, j + 1, k + 1) of t[1]
-    const FP* pwip0jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[25]);
-    const FP* pwip0jm1kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[26]);
-    const FP* pwim1jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[27]);
-    const FP* pwip1jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[28]);
-    const FP* pwip0jp1kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[29]);
-
-    // STARPU_R  // r at (i, j, k) of t[2]
-    const FP* pwcentralt2 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[30]);
-
-    // secondary wave
-    FP *const qwwrite = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[31]);
-
-    const FP* qwcentralt1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[32]);
-
-    // layer when k - 1
-    const FP* qwip0jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[33]);
-    const FP* qwip0jm1km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[34]);
-    const FP* qwim1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[35]);
-    const FP* qwip1jp0km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[36]);
-    const FP* qwip0jp1km1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[37]);
-
-    // layer when k
-    const FP* qwim1jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[38]);
-    const FP* qwip0jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[39]);
-    const FP* qwip1jm1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[40]);
-    const FP* qwim1jp0kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[41]);
-    const FP* qwip1jp0kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[42]);
-    const FP* qwim1jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[43]);
-    const FP* qwip0jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[44]);
-    const FP* qwip1jp1kp0 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[45]);
-
-    // layer when k + 1
-    const FP* qwip0jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[46]);
-    const FP* qwip0jm1kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[47]);
-    const FP* qwim1jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[48]);
-    const FP* qwip1jp0kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[49]);
-    const FP* qwip0jp1kp1 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[50]);
-
-    const FP* qwcentralt2 = (FP*) STARPU_BLOCK_GET_PTR(p.ptrs[51]);
+    #define ch1dxx ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[0]))
+    #define ch1dyy ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[1]))
+    #define ch1dzz ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[2]))
+    #define ch1dxy ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[3]))
+    #define ch1dyz ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[4]))
+    #define ch1dxz ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[5]))
+    #define v2px ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[6]))
+    #define v2pz ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[7]))
+    #define v2sz ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[8]))
+    #define v2pn ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[9]))
+    #define pwwrite 	STARPU_BLOCK_GET_PTR(p.ptrs[10])
+    #define pwcentralt1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[11]))
+    #define pwip0jp0km1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[12]))
+    #define pwip0jm1km1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[13]))
+    #define pwim1jp0km1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[14]))
+    #define pwip1jp0km1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[15]))
+    #define pwip0jp1km1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[16]))
+    #define pwim1jm1kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[17]))
+    #define pwip0jm1kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[18]))
+    #define pwip1jm1kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[19]))
+    #define pwim1jp0kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[20]))
+    #define pwip1jp0kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[21]))
+    #define pwim1jp1kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[22]))
+    #define pwip0jp1kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[23]))
+    #define pwip1jp1kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[24]))
+    #define pwip0jp0kp1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[25]))
+    #define pwip0jm1kp1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[26]))
+    #define pwim1jp0kp1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[27]))
+    #define pwip1jp0kp1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[28]))
+    #define pwip0jp1kp1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[29]))
+    #define pwcentralt2 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[30]))
+    #define qwwrite  	STARPU_BLOCK_GET_PTR(p.ptrs[31])
+    #define qwcentralt1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[32]))
+    #define qwip0jp0km1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[33]))
+    #define qwip0jm1km1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[34]))
+    #define qwim1jp0km1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[35]))
+    #define qwip1jp0km1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[36]))
+    #define qwip0jp1km1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[37]))
+    #define qwim1jm1kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[38]))
+    #define qwip0jm1kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[39]))
+    #define qwip1jm1kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[40]))
+    #define qwim1jp0kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[41]))
+    #define qwip1jp0kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[42]))
+    #define qwim1jp1kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[43]))
+    #define qwip0jp1kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[44]))
+    #define qwip1jp1kp0 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[45]))
+    #define qwip0jp0kp1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[46]))
+    #define qwip0jm1kp1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[47]))
+    #define qwim1jp0kp1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[48]))
+    #define qwip1jp0kp1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[49]))
+    #define qwip0jp1kp1 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[50]))
+    #define qwcentralt2 ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[51]))
 
 
 
