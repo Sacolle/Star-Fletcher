@@ -141,10 +141,11 @@ int main(int argc, char **argv){
 
     //need to be toplevel for the try macro
     int program_status = EXIT_SUCCESS;
+    int iteration_count = atoi(argv[3]);
     mem_vec_t allocs = NULL;
     mem_vec_t cuda_allocs = NULL;
     //uint32_t nx = 552, ny = 552, nz = 552, absorb_width = 8;
-    FP dx, dy, dz, dt = 0.0001, tmax = 0.0003;
+    FP dx, dy, dz, dt = 0.0001, tmax = dt * iteration_count;
     dx = dy = dz = FP_LIT(12.5);
 
 

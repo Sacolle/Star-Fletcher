@@ -37,7 +37,11 @@ struct rtm_kernel_params {
 
 extern size_t g_cube_width;
 
+<<<<<<< Updated upstream
 __global__ void rtm_cuda_kernel_impl(struct rtm_kernel_params p) {
+=======
+__global__ void __launch_bounds__(512, 2) rtm_cuda_kernel_impl(struct rtm_kernel_params p) {
+>>>>>>> Stashed changes
 
     // precomputed values
     #define ch1dxx ((const FP*) STARPU_BLOCK_GET_PTR(p.ptrs[0]))

@@ -157,6 +157,7 @@
                     #pkgs.gdb
                     nixglhost 
                     cudaPacks.cuda_cuobjdump
+		    pkgs.cudaPackages_13.nsight_compute
                 ] ++ (with cudaPacks; [
                     cuda_nvcc
                 ]);
@@ -165,7 +166,6 @@
                 buildInputs = [ 
                     star-fletcher-cuda		
                     nixglhost 
-                    cudaPacks.cuda_cuobjdump
                 ];
             };
 
