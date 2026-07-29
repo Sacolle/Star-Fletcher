@@ -130,14 +130,25 @@ static struct starpu_perfmodel rtm_perf_model = {
 extern void rtm_kernel_cuda(void *descr[], void *cl_args);
 #endif
 
-struct starpu_codelet rtm_codelet = {
-#ifndef NO_CPU_KERNEL
-    .cpu_funcs = { rtm_kernel },
+
+#ifdef CUDA_BACKEND
+  #ifndef NO_CPU_KERNEL
+    #define WHERE STARPU_CPU | STARPU_CUDA
+  #else
+    #define WHERE STARPU_CUDA
+  #endif
+  #else
+  #define WHERE STARPU_CPU
 #endif
+
+
+struct starpu_codelet rtm_codelet = {
+    .cpu_funcs = { rtm_kernel },
 #ifdef CUDA_BACKEND
     .cuda_funcs = { rtm_kernel_cuda },
     .cuda_flags = { STARPU_CUDA_ASYNC },
 #endif
+    .where = WHERE,
     .nbuffers = 52,
     .modes = {
         // precomputed values
