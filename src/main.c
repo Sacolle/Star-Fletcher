@@ -131,11 +131,13 @@ extern void rtm_kernel_cuda(void *descr[], void *cl_args);
 #endif
 
 struct starpu_codelet rtm_codelet = {
+#ifndef NO_CPU_KERNEL
     .cpu_funcs = { rtm_kernel },
-    #ifdef CUDA_BACKEND
+#endif
+#ifdef CUDA_BACKEND
     .cuda_funcs = { rtm_kernel_cuda },
-    .cuda_flags = {STARPU_CUDA_ASYNC},
-    #endif
+    .cuda_flags = { STARPU_CUDA_ASYNC },
+#endif
     .nbuffers = 52,
     .modes = {
         // precomputed values
