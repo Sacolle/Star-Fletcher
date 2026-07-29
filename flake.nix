@@ -113,6 +113,16 @@
             stdenv = cudapkgs.gcc12Stdenv;
         };
 
+        star-fletcher-cuda-no-cpu-kernel = pkgs.callPackage ./star-fletcher.nix {
+            StarPU = StarPU.packages.${system}.default; #starpu-cuda;
+            cudaPackages = cudaPacks;
+            enableCUDA = true;
+            enableTrace = false;
+            disableCPUKernel = true;
+            compileAsRelease = true;
+            stdenv = cudapkgs.gcc12Stdenv;
+        };
+
         nixglhost = nix-gl-host.defaultPackage.${system};
     in
     {
@@ -178,7 +188,7 @@
         };
         packages.${system} = {
           default = star-fletcher;
-          inherit star-fletcher star-fletcher-cuda;
+          inherit star-fletcher star-fletcher-cuda star-fletcher-cuda-no-cpu-kernel star-fletcher-cuda-trace;
         };
     };
 }
