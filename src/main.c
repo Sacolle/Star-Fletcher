@@ -366,6 +366,9 @@ int main(int argc, char **argv){
     sprintf(bin_filename, "%s/out-%s.rsf@", output_folder, output_filename);
     printf("bin filename %s\n", bin_filename);
 
+    int ret = starpu_init(NULL);
+    STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
+
     //init the IO here
     TRY(io_state_init(bin_filename, 4096, total_saved_moments, g_volume_width * g_volume_width * g_volume_width));
 
@@ -391,9 +394,6 @@ int main(int argc, char **argv){
     const FP stability_condition = medium_stability_condition(dx, dy, dz, vpz, epsilon, CUBE(g_volume_width));
     DEBUG("The stability condition (proper value for dt) for this problem is %lf.\n", stability_condition);
 
-    // all the medium functions above use openMP, so i need to init starpu latter
-    int ret = starpu_init(NULL);
-    STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
 
     FP **ch1dxx, **ch1dyy, **ch1dzz, **ch1dxy, **ch1dyz, **ch1dxz, **v2px, **v2pz, **v2sz, **v2pn;
     #define ALLOCATE_NESTED_BUFFER(v) \
@@ -413,6 +413,13 @@ int main(int argc, char **argv){
     ALLOCATE_NESTED_BUFFER(v2pn);
 
     #undef ALLOCATE_NESTED_BUFFER
+
+    medium_calc_intermediary_values(vpz, vsv, epsilon, delta, phi, theta,
+                                    ch1dxx, ch1dyy, ch1dzz, ch1dxy, ch1dyz, ch1dxz,
+                                    v2px, v2pz, v2sz, v2pn);
+
+    //at this point the values for the medium will not be used again
+    mem_free_local(medium_allocs);
 
     // a iteração do bloco t depende dos blocos t - 1 e t - 2.
     // aloca-se mais data_handles que necessário, compreendendo 0..g_width_in_cubes + 2
@@ -461,16 +468,6 @@ int main(int argc, char **argv){
         BLOCK_REGISTER(hdl_v2pn + idx, v2pn[idx]);
     }
 
-    medium_calc_intermediary_values(vpz, vsv, epsilon, delta, phi, theta,
-                                    hdl_ch1dxx, hdl_ch1dyy, hdl_ch1dzz,
-                                    hdl_ch1dxy, hdl_ch1dyz, hdl_ch1dxz,
-                                    hdl_v2px, hdl_v2pz, hdl_v2sz,
-                                    hdl_v2pn
-				    );
-
-    //at this point the values for the medium will not be used again
-    mem_free_local(medium_allocs);
-   
     // alocate the initial values for the waves pp, pc, qp, qc.
     // the null_block holds all zeros, which all blocks in pp and qp are
     // the propagation_block holds the point in which the propagation is set
