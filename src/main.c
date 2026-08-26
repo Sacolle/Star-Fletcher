@@ -377,12 +377,12 @@ int main(int argc, char **argv){
     FP *vpz, *vsv, *epsilon, *delta, *phi, *theta;
     const size_t medium_size = sizeof(FP) * CUBE(g_volume_width);
 
-    TRY(mem_allocate_local(medium_allocs, (void**) &vpz, medium_size));
-    TRY(mem_allocate_local(medium_allocs, (void**) &vsv, medium_size));
-    TRY(mem_allocate_local(medium_allocs, (void**) &epsilon, medium_size));
-    TRY(mem_allocate_local(medium_allocs, (void**) &delta, medium_size));
-    TRY(mem_allocate_local(medium_allocs, (void**) &phi, medium_size));
-    TRY(mem_allocate_local(medium_allocs, (void**) &theta, medium_size));
+    TRY(mem_allocate_local(&medium_allocs, (void**) &vpz, medium_size));
+    TRY(mem_allocate_local(&medium_allocs, (void**) &vsv, medium_size));
+    TRY(mem_allocate_local(&medium_allocs, (void**) &epsilon, medium_size));
+    TRY(mem_allocate_local(&medium_allocs, (void**) &delta, medium_size));
+    TRY(mem_allocate_local(&medium_allocs, (void**) &phi, medium_size));
+    TRY(mem_allocate_local(&medium_allocs, (void**) &theta, medium_size));
 
     // inicialize the buffers above based on the type of medium
     medium_initialize(form, CUBE(g_volume_width), vpz, vsv, epsilon, delta, phi, theta);
@@ -397,9 +397,9 @@ int main(int argc, char **argv){
 
     FP **ch1dxx, **ch1dyy, **ch1dzz, **ch1dxy, **ch1dyz, **ch1dxz, **v2px, **v2pz, **v2sz, **v2pn;
     #define ALLOCATE_NESTED_BUFFER(v) \
-        TRY(mem_allocate(static_allocs, (void**) &v, TOTAL_CUBES * sizeof(FP*))); \
+        TRY(mem_allocate(&static_allocs, (void**) &v, TOTAL_CUBES * sizeof(FP*))); \
         for(size_t i = 0; i < TOTAL_CUBES; i++) \
-            TRY(mem_allocate(static_allocs, (void**)(v + i), CUBE_SIZE * sizeof(FP)));
+            TRY(mem_allocate(&static_allocs, (void**)(v + i), CUBE_SIZE * sizeof(FP)));
 
     ALLOCATE_NESTED_BUFFER(ch1dxx);
     ALLOCATE_NESTED_BUFFER(ch1dyy);
@@ -419,7 +419,7 @@ int main(int argc, char **argv){
                                     v2px, v2pz, v2sz, v2pn);
 
     //at this point the values for the medium will not be used again
-    mem_free_local(medium_allocs);
+    mem_free_local(&medium_allocs);
 
     // a iteração do bloco t depende dos blocos t - 1 e t - 2.
     // aloca-se mais data_handles que necessário, compreendendo 0..g_width_in_cubes + 2
@@ -428,28 +428,28 @@ int main(int argc, char **argv){
     // na hora de fazer o `starpu_block_data_register` e `starpu_data_unregister_submit`, evita os blocos de borda
     // dessa forma, dentro do loop de execução de taregas i - 1 ou i + 1 são sempre índices válidos na lista de `data_handle_t`.
     starpu_data_handle_t* p_wave_iter[3];
-    TRY(mem_allocate(static_allocs, (void**) &p_wave_iter[0], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &p_wave_iter[1], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &p_wave_iter[2], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &p_wave_iter[0], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &p_wave_iter[1], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &p_wave_iter[2], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
 
     starpu_data_handle_t* q_wave_iter[3];
-    TRY(mem_allocate(static_allocs, (void**) &q_wave_iter[0], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &q_wave_iter[1], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &q_wave_iter[2], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &q_wave_iter[0], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &q_wave_iter[1], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &q_wave_iter[2], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
 
     starpu_data_handle_t *hdl_ch1dxx, *hdl_ch1dyy, *hdl_ch1dzz, 
         *hdl_ch1dxy, *hdl_ch1dyz, *hdl_ch1dxz, 
         *hdl_v2px, *hdl_v2pz, *hdl_v2sz, *hdl_v2pn;
-    TRY(mem_allocate(static_allocs, (void**) &hdl_ch1dxx, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_ch1dyy, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_ch1dzz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_ch1dxy, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_ch1dyz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_ch1dxz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_v2px,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_v2pz,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_v2sz,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_v2pn,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_ch1dxx, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_ch1dyy, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_ch1dzz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_ch1dxy, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_ch1dyz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_ch1dxz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_v2px,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_v2pz,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_v2sz,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_v2pn,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
 
 
     #define BLOCK_REGISTER(handle, ptr) starpu_block_data_register((handle), STARPU_MAIN_RAM, (uintptr_t) (ptr), \
@@ -475,8 +475,8 @@ int main(int argc, char **argv){
     // which is only referênced once.
     FP *null_block, *propagation_block; 
 
-    TRY(mem_allocate(static_allocs, (void**) &null_block, CUBE_SIZE * sizeof(FP)));
-    TRY(mem_allocate(static_allocs, (void**) &propagation_block, CUBE_SIZE * sizeof(FP)));
+    TRY(mem_allocate(&static_allocs, (void**) &null_block, CUBE_SIZE * sizeof(FP)));
+    TRY(mem_allocate(&static_allocs, (void**) &propagation_block, CUBE_SIZE * sizeof(FP)));
 
     for(size_t b_i = 0; b_i < CUBE_SIZE; b_i++){
         null_block[b_i] = propagation_block[b_i] = FP_LIT(0.0);
@@ -797,8 +797,8 @@ int main(int argc, char **argv){
 
     program_end:
 
-    mem_free(medium_allocs);
-    mem_free(static_allocs);
+    mem_free(&medium_allocs);
+    mem_free(&static_allocs);
     starpu_shutdown();
     assert(io_state_finish() == 0);
     return program_status;

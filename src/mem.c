@@ -13,7 +13,7 @@ struct mem_stat {
 };
 
 
-err_t mem_allocate(mem_vec_t v, void** ptr, const size_t size){
+err_t mem_allocate(mem_vec_t *v, void** ptr, const size_t size){
 
     err_t err;
     if((err = starpu_malloc(ptr, size)) != 0){
@@ -25,18 +25,20 @@ err_t mem_allocate(mem_vec_t v, void** ptr, const size_t size){
         .size = size
     };
 
-    vector_push(v, stat);
+    vector_push(*v, stat);
     return 0;
 }
 
-void mem_free(mem_vec_t v){
+void mem_free(mem_vec_t *v){
     #define FREE(x) starpu_free_noflag(x.ptr, x.size);
-    vector_free_all(v, FREE);
+    vector_free_all(*v, FREE);
     #undef FREE
+
+    *v = NULL;
 }
 
 
-err_t mem_allocate_local(mem_vec_t v, void** ptr, const size_t size){
+err_t mem_allocate_local(mem_vec_t *v, void** ptr, const size_t size){
 
   if((*ptr = (void*) malloc(size)) == NULL){
         return errno;
@@ -47,12 +49,13 @@ err_t mem_allocate_local(mem_vec_t v, void** ptr, const size_t size){
         .size = size
     };
 
-    vector_push(v, stat);
+    vector_push(*v, stat);
     return 0;
 }
 
-void mem_free_local(mem_vec_t v){
+void mem_free_local(mem_vec_t *v){
     #define FREE(x) free(x.ptr);
-    vector_free_all(v, FREE);
-    #undef FREE
+    vector_free_all(*v, FREE);
+#undef FREE
+    *v = NULL;
 }
