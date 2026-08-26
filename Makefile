@@ -11,6 +11,10 @@ else
 	CFLAGS += -O0 -g
 endif
 
+ifeq ($(NO_CPU_KERNEL), 1)
+	CFLAGS += -DNO_CPU_KERNEL
+endif
+
 export PARENT_DIR := $(CURDIR)
 
 BIN = main

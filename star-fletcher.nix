@@ -12,6 +12,7 @@
 
     enableCUDA ? false,
     cuda_arch ? "",
+    disableCPUKernel ? false,
     enableTrace ? false,
     compileAsRelease ? true
 }:
@@ -47,6 +48,7 @@ stdenv.mkDerivation {
 
     makeFlags = [ ] 
     ++ lib.optional compileAsRelease "RELEASE_MODE=1" 
+    ++ lib.optional disableCPUKernel "NO_CPU_KERNEL=1" 
     ++ lib.optionals enableCUDA [
       "CUDA_BACKEND=1 "
       (if cuda_arch != "" then "ARCH=${cuda_arch}" else " ")

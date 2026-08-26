@@ -130,12 +130,25 @@ static struct starpu_perfmodel rtm_perf_model = {
 extern void rtm_kernel_cuda(void *descr[], void *cl_args);
 #endif
 
+
+#ifdef CUDA_BACKEND
+  #ifndef NO_CPU_KERNEL
+    #define WHERE STARPU_CPU | STARPU_CUDA
+  #else
+    #define WHERE STARPU_CUDA
+  #endif
+  #else
+  #define WHERE STARPU_CPU
+#endif
+
+
 struct starpu_codelet rtm_codelet = {
     .cpu_funcs = { rtm_kernel },
-    #ifdef CUDA_BACKEND
+#ifdef CUDA_BACKEND
     .cuda_funcs = { rtm_kernel_cuda },
-    .cuda_flags = {STARPU_CUDA_ASYNC},
-    #endif
+    .cuda_flags = { STARPU_CUDA_ASYNC },
+#endif
+    .where = WHERE,
     .nbuffers = 52,
     .modes = {
         // precomputed values
@@ -353,6 +366,9 @@ int main(int argc, char **argv){
     sprintf(bin_filename, "%s/out-%s.rsf@", output_folder, output_filename);
     printf("bin filename %s\n", bin_filename);
 
+    int ret = starpu_init(NULL);
+    STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
+
     //init the IO here
     TRY(io_state_init(bin_filename, 4096, total_saved_moments, g_volume_width * g_volume_width * g_volume_width));
 
@@ -361,12 +377,12 @@ int main(int argc, char **argv){
     FP *vpz, *vsv, *epsilon, *delta, *phi, *theta;
     const size_t medium_size = sizeof(FP) * CUBE(g_volume_width);
 
-    TRY(mem_allocate_local(medium_allocs, (void**) &vpz, medium_size));
-    TRY(mem_allocate_local(medium_allocs, (void**) &vsv, medium_size));
-    TRY(mem_allocate_local(medium_allocs, (void**) &epsilon, medium_size));
-    TRY(mem_allocate_local(medium_allocs, (void**) &delta, medium_size));
-    TRY(mem_allocate_local(medium_allocs, (void**) &phi, medium_size));
-    TRY(mem_allocate_local(medium_allocs, (void**) &theta, medium_size));
+    TRY(mem_allocate_local(&medium_allocs, (void**) &vpz, medium_size));
+    TRY(mem_allocate_local(&medium_allocs, (void**) &vsv, medium_size));
+    TRY(mem_allocate_local(&medium_allocs, (void**) &epsilon, medium_size));
+    TRY(mem_allocate_local(&medium_allocs, (void**) &delta, medium_size));
+    TRY(mem_allocate_local(&medium_allocs, (void**) &phi, medium_size));
+    TRY(mem_allocate_local(&medium_allocs, (void**) &theta, medium_size));
 
     // inicialize the buffers above based on the type of medium
     medium_initialize(form, CUBE(g_volume_width), vpz, vsv, epsilon, delta, phi, theta);
@@ -378,15 +394,12 @@ int main(int argc, char **argv){
     const FP stability_condition = medium_stability_condition(dx, dy, dz, vpz, epsilon, CUBE(g_volume_width));
     DEBUG("The stability condition (proper value for dt) for this problem is %lf.\n", stability_condition);
 
-    // all the medium functions above use openMP, so i need to init starpu latter
-    int ret = starpu_init(NULL);
-    STARPU_CHECK_RETURN_VALUE(ret, "starpu_init");
 
     FP **ch1dxx, **ch1dyy, **ch1dzz, **ch1dxy, **ch1dyz, **ch1dxz, **v2px, **v2pz, **v2sz, **v2pn;
     #define ALLOCATE_NESTED_BUFFER(v) \
-        TRY(mem_allocate(static_allocs, (void**) &v, TOTAL_CUBES * sizeof(FP*))); \
+        TRY(mem_allocate(&static_allocs, (void**) &v, TOTAL_CUBES * sizeof(FP*))); \
         for(size_t i = 0; i < TOTAL_CUBES; i++) \
-            TRY(mem_allocate(static_allocs, (void**)(v + i), CUBE_SIZE * sizeof(FP)));
+            TRY(mem_allocate(&static_allocs, (void**)(v + i), CUBE_SIZE * sizeof(FP)));
 
     ALLOCATE_NESTED_BUFFER(ch1dxx);
     ALLOCATE_NESTED_BUFFER(ch1dyy);
@@ -401,6 +414,13 @@ int main(int argc, char **argv){
 
     #undef ALLOCATE_NESTED_BUFFER
 
+    medium_calc_intermediary_values(vpz, vsv, epsilon, delta, phi, theta,
+                                    ch1dxx, ch1dyy, ch1dzz, ch1dxy, ch1dyz, ch1dxz,
+                                    v2px, v2pz, v2sz, v2pn);
+
+    //at this point the values for the medium will not be used again
+    mem_free_local(&medium_allocs);
+
     // a iteração do bloco t depende dos blocos t - 1 e t - 2.
     // aloca-se mais data_handles que necessário, compreendendo 0..g_width_in_cubes + 2
     // isso evita checks de bounds, pois os cubos internos tem uma borda que evita acessar fora deles no limite do volume
@@ -408,28 +428,28 @@ int main(int argc, char **argv){
     // na hora de fazer o `starpu_block_data_register` e `starpu_data_unregister_submit`, evita os blocos de borda
     // dessa forma, dentro do loop de execução de taregas i - 1 ou i + 1 são sempre índices válidos na lista de `data_handle_t`.
     starpu_data_handle_t* p_wave_iter[3];
-    TRY(mem_allocate(static_allocs, (void**) &p_wave_iter[0], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &p_wave_iter[1], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &p_wave_iter[2], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &p_wave_iter[0], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &p_wave_iter[1], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &p_wave_iter[2], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
 
     starpu_data_handle_t* q_wave_iter[3];
-    TRY(mem_allocate(static_allocs, (void**) &q_wave_iter[0], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &q_wave_iter[1], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &q_wave_iter[2], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &q_wave_iter[0], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &q_wave_iter[1], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &q_wave_iter[2], CUBE(g_width_in_cubes + 2) * sizeof(starpu_data_handle_t)));
 
     starpu_data_handle_t *hdl_ch1dxx, *hdl_ch1dyy, *hdl_ch1dzz, 
         *hdl_ch1dxy, *hdl_ch1dyz, *hdl_ch1dxz, 
         *hdl_v2px, *hdl_v2pz, *hdl_v2sz, *hdl_v2pn;
-    TRY(mem_allocate(static_allocs, (void**) &hdl_ch1dxx, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_ch1dyy, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_ch1dzz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_ch1dxy, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_ch1dyz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_ch1dxz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_v2px,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_v2pz,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_v2sz,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
-    TRY(mem_allocate(static_allocs, (void**) &hdl_v2pn,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_ch1dxx, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_ch1dyy, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_ch1dzz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_ch1dxy, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_ch1dyz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_ch1dxz, CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_v2px,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_v2pz,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_v2sz,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
+    TRY(mem_allocate(&static_allocs, (void**) &hdl_v2pn,   CUBE(g_width_in_cubes) * sizeof(starpu_data_handle_t)));
 
 
     #define BLOCK_REGISTER(handle, ptr) starpu_block_data_register((handle), STARPU_MAIN_RAM, (uintptr_t) (ptr), \
@@ -448,16 +468,6 @@ int main(int argc, char **argv){
         BLOCK_REGISTER(hdl_v2pn + idx, v2pn[idx]);
     }
 
-    medium_calc_intermediary_values(vpz, vsv, epsilon, delta, phi, theta,
-                                    hdl_ch1dxx, hdl_ch1dyy, hdl_ch1dzz,
-                                    hdl_ch1dxy, hdl_ch1dyz, hdl_ch1dxz,
-                                    hdl_v2px, hdl_v2pz, hdl_v2sz,
-                                    hdl_v2pn
-				    );
-
-    //at this point the values for the medium will not be used again
-    mem_free_local(medium_allocs);
-   
     // alocate the initial values for the waves pp, pc, qp, qc.
     // the null_block holds all zeros, which all blocks in pp and qp are
     // the propagation_block holds the point in which the propagation is set
@@ -465,8 +475,8 @@ int main(int argc, char **argv){
     // which is only referênced once.
     FP *null_block, *propagation_block; 
 
-    TRY(mem_allocate(static_allocs, (void**) &null_block, CUBE_SIZE * sizeof(FP)));
-    TRY(mem_allocate(static_allocs, (void**) &propagation_block, CUBE_SIZE * sizeof(FP)));
+    TRY(mem_allocate(&static_allocs, (void**) &null_block, CUBE_SIZE * sizeof(FP)));
+    TRY(mem_allocate(&static_allocs, (void**) &propagation_block, CUBE_SIZE * sizeof(FP)));
 
     for(size_t b_i = 0; b_i < CUBE_SIZE; b_i++){
         null_block[b_i] = propagation_block[b_i] = FP_LIT(0.0);
@@ -787,8 +797,8 @@ int main(int argc, char **argv){
 
     program_end:
 
-    mem_free(medium_allocs);
-    mem_free(static_allocs);
+    mem_free(&medium_allocs);
+    mem_free(&static_allocs);
     starpu_shutdown();
     assert(io_state_finish() == 0);
     return program_status;
