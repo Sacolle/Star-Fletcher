@@ -1,3 +1,6 @@
+
+extern size_t thread_x, thread_y, thread_z;
+
 __device__ static inline size_t cuda_idx(
     const size_t x, const size_t y, const size_t z, 
     const size_t ldy, const size_t ldz
@@ -205,7 +208,7 @@ extern "C" void rtm_kernel_cuda(struct rtm_kernel_params* p){
 
     // Define CUDA Grid and Block Dimensions
     // A 3D block of 8x8x8 is 512 threads, which is a standard starting point for 3D stencils.
-    dim3 threads_per_block(8, 8, 8); 
+    dim3 threads_per_block(thread_x, thread_y, thread_z); 
     dim3 num_blocks(
         (p->cube_width_x + threads_per_block.x - 1) / threads_per_block.x,
         (p->cube_width_y + threads_per_block.y - 1) / threads_per_block.y,

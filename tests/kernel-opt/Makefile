@@ -29,17 +29,20 @@ INCLUDEDIR = ../../src/includes
 
 all: $(BIN)
 
-$(BIN): main.o kernel.o vector.o
+$(BIN): main.o kernel.o vector.o argparse.o
 	$(CC) $(CFLAGS) $(LDLIBS) $^ -o $@
 
 main.o: main.c 
 	$(CC) $(CFLAGS) -c $^ -o $@ -I $(INCLUDEDIR)
 
+kernel.o: kernel.cu 
+	$(NVCC) $(NVCCFLAGS) -c $< -o $@ -I $(INCLUDEDIR)
+
 vector.o: $(SRCDIR)/vector.c
 	$(CC) $(CFLAGS) -c $^ -o $@ -I $(INCLUDEDIR)
 
-kernel.o: kernel.cu 
-	$(NVCC) $(NVCCFLAGS) -c $< -o $@ -I $(INCLUDEDIR)
+argparse.o: $(SRCDIR)/argparse.c
+	$(CC) $(CFLAGS) -c $^ -o $@ -I $(INCLUDEDIR)
 
 clean:
 	rm *.o

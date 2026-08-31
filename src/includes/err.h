@@ -2,8 +2,6 @@
 #define _ERR_GUARD_
 
 #include <stdint.h>
-#include <errno.h>
-#include <string.h>
 
 typedef int64_t err_t;
 
@@ -25,7 +23,13 @@ typedef int64_t err_t;
 #define ME_REINITILIZATION  MY_ERR(8)
 
 
-static char* err_name(err_t err){
+//to use the error name function, add #define ERR_NAME_IMPL in one of the project files
+#ifdef ERR_NAME_IMPL
+
+#include <errno.h>
+#include <string.h>
+
+char* err_name(err_t err){
     if(IS_STARPU_ERR(err)){
         return strerror((int) -err);
     }
@@ -46,5 +50,10 @@ static char* err_name(err_t err){
     }
     #undef NAMECASE
 }
+#else
+
+char* err_name(err_t err);
+
+#endif
 
 #endif

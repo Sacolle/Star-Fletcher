@@ -4,7 +4,8 @@
 
 #include <stdio.h>
 
-
+#define ERR_NAME_IMPL
+#include "err.h"
 #include "kernel.h"
 #include "macros.h"
 #include "floatingpoint.h"
@@ -12,8 +13,6 @@
 #include "medium.h"
 #include "mem.h"
 #include "io.h"
-#include "err.h"
-#include "vector.h"
 
 #define DEFAULT_OUTPUT_FOLDER "results"
 #define DEFAULT_OUTPUT_NAME "form"

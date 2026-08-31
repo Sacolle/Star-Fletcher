@@ -17,35 +17,35 @@ bool has_envvar(const char* key){
 err_t i64_get_envvar(int64_t* out, const char* key){
     char* env_out = getenv(key);
     if(env_out == NULL){
-		return ME_MISSING_ENVVAR;
-  	}
-	char* rest;
-	errno = 0;
+      return ME_MISSING_ENVVAR;
+    }
+    char *rest;
+    errno = 0;
 
-	int64_t ret = strtoll(env_out, &rest, 10);
-	int err = errno;
-	if(err) {
-		return err;
-	}
-	if(rest == key){
-		// String vazia de entrada
-		return ME_IMPROPER_INPUT;
-	}
-	if(*rest != '\0'){ 
-		// há mais caracteres que não foram parseados
-		return ME_INCOMPLETE_PARSE;
-	};
-	*out = ret;
-	return 0;
+    int64_t ret = strtoll(env_out, &rest, 10);
+    int err = errno;
+    if(err) {
+      return err;
+    }
+    if(rest == key){
+      // String vazia de entrada
+      return ME_IMPROPER_INPUT;
+    }
+    if(*rest != '\0'){ 
+      // há mais caracteres que não foram parseados
+      return ME_INCOMPLETE_PARSE;
+    };
+    *out = ret;
+    return 0;
 }
 
 err_t str_get_envvar(char** out, const char* key){
     char* env_out = getenv(key);
     if(env_out == NULL){
-		return ME_MISSING_ENVVAR;
-  	}
-	*out = env_out;
-	return 0;
+      return ME_MISSING_ENVVAR;
+    }
+    *out = env_out;
+    return 0;
 }
 
 
@@ -91,7 +91,7 @@ err_t read_args(int* argc, char** argv, int count, ...){
 	for(size_t i = 0; i < count; i++){
 		int tag = va_arg(valist, int);
 		
-		if(tag < 0 || tag > 7) {
+		if(tag < 0 || tag > 8) {
 			err = ME_NOMATCH;
 			goto exit;
 		}
@@ -145,6 +145,8 @@ err_t read_args(int* argc, char** argv, int count, ...){
 				break;
 			default:
 				assert(0 && "Unreachable!");
+
+#undef READ_TO_VAL
 		}
 		*argc += 1;
 	}

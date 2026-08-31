@@ -1,13 +1,17 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include<time.h>
+#include <time.h>
+#include <errno.h>
 #include <cuda_runtime.h>
 
+#define ERR_NAME_IMPL
+
+#include "err.h"
 #include "macros.h"
 #include "floatingpoint.h"
-#include "err.h"
 #include "vector.h"
+#include "argparse.h"
 
 
 size_t g_volume_width = 0;
@@ -132,26 +136,29 @@ cudaError_t cuda_copy_nested_buffer(FP** buff[], FP* ref[], mem_vec_t* allocs, m
   return cudaSuccess;
 }
 
+size_t thread_x, thread_y, thread_z;
 extern void rtm_kernel_cuda(struct rtm_kernel_params* p);
 
 int main(int argc, char **argv){
+    //need to be toplevel for the try macro
+    int program_status = EXIT_SUCCESS;
+    mem_vec_t allocs = NULL;
+    mem_vec_t cuda_allocs = NULL;
 
     const uint64_t initialization_start_time = get_timestamp_ns();
     srand(RANDOM_SEED);
 
-    //need to be toplevel for the try macro
-    int program_status = EXIT_SUCCESS;
-    int iteration_count = atoi(argv[3]);
-    mem_vec_t allocs = NULL;
-    mem_vec_t cuda_allocs = NULL;
+    int iteration_count;
     //uint32_t nx = 552, ny = 552, nz = 552, absorb_width = 8;
-    FP dx, dy, dz, dt = 0.0001, tmax = dt * iteration_count;
+    FP dx, dy, dz, dt = 0.0001;
     dx = dy = dz = FP_LIT(12.5);
 
-
-    TRY(argc > 1 ? 0 : ME_COUNT_DONT_MATCH, "Passe a segmentação.");
-    g_width_in_cubes = atoi(argv[1]);
-    g_cube_width = atoi(argv[2]);
+    TRY(read_args(&argc, argv, 6, ARG_usize, &g_width_in_cubes, ARG_usize,
+                  &g_cube_width, ARG_i32, &iteration_count, ARG_usize,
+                  &thread_x, ARG_usize, &thread_y, ARG_usize,
+                  &thread_z), "Error in parsing arg at %d\n.", argc);
+    
+    FP tmax = dt * iteration_count;
 
     //fazendo dessa forma para ficar igual ao fletcher base
     //g_volume_width = nx + 2 * absorb_width + 2 * BORDER_WIDTH;
