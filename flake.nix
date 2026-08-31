@@ -126,9 +126,10 @@
         nixglhost = nix-gl-host.defaultPackage.${system};
 
         kernel-test = pkgs.callPackage ./tests/kernel-opt/kernel-test.nix {
-            cudaPackages = cudaPacks;
+	    root = self;
             compileAsRelease = true;
             stdenv = cudapkgs.gcc12Stdenv;
+            cudaPackages = cudaPacks;
         };
     in
     {
@@ -190,6 +191,12 @@
                 buildInputs = [ 
                     star-fletcher-cuda-trace
                     nixglhost 
+                ];
+            };
+            kernel-test-grace = pkgs.mkShell {
+                buildInputs = [ 
+                    nixglhost 
+		    (kernel-test.overrideAttrs { doCheck = false; })
                 ];
             };
         };

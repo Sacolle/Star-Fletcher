@@ -1,6 +1,7 @@
 {
     # derivation dependencies
     lib,
+    root,
     stdenv,
     cudaPackages,
     compileAsRelease ? true,
@@ -17,7 +18,7 @@ stdenv.mkDerivation (f:
     system = "x86_64-linux";
     version = "0.1";
 
-    src = ./.;
+    src = root;
 
     nativeBuildInputs = cudaNativeBuildInputs;
     buildInputs = cudaBuildInputs;
@@ -27,5 +28,10 @@ stdenv.mkDerivation (f:
 	    "NIX_CUDA_LDFLAGS=-L${cudaPackages.cuda_cudart.lib}/lib"
     ] ++ lib.optional compileAsRelease "RELEASE_MODE=1";
 
-    installPhase = "mkdir -p $out/bin && cp main $out/bin/fletcher-base";
+    buildPhase = ''
+        cd tests/kernel-opt
+        make $makeFlags
+    '';
+
+    installPhase = "mkdir -p $out/bin && cp main $out/bin/${f.pname}";
 })
